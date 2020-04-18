@@ -239,7 +239,6 @@ class GraphiQLIDE extends Component<{}, GraphiQLIDEState> {
                                 onSelect={() => this._handleSaveResponse()}
                             />
                         </GraphiQL.Menu>
-
                     </GraphiQL.Toolbar>
                 </GraphiQL>
             </div>

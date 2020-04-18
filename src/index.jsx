@@ -18,7 +18,7 @@ const styles = {
     area: css`
         display: flex;
         flex-direction: column;
-        height: calc(100% - 69px - 0px);
+        height: calc(100% - 69px - 4px);
         padding: 0px;
         margin-left: 0px;
         margin-rigth: 0px;

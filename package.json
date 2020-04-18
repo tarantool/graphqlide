@@ -1,5 +1,5 @@
 {
-  "name": "@tarantool.io/frontend-stub",
+  "name": "graphiqlide",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
