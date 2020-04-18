@@ -60,13 +60,13 @@ async function fetcher(graphQLParams: Object): Object {
 
 const DEFAULT_QUERY = ``;
 
-type GraphiQLBuilderState = {
+type GraphiQLIDEState = {
     schema: ?GraphQLSchema,
     query: string,
     explorerIsOpen: boolean,
 }
 
-class GraphiQLBuilder extends Component<{}, GraphiQLBuilderState> {
+class GraphiQLIDE extends Component<{}, GraphiQLIDEState> {
     _graphiql: GraphiQL;
     state = { schema: null, query: DEFAULT_QUERY, explorerIsOpen: false };
 
@@ -171,7 +171,7 @@ class GraphiQLBuilder extends Component<{}, GraphiQLBuilderState> {
     };
 
     render() {
-        const { query, schema, error } = this.state;
+        const { query, schema } = this.state;
         return (
             <div
                 className={cx(
@@ -247,4 +247,4 @@ class GraphiQLBuilder extends Component<{}, GraphiQLBuilderState> {
     }
 }
 
-export default GraphiQLBuilder;
+export default GraphiQLIDE;

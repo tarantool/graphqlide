@@ -1,7 +1,7 @@
 // @flow
 import React from 'react'
 import { css, cx } from 'emotion'
-import GraphiQLBuilder from './GraphiQLBuilder'
+import GraphiQLIDE from './GraphiQLIDE'
 
 import 'graphiql/graphiql.css'
 import './index.css'
@@ -10,7 +10,7 @@ import { IconChip } from '@tarantool.io/ui-kit'
 const core = window.tarantool_enterprise_core;
 
 const PROJECT_NAME = 'graphqlide'
-const GQLIDE_MENU_LABEL = 'Admin API'
+const GQLIDE_MENU_LABEL = 'GraphiQL IDE'
 const GQLIDE_PATH = '/graphqlide'
 const GQLIDE_CLASS_NAME = 'graphqlide'
 
@@ -43,7 +43,7 @@ class Root extends React.Component {
                     GQLIDE_CLASS_NAME
                 )}
             >
-                <GraphiQLBuilder />
+                <GraphiQLIDE />
             </div>
         )
     }
