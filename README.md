@@ -12,7 +12,7 @@ Based on:
 
 See how its look like:
 
-<img align="center" width="640" alt="grahpiqlide" src="https://github.com/no1seman/graphiqlide/blob/master/resources/cartridgegraphiql.jpg">
+<p align="center"><img width="640" alt="grahpiqlide" src="https://github.com/no1seman/graphiqlide/blob/master/resources/cartridgegraphiql.jpg"></p>
 
 # Usage
 
