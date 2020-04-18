@@ -11,6 +11,7 @@ Based on:
 
 
 See how its look like:
+
 <img width="640" alt="grahpiqlide" src="https://github.com/no1seman/graphiqlide/blob/master/resources/cartridgegraphiql.jpg">
 
 # Usage
