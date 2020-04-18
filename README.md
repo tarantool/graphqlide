@@ -12,7 +12,7 @@ Based on:
 
 See how its look like:
 
-<img width="640" alt="grahpiqlide" src="https://github.com/no1seman/graphiqlide/blob/master/resources/cartridgegraphiql.jpg">
+<img align="center" width="640" alt="grahpiqlide" src="https://github.com/no1seman/graphiqlide/blob/master/resources/cartridgegraphiql.jpg">
 
 # Usage
 
@@ -39,15 +39,14 @@ After build completion you will get:
 2. graphiqlide rock installed to graphiqlide/.rocks dir
 
 
-##Run
+## Run
 
 Also for debug & development purposes VS code will be used.
 
 Use F5 to run app or Shift-Crtl-B to run production build task
 
 
-
-##Install
+## Install
 ```
 cd <Tarantool Cartridge application dir>
 tarantoolctl rocks install <path to rock file>/graphqlide-scm-1.all.rock
