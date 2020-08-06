@@ -4,3 +4,4 @@ build
 .rocks
 .history/*
 /plop-templates/*
+*.rock

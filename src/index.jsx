@@ -1,18 +1,17 @@
-// @flow
-import React from 'react'
-import { css, cx } from 'emotion'
-import GraphiQLIDE from './GraphiQLIDE'
+// @ts-check
 
-import 'graphiql/graphiql.css'
-import './index.css'
-import { IconChip } from '@tarantool.io/ui-kit'
+import * as React from 'react';
+import { css, cx } from 'react-emotion';
+import { IconChip, type MenuItemType } from '@tarantool.io/ui-kit';
+import GraphiQLIDE from './GraphiQLIDE';
 
-const core = window.tarantool_enterprise_core;
+import 'graphiql/graphiql.css';
+import './index.css';
 
-const PROJECT_NAME = 'graphqlide'
-const GQLIDE_MENU_LABEL = 'GraphiQL IDE'
-const GQLIDE_PATH = '/graphqlide'
-const GQLIDE_CLASS_NAME = 'graphqlide'
+const PROJECT_NAME = 'graphqlide';
+const GQLIDE_MENU_LABEL = 'GraphiQL IDE';
+const GQLIDE_PATH = '/graphqlide';
+const GQLIDE_CLASS_NAME = 'graphqlide';
 
 const styles = {
     area: css`
@@ -27,62 +26,67 @@ const styles = {
         border-radius: 4px;
         box-sizing: border-box;
         background-color: #ffffff;
-  `,
+    `,
     areaWithPane: css`
         height: calc(100% - 69px - 112px - 16px);
-  `
-}
+    `
+};
 
 class Root extends React.Component {
     render() {
         return (
-            <div
-                className={cx(
-                    styles.area,
-                    { [styles.areaWithPane]: false },
-                    GQLIDE_CLASS_NAME
-                )}
-            >
+            <div className={cx(styles.area, { [styles.areaWithPane]: false }, GQLIDE_CLASS_NAME)}>
                 <GraphiQLIDE />
             </div>
-        )
+        );
     }
 }
-
-const menuItems = [
-    {
-        label: GQLIDE_MENU_LABEL,
-        path: GQLIDE_PATH,
-        selected: false,
-        expanded: false,
-        loading: false,
-        icon: <IconChip className={css`width: 14px; height: 14px; fill: #fff;`} />
-    }
-]
-
-const menuInitialState = menuItems
 
 const matchPath = (path, link) => {
-    if (path.length === 0)
-        return false;
+    if (path.length === 0) return false;
     const point = path.indexOf(link);
-    return point === 0 && (link.length === path.length || path[link.length] === '/')
-}
+    return point === 0 && (link.length === path.length || path[link.length] === '/');
+};
 
-const updateLink = path => menuItem => ({ ...menuItem, selected: matchPath(path, menuItem.path) })
+const updateLink = path => menuItem => ({ ...menuItem, selected: matchPath(path, menuItem.path) });
+
+const menuItems = {
+    graphiql() {
+        return [
+            {
+                label: GQLIDE_MENU_LABEL,
+                path: GQLIDE_PATH,
+                selected: false,
+                expanded: false,
+                loading: false,
+                icon: (
+                    <IconChip
+                        className={css`
+                            width: 14px;
+                            height: 14px;
+                            fill: #fff;
+                        `}
+                    />
+                )
+            }
+        ];
+    }
+};
+
+const menuInitialState = menuItems.graphiql();
 
 export const menuReducer = (state: MenuItemType[] = menuInitialState, { type, payload }: FSA): MenuItemType[] => {
     switch (type) {
         case '@@router/LOCATION_CHANGE':
             if (payload && payload.location && payload.location.pathname) {
-                return state.map(updateLink(payload.location.pathname))
+                return state.map(updateLink(payload.location.pathname));
             } else {
                 return state;
             }
 
         case 'RESET':
             if (payload) {
-                return menuInitialState.map(updateLink(payload.path))
+                return menuInitialState.map(updateLink(payload.path));
             } else {
                 return state;
             }
@@ -92,10 +96,4 @@ export const menuReducer = (state: MenuItemType[] = menuInitialState, { type, pa
     }
 };
 
-
-core.register(
-    PROJECT_NAME,
-    menuReducer,
-    Root,
-    'react'
-);
+window.tarantool_enterprise_core.register(PROJECT_NAME, menuReducer, Root, 'react');

@@ -3,12 +3,11 @@
 This plugin is used to add GrapiQL IDE functionality into Tarantool Cartridge WebUI
 Based on:
 
-* [Tarantool 2.3.1](https://www.tarantool.io/en/download/?v=2.2)
-* [Tarantool Cartridge 2.1.0](https://github.com/tarantool/cartridge)
-* [Tarantool Front-end Core 6.5.1](https://github.com/tarantool/frontend-core)
-* [GraphiGL 1.0.0alpha7](https://github.com/graphql/graphiql)
-* [GraphiQL Explorer 0.5.1](https://github.com/OneGraph/graphiql-explorer)
-
+-   [Tarantool 2.4.2](https://www.tarantool.io/en/download/?v=2.4)
+-   [Tarantool Cartridge 2.2.0](https://github.com/tarantool/cartridge)
+-   [Tarantool Front-end Core 7.2.0](https://github.com/tarantool/frontend-core)
+-   [GraphiGL 1.0.3](https://github.com/graphql/graphiql)
+-   [GraphiQL Explorer 0.6.2](https://github.com/OneGraph/graphiql-explorer)
 
 See how its look like:
 
@@ -20,13 +19,15 @@ See how its look like:
 
 ## Build
 
-1. clone repo: 
+1. clone repo:
+
 ```
 git clone git@github.com:no1seman/graphiqlide.git graphiqlide
 cd graphiqlide
 ```
 
 2. build:
+
 ```
 tarantoolctl rocks make
 tarantoolctl rocks pack graphqlide scm-1
@@ -35,9 +36,9 @@ tarantoolctl rocks pack graphqlide scm-1
 PS Also "build_rock.sh" may be used to automate build process
 
 After build completion you will get:
+
 1. graphiqlide-scm-1.all.rock
 2. graphiqlide rock installed to graphiqlide/.rocks dir
-
 
 ## Run
 
@@ -45,8 +46,8 @@ Also for debug & development purposes VS code will be used.
 
 Use F5 to run app or Shift-Crtl-B to run production build task
 
-
 ## Install
+
 ```
 cd <Tarantool Cartridge application dir>
 tarantoolctl rocks install <path to rock file>/graphqlide-scm-1.all.rock

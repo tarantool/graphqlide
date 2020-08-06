@@ -1,7 +1,7 @@
-// @flow
+// @ts-check
 
 import React, { Component } from 'react';
-import { css, cx } from 'emotion'
+import { css, cx } from 'emotion';
 import GraphiQL from 'graphiql';
 import GraphiQLExplorer from 'graphiql-explorer';
 import { buildClientSchema, getIntrospectionQuery, parse } from 'graphql';
@@ -13,10 +13,10 @@ import 'graphiql/graphiql.css';
 
 const styles = {
     container: css`
-        height: 100vh; 
+        height: 100vh;
         width: 100vw;
     `
-}
+};
 
 function fetchWrapper(url, options, timeout) {
     return new Promise((resolve, reject) => {
@@ -29,32 +29,22 @@ function fetchWrapper(url, options, timeout) {
     });
 }
 
-const isLocalhost = Boolean(
-    window.location.hostname === 'localhost' ||
-    // [::1] is the IPv6 localhost address.
-    window.location.hostname === '[::1]' ||
-    // 127.0.0.1/8 is considered localhost for IPv4.
-    window.location.hostname.match(
-        /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/
-    )
-);
-
 async function fetcher(graphQLParams: Object): Object {
     if (typeof graphQLParams['variables'] === 'undefined') {
-        graphQLParams['variables'] = {}
+        graphQLParams['variables'] = {};
     }
     const data = await fetchWrapper(
-        isLocalhost ? 'http://192.168.3.153:81/admin/api' : window.location.origin + '/admin/api',
+        '/admin/api',
         {
             method: 'POST',
             headers: {
-                'Accept': 'application/json',
+                Accept: 'application/json',
                 'Content-Type': 'application/json; charset=utf-8'
             },
             body: JSON.stringify(graphQLParams)
         },
         5000
-    )
+    );
     return data.json().catch(() => data.text());
 }
 
@@ -63,8 +53,8 @@ const DEFAULT_QUERY = ``;
 type GraphiQLIDEState = {
     schema: ?GraphQLSchema,
     query: string,
-    explorerIsOpen: boolean,
-}
+    explorerIsOpen: boolean
+};
 
 class GraphiQLIDE extends Component<{}, GraphiQLIDEState> {
     _graphiql: GraphiQL;
@@ -84,10 +74,7 @@ class GraphiQLIDE extends Component<{}, GraphiQLIDEState> {
         });
     }
 
-    _handleInspectOperation = (
-        cm: any,
-        mousePos: { line: Number, ch: Number }
-    ) => {
+    _handleInspectOperation = (cm: any, mousePos: { line: Number, ch: Number }) => {
         const parsedQuery = parse(this.state.query || '');
 
         if (!parsedQuery) {
@@ -116,9 +103,7 @@ class GraphiQLIDE extends Component<{}, GraphiQLIDEState> {
         });
 
         if (!def) {
-            console.error(
-                'Unable to find definition corresponding to mouse position'
-            );
+            console.error('Unable to find definition corresponding to mouse position');
             return null;
         }
 
@@ -149,43 +134,36 @@ class GraphiQLIDE extends Component<{}, GraphiQLIDEState> {
     };
 
     _handleSaveQuery = () => {
-        console.log('Save query')
+        console.log('Save query');
         const queryEditor = this._graphiql.getQueryEditor();
         var query = queryEditor && queryEditor.getValue();
         if (!query || query.length === 0) {
             return;
         }
         var Query = new Blob([query], { type: 'application/graphql;charset=utf-8' });
-        saveAs(Query, 'query1.graphql')
+        saveAs(Query, 'query1.graphql');
     };
 
     _handleSaveResponse = () => {
-        console.log('Save response')
+        console.log('Save response');
         var response = this._graphiql.state.response;
         if (!response || response.length === 0) {
             return;
         }
-        console.log(response)
+        console.log(response);
         var Response = new Blob([response], { type: 'application/json;charset=utf-8' });
-        saveAs(Response, 'response1.json')
+        saveAs(Response, 'response1.json');
     };
 
     render() {
         const { query, schema } = this.state;
         return (
-            <div
-                className={cx(
-                    styles.container,
-                    'graphiql-container'
-                )}
-            >
+            <div className={cx(styles.container, 'graphiql-container')}>
                 <GraphiQLExplorer
                     schema={schema}
                     query={query}
                     onEdit={this._handleEditQuery}
-                    onRunOperation={operationName =>
-                        this._graphiql.handleRunQuery(operationName)
-                    }
+                    onRunOperation={operationName => this._graphiql.handleRunQuery(operationName)}
                     explorerIsOpen={this.state.explorerIsOpen}
                     onToggleExplorer={this._handleToggleExplorer}
                     getDefaultScalarArgValue={getDefaultScalarArgValue}
@@ -224,15 +202,8 @@ class GraphiQLIDE extends Component<{}, GraphiQLIDEState> {
                             title="Copy Query (Shift-Ctrl-C)"
                             label="Copy"
                         />
-                        <GraphiQL.Menu
-                            label="Save"
-                            title="Save"
-                        >
-                            <GraphiQL.MenuItem
-                                label="Query"
-                                title="Query"
-                                onSelect={() => this._handleSaveQuery()}
-                            />
+                        <GraphiQL.Menu label="Save" title="Save">
+                            <GraphiQL.MenuItem label="Query" title="Query" onSelect={() => this._handleSaveQuery()} />
                             <GraphiQL.MenuItem
                                 label="Response"
                                 title="Response"
