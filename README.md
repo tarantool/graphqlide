@@ -30,15 +30,18 @@ cd graphiqlide
 
 ```
 tarantoolctl rocks make
-tarantoolctl rocks pack graphqlide scm-1
+tarantoolctl rocks pack graphqlide version
 ```
 
 PS Also "build_rock.sh" may be used to automate build process
 
 After build completion you will get:
 
-1. graphiqlide-scm-1.all.rock
-2. graphiqlide rock installed to graphiqlide/.rocks dir
+graphiqlide-version.all.rock
+graphiqlide rock installed to graphiqlide/.rocks dir
+
+3. install:
+Simply run install_rock.sh from the path where rock should be installed
 
 ## Run
 
