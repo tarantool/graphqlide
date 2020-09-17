@@ -11,8 +11,7 @@ build = {
     type = 'make';
     install = {
         lua = {
-            ['graphqlide'] = 'graphqlide.lua',
-            -- ['frontend-core.bundle'] -- installed with make
+            ['graphqlide'] = 'graphqlide.lua'
         },
     },
     install_variables = {

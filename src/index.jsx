@@ -2,8 +2,14 @@
 
 import * as React from 'react';
 import { css, cx } from 'react-emotion';
-import { IconChip, type MenuItemType } from '@tarantool.io/ui-kit';
+import {
+    type MenuItemType,
+    Icon,
+    type GenericIconProps,
+    colors,
+} from '@tarantool.io/ui-kit';
 import GraphiQLIDE from './GraphiQLIDE';
+import image from './graphql.svg';
 
 import 'graphiql/graphiql.css';
 import './index.css';
@@ -29,13 +35,28 @@ const styles = {
     `,
     areaWithPane: css`
         height: calc(100% - 69px - 112px - 16px);
-    `
+    `,
+    icon: css`
+        width: 48px;
+        height: 48px;
+        fill: ${colors.intentPrimary};
+    `,
 };
+
+const IconGraphQL = ({ className }: GenericIconProps) => (
+    <Icon className={cx(styles.icon, className)} glyph={image} />
+);
 
 class Root extends React.Component {
     render() {
         return (
-            <div className={cx(styles.area, { [styles.areaWithPane]: false }, GQLIDE_CLASS_NAME)}>
+            <div
+                className={cx(
+                    styles.area,
+                    { [styles.areaWithPane]: false },
+                    GQLIDE_CLASS_NAME
+                )}
+            >
                 <GraphiQLIDE />
             </div>
         );
@@ -45,10 +66,16 @@ class Root extends React.Component {
 const matchPath = (path, link) => {
     if (path.length === 0) return false;
     const point = path.indexOf(link);
-    return point === 0 && (link.length === path.length || path[link.length] === '/');
+    return (
+        point === 0 &&
+        (link.length === path.length || path[link.length] === '/')
+    );
 };
 
-const updateLink = path => menuItem => ({ ...menuItem, selected: matchPath(path, menuItem.path) });
+const updateLink = path => menuItem => ({
+    ...menuItem,
+    selected: matchPath(path, menuItem.path),
+});
 
 const menuItems = {
     graphiql() {
@@ -60,22 +87,25 @@ const menuItems = {
                 expanded: false,
                 loading: false,
                 icon: (
-                    <IconChip
+                    <IconGraphQL
                         className={css`
                             width: 14px;
                             height: 14px;
                             fill: #fff;
                         `}
                     />
-                )
-            }
+                ),
+            },
         ];
-    }
+    },
 };
 
 const menuInitialState = menuItems.graphiql();
 
-export const menuReducer = (state: MenuItemType[] = menuInitialState, { type, payload }: FSA): MenuItemType[] => {
+export const menuReducer = (
+    state: MenuItemType[] = menuInitialState,
+    { type, payload }: FSA
+): MenuItemType[] => {
     switch (type) {
         case '@@router/LOCATION_CHANGE':
             if (payload && payload.location && payload.location.pathname) {
@@ -96,4 +126,9 @@ export const menuReducer = (state: MenuItemType[] = menuInitialState, { type, pa
     }
 };
 
-window.tarantool_enterprise_core.register(PROJECT_NAME, menuReducer, Root, 'react');
+window.tarantool_enterprise_core.register(
+    PROJECT_NAME,
+    menuReducer,
+    Root,
+    'react'
+);

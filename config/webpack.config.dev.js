@@ -204,13 +204,11 @@ module.exports = {
                   plugins: () => [
                     require('postcss-flexbugs-fixes'),
                     autoprefixer({
-                      browsers: [
-                        '>1%',
-                        'last 4 versions',
-                        'Firefox ESR',
-                        // EDIT -->
-                        'not ie < 11'
-                        // <-- EDIT
+                      overrideBrowserslist: [
+                        "defaults",
+                        "not IE 11",
+                        "not IE_Mob 11",
+                        "maintained node versions"
                       ],
                       flexbox: 'no-2009'
                     })
