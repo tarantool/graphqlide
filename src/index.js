@@ -39,7 +39,7 @@ const styles = {
 
 const IconGraphQL = ({ className }: GenericIconProps) => <Icon className={cx(styles.icon, className)} glyph={image} />;
 
-class Root extends React.Component {
+class Root extends React.PureComponent {
   render() {
     return (
       <div className={cx(styles.area, { [styles.areaWithPane]: false }, GQLIDE_CLASS_NAME)}>
@@ -106,4 +106,9 @@ export const menuReducer = (state: MenuItemType[] = menuInitialState, { type, pa
   }
 };
 
-window.tarantool_enterprise_core.register(PROJECT_NAME, menuReducer, Root, 'react');
+window.tarantool_enterprise_core.register(
+  PROJECT_NAME,
+  menuReducer,
+  Root,
+  'react'
+);

@@ -21,7 +21,10 @@ function unwrapOutputType(outputType: GraphQLOutputType): * {
   return unwrappedType;
 }
 
-export function makeDefaultArg(parentField: GraphQLField<any, any>, arg: GraphQLArgument | GraphQLInputField): boolean {
+export function makeDefaultArg(
+  parentField: GraphQLField<any, any>,
+  arg: GraphQLArgument | GraphQLInputField
+): boolean {
   const unwrappedType = unwrapOutputType(parentField.type);
   if (
     unwrappedType.name.startsWith('GitHub') &&
@@ -53,7 +56,11 @@ export function getDefaultScalarArgValue(
       }
       break;
     default:
-      if (isEnumType(argType) && unwrappedType.name.startsWith('GitHub') && unwrappedType.name.endsWith('Connection')) {
+      if (
+        isEnumType(argType) &&
+        unwrappedType.name.startsWith('GitHub') &&
+        unwrappedType.name.endsWith('Connection')
+      ) {
         if (
           arg.name === 'direction' &&
           argType

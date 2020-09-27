@@ -1,4 +1,5 @@
 // @ts-check
+
 import React, { Component } from 'react';
 import { css, cx } from 'emotion';
 import GraphiQL from 'graphiql';
@@ -44,7 +45,16 @@ async function fetcher(graphQLParams: Object): Object {
     },
     5000
   );
-  return data.json().catch(() => data.text());
+
+  const json = (function(raw) {
+    try {
+      return raw.json();
+    } catch (err) {
+      return '{}';
+    }
+  })(data);
+
+  return json;
 }
 
 const DEFAULT_QUERY = ``;
@@ -73,7 +83,10 @@ class GraphiQLIDE extends Component<{}, GraphiQLIDEState> {
     });
   }
 
-  _handleInspectOperation = (cm: any, mousePos: { line: Number, ch: Number }) => {
+  _handleInspectOperation = (
+    cm: any,
+    mousePos: { line: Number, ch: Number }
+  ) => {
     const parsedQuery = parse(this.state.query || '');
 
     if (!parsedQuery) {
@@ -102,12 +115,18 @@ class GraphiQLIDE extends Component<{}, GraphiQLIDEState> {
     });
 
     if (!def) {
-      console.error('Unable to find definition corresponding to mouse position');
+      console.error(
+        'Unable to find definition corresponding to mouse position'
+      );
       return null;
     }
 
     var operationKind =
-      def.kind === 'OperationDefinition' ? def.operation : def.kind === 'FragmentDefinition' ? 'fragment' : 'unknown';
+      def.kind === 'OperationDefinition'
+        ? def.operation
+        : def.kind === 'FragmentDefinition'
+          ? 'fragment'
+          : 'unknown';
 
     var operationName =
       def.kind === 'OperationDefinition' && !!def.name
@@ -172,7 +191,11 @@ class GraphiQLIDE extends Component<{}, GraphiQLIDEState> {
           onEditQuery={this._handleEditQuery}
         >
           <GraphiQL.Toolbar>
-            <GraphiQL.Button onClick={this._handleToggleExplorer} label="Explorer" title="Toggle Explorer" />
+            <GraphiQL.Button
+              onClick={this._handleToggleExplorer}
+              label="Explorer"
+              title="Toggle Explorer"
+            />
             <GraphiQL.Button
               onClick={() => this._graphiql.handleToggleHistory()}
               label="History"
@@ -193,9 +216,20 @@ class GraphiQLIDE extends Component<{}, GraphiQLIDEState> {
               title="Copy Query (Shift-Ctrl-C)"
               label="Copy"
             />
-            <GraphiQL.Menu label="Save" title="Save">
-              <GraphiQL.MenuItem label="Query" title="Query" onSelect={() => this._handleSaveQuery()} />
-              <GraphiQL.MenuItem label="Response" title="Response" onSelect={() => this._handleSaveResponse()} />
+            <GraphiQL.Menu
+              label="Save"
+              title="Save"
+            >
+              <GraphiQL.MenuItem
+                label="Query"
+                title="Query"
+                onSelect={() => this._handleSaveQuery()}
+              />
+              <GraphiQL.MenuItem
+                label="Response"
+                title="Response"
+                onSelect={() => this._handleSaveResponse()}
+              />
             </GraphiQL.Menu>
           </GraphiQL.Toolbar>
         </GraphiQL>
