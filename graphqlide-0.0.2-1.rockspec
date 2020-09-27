@@ -1,5 +1,5 @@
 package = 'graphqlide'
-version = '0.0.1-1'
+version = '0.0.2-1'
 source  = {
     url = '',
     branch = 'master',

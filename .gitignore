@@ -1,8 +1,7 @@
-/node_modules
+node_modules
 build
 .idea
 .rocks
-.history/*
-/plop-templates/*
+.history
 *.rock
-.vscode/*
+.vscode
