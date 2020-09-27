@@ -11,6 +11,7 @@ Maintanance release with a number of minor changes:
 - `'build_rock.sh' and 'install_rock.sh' scripts moved to ./scripts folder`
 - `removed plop because it's not needed any more`
 - `fixed bug when in some circumstances dev run ('npm run start') didn't work`
+- `fixed main graphqlide container properties`
 - `added .vscode folder with settings for MS Visual Studio Code`
 - `fixed multiple lint issues`
 - `fixed README`

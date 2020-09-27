@@ -25,6 +25,7 @@ GraphQLIDE looks like:
 ```bash
 git clone git@github.com:no1seman/graphiqlide.git graphiqlide
 cd graphiqlide
+npm i
 ```
 
 ### Build rock
