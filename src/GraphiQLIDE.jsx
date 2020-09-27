@@ -1,7 +1,7 @@
 // @ts-check
 
 import React, { Component } from 'react';
-import { css, cx } from 'emotion';
+import { css, cx } from 'emotion'
 import GraphiQL from 'graphiql';
 import GraphiQLExplorer from 'graphiql-explorer';
 import { buildClientSchema, getIntrospectionQuery, parse } from 'graphql';
@@ -13,10 +13,12 @@ import 'graphiql/graphiql.css';
 
 const styles = {
   container: css`
-    height: 100vh;
-    width: 100vw;
+    height: 100%; 
+    width: 100%;
+    display: flex;
+    flex-direction: row;
   `
-};
+}
 
 function fetchWrapper(url, options, timeout) {
   return new Promise((resolve, reject) => {
@@ -148,7 +150,6 @@ class GraphiQLIDE extends Component<{}, GraphiQLIDEState> {
   };
 
   _handleSaveQuery = () => {
-    console.log('Save query');
     const queryEditor = this._graphiql.getQueryEditor();
     var query = queryEditor && queryEditor.getValue();
     if (!query || query.length === 0) {
@@ -159,12 +160,10 @@ class GraphiQLIDE extends Component<{}, GraphiQLIDEState> {
   };
 
   _handleSaveResponse = () => {
-    console.log('Save response');
     var response = this._graphiql.state.response;
     if (!response || response.length === 0) {
       return;
     }
-    console.log(response);
     var Response = new Blob([response], { type: 'application/json;charset=utf-8' });
     saveAs(Response, 'response1.json');
   };
@@ -172,7 +171,7 @@ class GraphiQLIDE extends Component<{}, GraphiQLIDEState> {
   render() {
     const { query, schema } = this.state;
     return (
-      <div className={cx(styles.container, 'graphiql-container')}>
+      <div className={cx(styles.container, 'graphiql-container')} >
         <GraphiQLExplorer
           schema={schema}
           query={query}

@@ -4,3 +4,4 @@ build
 .rocks
 .history
 *.rock
+package-lock.json

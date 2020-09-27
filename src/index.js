@@ -23,7 +23,7 @@ const styles = {
     margin-rigth: 0px;
     margin-top: 4px;
     margin-bottom: 0px;
-    border-radius: 4px;
+    border-radius: 0px;
     box-sizing: border-box;
     background-color: #ffffff;
   `,
