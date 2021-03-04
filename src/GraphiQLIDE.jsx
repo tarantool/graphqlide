@@ -36,7 +36,7 @@ async function fetcher(graphQLParams: Object): Object {
     graphQLParams['variables'] = {};
   }
   const data = await fetchWrapper(
-    '/admin/api',
+    window.__tarantool_variables.graphqlidePath or '/admin/api',
     {
       method: 'POST',
       headers: {
