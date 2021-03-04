@@ -6,7 +6,7 @@
     "@tarantool.io/frontend-core": "7.3.0",
     "@tarantool.io/ui-kit": "0.23.0",
     "emotion": "^10.0.27",
-    "graphiql": "^1.0.5",
+    "graphiql": "1.4.0",
     "graphiql-explorer": "^0.6.2",
     "graphql": "^15.5.0"
   },

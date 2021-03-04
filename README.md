@@ -4,10 +4,10 @@ This plugin is used to add GrapiQL IDE functionality into Tarantool Cartridge We
 
 Based on:
 
-- [Tarantool 2.x.x](https://www.tarantool.io/en/download/?v=2.4)
-- [Tarantool Cartridge 2.3.0](https://github.com/tarantool/cartridge)
+- [Tarantool 2.x.x](https://www.tarantool.io/en/download/?v=2.5)
+- [Tarantool Cartridge 2.3.0+](https://github.com/tarantool/cartridge)
 - [Tarantool Frontend Core 7.3.0](https://github.com/tarantool/frontend-core)
-- [GraphiGL 1.0.5](https://github.com/graphql/graphiql)
+- [GraphiGL 1.4.0](https://github.com/graphql/graphiql)
 - [GraphiQL Explorer 0.6.2](https://github.com/OneGraph/graphiql-explorer)
 
 GraphQLIDE looks like:
@@ -55,11 +55,14 @@ tarantoolctl rocks install <path to rock file>/graphqlide-version.all.rock
 
 ### Add plugin to your Tarantool Cartridge App
 
-To get GraphQLIDE work just add to Tarantool Cartridge application init.lua the following code:
+To get GraphQL IDE work just add to Tarantool Cartridge application init.lua the following code:
 
 ```lua
-require('graphqlide').init()
+local path = '/admin/graphql'
+require('graphqlide').init(path)
 ```
+
+`path` is optional, if not set - default '/admin/api' endpoint used
 
 ## Development
 
@@ -68,6 +71,6 @@ Use F5 to run app or Shift-Crtl-B to run production build task
 
 Useful commands:
 
-- `npm run build - builds production project`
+- `npm run build - to build production module`
 - `npm run start - run application without need to integrate it into Tarantool Cartridge App. Useful for development purposes`
-- `npm run build-rock - builds production project and bundles it into rock`
+- `npm run build-rock - builds production module and bundles it into rock`

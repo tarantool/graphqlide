@@ -35,8 +35,11 @@ async function fetcher(graphQLParams: Object): Object {
   if (typeof graphQLParams['variables'] === 'undefined') {
     graphQLParams['variables'] = {};
   }
+
+  var endpoint = window.__tarantool_variables.graphqlidePath ? 
+    window.__tarantool_variables.graphqlidePath : '/admin/api'
   const data = await fetchWrapper(
-    window.__tarantool_variables.graphqlidePath or '/admin/api',
+    endpoint,
     {
       method: 'POST',
       headers: {

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.0.3
+
+Maintanance release with a number of minor changes:
+
+- `graphiql@1.0.5 upgraded to graphiql@1.4.0`
+- `axios removed cause it's not used anymore`
+- `add setting graphql API endpoint from lua-api`
+
 ## 0.0.2
 
 Maintanance release with a number of minor changes:
