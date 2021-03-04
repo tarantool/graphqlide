@@ -1,7 +1,7 @@
 package = 'graphqlide'
 version = '0.0.3-1'
 source  = {
-    url = '',
+    url = 'git+https://github.com/no1seman/graphiqlide.git',
     branch = 'master',
 }
 dependencies = {
