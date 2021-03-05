@@ -36,8 +36,13 @@ async function fetcher(graphQLParams: Object): Object {
     graphQLParams['variables'] = {};
   }
 
-  var endpoint = window.__tarantool_variables.graphqlidePath ? 
-    window.__tarantool_variables.graphqlidePath : '/admin/api'
+  var endpoint
+  if (typeof window.__tarantool_variables !== 'undefined' &&
+    typeof window.__tarantool_variables.graphqlidePath !== 'undefined')
+    endpoint = window.__tarantool_variables.graphqlidePath
+  else
+    endpoint = '/admin/api'
+
   const data = await fetchWrapper(
     endpoint,
     {

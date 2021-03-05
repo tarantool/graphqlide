@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.4
+
+Maintanance release with a number of minor changes:
+
+- `proper check of __tarantool_variables.graphqlidePath variable`
+
 ## 0.0.3
 
 Maintanance release with a number of minor changes:

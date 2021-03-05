@@ -1,6 +1,6 @@
 {
   "name": "graphqlide",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "private": true,
   "dependencies": {
     "@tarantool.io/frontend-core": "7.3.0",
