@@ -6,7 +6,7 @@ Based on:
 
 - [Tarantool 2.x.x](https://www.tarantool.io/en/download/?v=2.5)
 - [Tarantool Cartridge 2.3.0+](https://github.com/tarantool/cartridge)
-- [Tarantool Frontend Core 7.3.0](https://github.com/tarantool/frontend-core)
+- [Tarantool Frontend Core 7.5.0](https://github.com/tarantool/frontend-core)
 - [GraphiGL 1.4.0](https://github.com/graphql/graphiql)
 - [GraphiQL Explorer 0.6.2](https://github.com/OneGraph/graphiql-explorer)
 
@@ -39,7 +39,7 @@ Also "npm run build-rock" to build the rock
 
 After build completion you will get:
 
-graphqlide-version.all.rock
+graphqlide-<version>.all.rock
 graphqlide rock installed to graphqlide/.rocks dir
 
 ## Install

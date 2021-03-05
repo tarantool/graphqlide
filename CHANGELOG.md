@@ -1,5 +1,15 @@
 # Changelog
 
+
+## 0.0.5
+
+Maintanance release with a number of minor changes:
+
+`replace vulnerable uglifyjs-webpack-plugin with terser-webpack-plugin@4.2.3`
+`update @tarantool.io/frontend-core@7.3.0 to @tarantool.io/frontend-core@7.5.0`
+`update @tarantool.io/ui-kit@0.23.0 to @tarantool.io/ui-kit@0.34.0`
+`update react-dev-utils@9.0.1 to react-dev-utils@11.0.3`
+
 ## 0.0.4
 
 Maintanance release with a number of minor changes:

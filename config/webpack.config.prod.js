@@ -5,7 +5,7 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require("terser-webpack-plugin");
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 const moduleConfig = require('../module-config');
@@ -306,17 +306,11 @@ module.exports = {
     ]
   },
   optimization: {
+    minimize: true,
     minimizer: [
       // Minify the code.
-      new UglifyJsPlugin({
-        uglifyOptions: {
-          output: {
-            comments: false
-          },
-          warnings: false
-        },
-        // parallel: false,
-        sourceMap: shouldUseSourceMap
+      new TerserPlugin({
+        extractComments: false,
       })
     ]
   },
