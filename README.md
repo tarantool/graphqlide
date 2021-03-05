@@ -1,4 +1,4 @@
-# Tarantool Cartridge WebUI GraphiQL IDE plugin
+# Tarantool Cartridge WebUI GraphQL IDE plugin
 
 This plugin is used to add GrapiQL IDE functionality into Tarantool Cartridge WebUI
 
@@ -12,7 +12,7 @@ Based on:
 
 GraphQLIDE looks like:
 
-![GraphQLIDE](https://github.com/no1seman/graphiqlide/blob/master/resources/graphqlide.jpg "GraphQLIDE")
+![GraphQLIDE](https://github.com/no1seman/graphqlide/blob/master/resources/graphqlide.jpg "GraphQLIDE")
 
 ## Usage
 
@@ -23,8 +23,8 @@ GraphQLIDE looks like:
 ### Clone repo
 
 ```bash
-git clone git@github.com:no1seman/graphiqlide.git graphiqlide
-cd graphiqlide
+git clone git@github.com:no1seman/graphqlide.git graphqlide
+cd graphqlide
 npm i
 ```
 
@@ -39,8 +39,8 @@ Also "npm run build-rock" to build the rock
 
 After build completion you will get:
 
-graphiqlide-version.all.rock
-graphiqlide rock installed to graphiqlide/.rocks dir
+graphqlide-version.all.rock
+graphqlide rock installed to graphqlide/.rocks dir
 
 ## Install
 
