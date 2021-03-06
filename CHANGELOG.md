@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.0.6
+
+Maintanance release with a number of minor changes:
+
+`update readme`
+`use frontend-core vanilla menu reducer instead of custom and also simplify module code`
+`finally change GraphiQLIDE to GraphQLIDE`
 
 ## 0.0.5
 
