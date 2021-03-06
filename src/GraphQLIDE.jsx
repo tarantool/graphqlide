@@ -69,13 +69,13 @@ async function fetcher(graphQLParams: Object): Object {
 
 const DEFAULT_QUERY = ``;
 
-type GraphiQLIDEState = {
+type GraphQLIDEState = {
   schema: ?GraphQLSchema,
   query: string,
   explorerIsOpen: boolean
 };
 
-class GraphiQLIDE extends Component<{}, GraphiQLIDEState> {
+class GraphQLIDE extends Component<{}, GraphQLIDEState> {
   _graphiql: GraphiQL;
   state = { schema: null, query: DEFAULT_QUERY, explorerIsOpen: false };
 
@@ -245,4 +245,4 @@ class GraphiQLIDE extends Component<{}, GraphiQLIDEState> {
   }
 }
 
-export default GraphiQLIDE;
+export default GraphQLIDE;

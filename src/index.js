@@ -1,17 +1,14 @@
 // @ts-check
 import * as React from 'react';
 import { css, cx } from 'emotion';
-import { type MenuItemType, Icon, type GenericIconProps, colors } from '@tarantool.io/ui-kit';
-import GraphiQLIDE from './GraphiQLIDE';
+import { Icon, type GenericIconProps } from '@tarantool.io/ui-kit';
+import GraphQLIDE from './GraphQLIDE';
 import image from './graphql.svg';
 
 import 'graphiql/graphiql.css';
 import './index.css';
 
 const PROJECT_NAME = 'graphqlide';
-const GQLIDE_MENU_LABEL = 'GraphiQL IDE';
-const GQLIDE_PATH = '/graphqlide';
-const GQLIDE_CLASS_NAME = 'graphqlide';
 
 const styles = {
   area: css`
@@ -31,9 +28,9 @@ const styles = {
     height: calc(100% - 69px - 112px - 16px);
   `,
   icon: css`
-    width: 48px;
-    height: 48px;
-    fill: ${colors.intentPrimary};
+    width: 16px;
+    height: 16px;
+    fill: #fff;
   `
 };
 
@@ -42,73 +39,20 @@ const IconGraphQL = ({ className }: GenericIconProps) => <Icon className={cx(sty
 class Root extends React.PureComponent {
   render() {
     return (
-      <div className={cx(styles.area, { [styles.areaWithPane]: false }, GQLIDE_CLASS_NAME)}>
-        <GraphiQLIDE />
+      <div className={cx(styles.area, { [styles.areaWithPane]: false }, PROJECT_NAME)}>
+        <GraphQLIDE />
       </div>
     );
   }
 }
 
-const matchPath = (path, link) => {
-  if (path.length === 0) return false;
-  const point = path.indexOf(link);
-  return point === 0 && (link.length === path.length || path[link.length] === '/');
-};
-
-const updateLink = path => menuItem => ({
-  ...menuItem,
-  selected: matchPath(path, menuItem.path)
-});
-
-const menuItems = {
-  graphiql() {
-    return [
-      {
-        label: GQLIDE_MENU_LABEL,
-        path: GQLIDE_PATH,
-        selected: false,
-        expanded: false,
-        loading: false,
-        icon: (
-          <IconGraphQL
-            className={css`
-              width: 14px;
-              height: 14px;
-              fill: #fff;
-            `}
-          />
-        )
-      }
-    ];
-  }
-};
-
-const menuInitialState = menuItems.graphiql();
-
-export const menuReducer = (state: MenuItemType[] = menuInitialState, { type, payload }: FSA): MenuItemType[] => {
-  switch (type) {
-    case '@@router/LOCATION_CHANGE':
-      if (payload && payload.location && payload.location.pathname) {
-        return state.map(updateLink(payload.location.pathname));
-      } else {
-        return state;
-      }
-
-    case 'RESET':
-      if (payload) {
-        return menuInitialState.map(updateLink(payload.path));
-      } else {
-        return state;
-      }
-
-    default:
-      return state;
-  }
-};
-
 window.tarantool_enterprise_core.register(
   PROJECT_NAME,
-  menuReducer,
+  [{ label: 'GraphQL IDE', path: `/${PROJECT_NAME}`, icon: IconGraphQL }],
   Root,
   'react'
 );
+
+if (window.tarantool_enterprise_core.install) {
+  window.tarantool_enterprise_core.install();
+}
