@@ -1,10 +1,10 @@
 {
   "name": "graphqlide",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "private": true,
   "dependencies": {
     "@tarantool.io/frontend-core": "7.5.0",
-    "@tarantool.io/ui-kit": "0.34.0",
+    "@tarantool.io/ui-kit": "0.35.0",
     "emotion": "^10.0.27",
     "graphiql": "1.4.0",
     "graphiql-explorer": "^0.6.2",
@@ -59,7 +59,7 @@
     "promise": "8.1.0",
     "prop-types": "^15.7.2",
     "raf": "3.4.1",
-    "react-dev-utils": "11.0.3",
+    "react-dev-utils": "11.0.4",
     "resolve": "1.17.0",
     "source-map-explorer": "^2.5.0",
     "string-replace-loader": "^2.3.0",
