@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.0.7
+
+Maintanance release with a number of minor changes:
+
+`update react-dev-utils@11.0.3 to react-dev-utils@11.0.4`
+`update @tarantool.io/ui-kit@0.34.0 to @tarantool.io/ui-kit@0.35.0`
+`minor README.md fixes`
 ## 0.0.6
 
 Maintanance release with a number of minor changes:
