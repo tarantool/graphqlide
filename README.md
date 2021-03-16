@@ -4,7 +4,7 @@ This plugin is used to add GraphQL IDE functionality into Tarantool Cartridge We
 
 Based on:
 
-- [Tarantool 2.x.x](https://www.tarantool.io/en/download/)
+- [Tarantool 1.x.x or 2.x.x](https://www.tarantool.io/en/download/)
 - [Tarantool Cartridge 2.3.0+](https://github.com/tarantool/cartridge)
 - [Tarantool Frontend Core 7.5.0](https://github.com/tarantool/frontend-core)
 - [GraphiQL 1.4.0](https://github.com/graphql/graphiql)
@@ -37,7 +37,7 @@ Initialize graphqlide module.
 
 where:
 
-* `endpoint` (`?string`) - URI-endpoint of GraphQL IDE UI. Parameter is optional, if not set - default '/admin/api' endpoint used.
+* `endpoint` (`?string`) - URI-endpoint of GraphQL API. Parameter is optional, if not set - default '/admin/api' endpoint used.
 
 ## Add GraphQL IDE to your Tarantool Cartridge App
 
