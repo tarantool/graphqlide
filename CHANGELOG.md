@@ -1,28 +1,36 @@
 # Changelog
 
+## 0.0.8
+
+- `updated README.md`
+- `added Tarantool Cartridge role`
+- `added set_endpoint() method to set GraphQLAPI endpoint`
+- `added get_endpoint() method to get GraphQLAPI endpoint`
+- `added VERSION parameter`
+- `fixed CAHNGELOG.md styles`
 ## 0.0.7
 
 Maintanance release with a number of minor changes:
 
-`update react-dev-utils@11.0.3 to react-dev-utils@11.0.4`
-`update @tarantool.io/ui-kit@0.34.0 to @tarantool.io/ui-kit@0.35.0`
-`minor README.md fixes`
+- `update react-dev-utils@11.0.3 to react-dev-utils@11.0.4`
+- `update @tarantool.io/ui-kit@0.34.0 to @tarantool.io/ui-kit@0.35.0`
+- `minor README.md fixes`
 ## 0.0.6
 
 Maintanance release with a number of minor changes:
 
-`update readme`
-`use frontend-core vanilla menu reducer instead of custom and also simplify module code`
-`finally change GraphiQLIDE to GraphQLIDE`
+- `update readme`
+- `use frontend-core vanilla menu reducer instead of custom and also simplify module code`
+- `finally change GraphiQLIDE to GraphQLIDE`
 
 ## 0.0.5
 
 Maintanance release with a number of minor changes:
 
-`replace vulnerable uglifyjs-webpack-plugin with terser-webpack-plugin@4.2.3`
-`update @tarantool.io/frontend-core@7.3.0 to @tarantool.io/frontend-core@7.5.0`
-`update @tarantool.io/ui-kit@0.23.0 to @tarantool.io/ui-kit@0.34.0`
-`update react-dev-utils@9.0.1 to react-dev-utils@11.0.3`
+- `replace vulnerable uglifyjs-webpack-plugin with terser-webpack-plugin@4.2.3`
+- `update @tarantool.io/frontend-core@7.3.0 to @tarantool.io/frontend-core@7.5.0`
+- `update @tarantool.io/ui-kit@0.23.0 to @tarantool.io/ui-kit@0.34.0`
+- `update react-dev-utils@9.0.1 to react-dev-utils@11.0.3`
 
 ## 0.0.4
 

@@ -38,8 +38,8 @@ async function fetcher(graphQLParams: Object): Object {
 
   var endpoint
   if (typeof window.__tarantool_variables !== 'undefined' &&
-    typeof window.__tarantool_variables.graphqlidePath !== 'undefined')
-    endpoint = window.__tarantool_variables.graphqlidePath
+    typeof window.__tarantool_variables.graphQLIDEPath !== 'undefined')
+    endpoint = window.__tarantool_variables.graphQLIDEPath
   else
     endpoint = '/admin/api'
 
@@ -173,7 +173,7 @@ class GraphQLIDE extends Component<{}, GraphQLIDEState> {
       return;
     }
     var Response = new Blob([response], { type: 'application/json;charset=utf-8' });
-    saveAs(Response, 'response1.json');
+    saveAs(Response, 'response.json');
   };
 
   render() {
