@@ -1,26 +1,36 @@
-local graphqlide = require('graphqlide')
+package.loaded['graphqlide.bundle'] = nil
+
+local checks = require('checks')
+local bundle = require('graphqlide.bundle')
+local front = require('frontend-core')
+
+local VERSION = '0.0.9-1'
+local ENDPOINT = nil
 
 local function init()
-    graphqlide.init()
+    if bundle and front then
+        ENDPOINT = '/admin/api'
+        front.add('graphqlide', bundle)
+    end
 end
 
 local function stop()
-    package.loaded['graphqlide.bundle'] = nil
 end
 
 local function set_endpoint(endpoint)
-    graphqlide.set_endpoint(endpoint)
+    checks('string')
+    front.set_variable('graphQLIDEPath', endpoint)
 end
 
-local function get_endpoint(endpoint)
-    return graphqlide.get_endpoint()
+local function get_endpoint()
+    return ENDPOINT
 end
 
-return setmetatable({
+return {
     role_name = 'graphqlide',
     init = init,
     stop = stop,
     set_endpoint = set_endpoint,
     get_endpoint = get_endpoint,
-    VERSION = graphqlide.VERSION
-}, { __index = graphqlide })
+    VERSION = VERSION,
+}

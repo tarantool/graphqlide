@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.0.9
+
+- `add support for pure-Tarantool`
+- `fix module rockspec to avoid rebuild during install`
+- `make possible to use module with pure Tarantool without Tarantool Cartridge`
+- `separate Tarantool Cartridge role and pure Tarantool module logic`
+- `add front_init() method for pure-Tarantool`
+  
 ## 0.0.8
 
 - `updated README.md`
@@ -8,6 +16,7 @@
 - `added get_endpoint() method to get GraphQLAPI endpoint`
 - `added VERSION parameter`
 - `fixed CAHNGELOG.md styles`
+  
 ## 0.0.7
 
 Maintanance release with a number of minor changes:
@@ -15,6 +24,7 @@ Maintanance release with a number of minor changes:
 - `update react-dev-utils@11.0.3 to react-dev-utils@11.0.4`
 - `update @tarantool.io/ui-kit@0.34.0 to @tarantool.io/ui-kit@0.35.0`
 - `minor README.md fixes`
+  
 ## 0.0.6
 
 Maintanance release with a number of minor changes:
