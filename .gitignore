@@ -5,3 +5,10 @@ build
 .history
 *.rock
 package-lock.json
+.vscode
+*.xlog
+*.snap
+*.rpm
+*.deb
+*.tar.gz
+example/*

@@ -1,5 +1,5 @@
 package = 'graphqlide'
-version = '0.0.8-1'
+version = '0.0.9-1'
 source  = {
     url = 'git+https://github.com/no1seman/graphqlide.git',
     branch = 'master',
@@ -13,18 +13,18 @@ description = {
 dependencies = {
     'lua >= 5.1',
     'checks >= 2.0.0',
-    'frontend-core >= 7.2.0-1',
+    'frontend-core ~> 7',
 }
 build = {
-    type = 'make';
+    type = 'make',
+    build_target = 'all',
     install = {
         lua = {
             ['graphqlide'] = 'graphqlide.lua',
             ['cartridge.roles.graphqlide'] = 'cartridge/roles/graphqlide.lua',
-        },
+        }
     },
     install_variables = {
         INST_LUADIR="$(LUADIR)",
     },
-
 }

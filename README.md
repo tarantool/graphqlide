@@ -5,7 +5,7 @@ This plugin is used to add GraphQL IDE functionality into Tarantool Cartridge We
 Based on:
 
 - [Tarantool 1.10.x or 2.x.x](https://www.tarantool.io/en/download/)
-- [Tarantool Cartridge 2.3.0+](https://github.com/tarantool/cartridge)
+- [Tarantool Cartridge 2.3.0+](https://github.com/tarantool/cartridge) (optional)
 - [Tarantool Frontend Core 7.5.0](https://github.com/tarantool/frontend-core)
 - [GraphiQL 1.4.0](https://github.com/graphql/graphiql)
 - [GraphiQL Explorer 0.6.2](https://github.com/OneGraph/graphiql-explorer)
@@ -16,18 +16,18 @@ GraphQL IDE interface:
 
 ## Install pre-built rock
 
-Simply run from the root of Tarantool Cartridge App root the following
+Simply run from the root of Tarantool Cartridge App root the following:
 
 ```sh
     cd <tarantool-cartridge-application-dir>
-    tarantoolctl rocks install https://github.com/no1seman/graphqlide/releases/download/0.0.8/graphqlide-0.0.8-1.all.rock
+    tarantoolctl rocks install https://github.com/no1seman/graphqlide/releases/download/0.0.9/graphqlide-0.0.9-1.all.rock
 ```
 
 ## Lua API
 
 ### Init
 
-`init(endpoint)` used to initialize graphqlide module.
+`init(endpoint)` - used to initialize graphqlide module.
 
 where:
 
@@ -43,7 +43,7 @@ Example:
 
 ### Set endpoint
 
-`set_endpoint(endpoint)` method is used to set endpoint in runtime.
+`set_endpoint(endpoint)` - method is used to set endpoint in runtime.
 
 where:
 
@@ -59,7 +59,7 @@ Example:
 
 ### Get endpoint
 
-`get_endpoint()` method is used to get endpoint.
+`get_endpoint()` - method is used to get endpoint.
 
 Returns `endpoint` (`string`).
 
@@ -71,6 +71,18 @@ Example:
     local graphqlide_endpoint = graphqlide.get_endpoint()
     log.info('GraphQL IDE endpoint: %s', graphqlide_endpoint)
 ```
+
+### Front init
+
+`front_init(httpd, opts)` - method to init frontend core.
+
+where:
+
+* `httpd` (`table`) - instance of a Tarantool HTTP server.
+
+* `enforce_root_redirect` (`boolean`) - optional key which controls redirection to frontend core app from '/' path, default true.
+
+* `prefix` (`string`) - optional, adds path prefix to frontend core app.
 
 ### Version
 
@@ -88,7 +100,7 @@ Example:
 
 There are 3 ways to add GraphQL IDE to Tarantool Cartridge application:
 
-1. Add GraphQL IDE initialization code to init.lua:
+1. Add GraphQL IDE initialization code to Tarantool Cartridge application init.lua:
 
 ```lua
     ...
@@ -110,7 +122,7 @@ There are 3 ways to add GraphQL IDE to Tarantool Cartridge application:
 
 **Note:** graphqlide.init() must be called after cartridge.cfg()
 
-2. Add GraphQL IDE initialization code to Role into init() function:
+2. Add GraphQL IDE initialization code into desired Tarantool Cartridge role init() function:
 
 ```lua
     ...
@@ -131,7 +143,7 @@ There are 3 ways to add GraphQL IDE to Tarantool Cartridge application:
     ...
 ```
 
-3. Add GraphQL IDE Tarantool Cartridge role as dependency of other Tarantool Cartridge role:
+3. Add GraphQL IDE Tarantool Cartridge role as dependency of desired Tarantool Cartridge role:
 
 ```lua
     ...
@@ -160,19 +172,29 @@ In this case may need to set endpoint of GraphQL API. The best way to it simply 
     end
 ```
 
-or use `cartridge.service_get()` method:
+## Use GraphQL IDE with pure Tarantool (without Tarantool Cartridge)
+
+This module can be used with pure Tarantool (without Tarantool Cartridge).
+
+Caution: GraphQL IDE module is compatible only with 1.x branch of http module [http](https://github.com/tarantool/http)
+
+Example:
 
 ```lua
-    local cartridge = require('cartridge')
-    ...
-    local function init(opts)
-        if opts.is_master then
-        ...
-        end
-        ...
-        cartridge.service_get('graphqlide').set_endpoint('/admin/graphql')
-        ...
-    end
+    local http = require('http.server')
+    local graphqlide = require('graphqlide')
+
+    local HOST = '0.0.0.0'
+    local PORT = 8081
+    local ENDPOINT = '/graphqlide'
+
+    local httpd = http.new(HOST, PORT,{ log_requests = false })
+
+    httpd:start()
+    graphqlide.front_init(httpd)
+    graphqlide.init(ENDPOINT)
+
+    box.cfg({work_dir = './tmp'})
 ```
 
 ## Build from sources
@@ -202,7 +224,7 @@ Also you can use `npm run build-rock` to build the rock.
 
 After build completion you will get:
 
-- packed graphqlide rock: `graphqlide/graphqlide-0.0.8-1.all.rock`
+- packed graphqlide rock: `graphqlide/graphqlide-0.0.9-1.all.rock`
 - graphqlide rock installed to: graphqlide/.rocks/tarantool
 
 ### Install built rock
@@ -211,7 +233,7 @@ Simply run from the root of Tarantool Cartridge App root the following:
 
 ```sh
     cd <Tarantool Cartridge application dir>
-    tarantoolctl rocks install <path_to_rock_file>/graphqlide-0.0.8-1.all.rock
+    tarantoolctl rocks install <path_to_rock_file>/graphqlide-0.0.9-1.all.rock
 ```
 
 ## Development
