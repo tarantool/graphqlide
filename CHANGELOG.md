@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.0.10
+
+- `update @tarantool.io/ui-kit@0.35.0 to @tarantool.io/ui-kit@0.37.0`
+- `update @tarantool.io/frontend-core@7.5.0 to @tarantool.io/frontend-core@7.8.0`
+- `update graphiql@1.4.0 to graphiql@1.4.2`
+- `include graphiql-explorer@0.6.3 sources to project instead of importing external module`
+- `fix isLeaf check fields auto-selection for non-nullable scalars and enums`
+- `revert separating Tarantool Cartridge role and pure Tarantool module logic`
+- `add support for multiple schemas`
+- `fix non-working js/ts code linting and fix multiple lint warnings`
+- `add tests for lua part of this module`
+- `update README.md`
+
 ## 0.0.9
 
 - `add support for pure-Tarantool`

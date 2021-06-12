@@ -1,5 +1,5 @@
 package = 'graphqlide'
-version = '0.0.9-1'
+version = '0.0.10-1'
 source  = {
     url = 'git+https://github.com/no1seman/graphqlide.git',
     branch = 'master',
@@ -12,7 +12,7 @@ description = {
 }
 dependencies = {
     'lua >= 5.1',
-    'checks >= 2.0.0',
+    'checks ~> 3',
     'frontend-core ~> 7',
 }
 build = {
