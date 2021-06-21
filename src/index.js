@@ -48,7 +48,11 @@ class Root extends React.PureComponent {
 
 window.tarantool_enterprise_core.register(
   PROJECT_NAME,
-  [{ label: 'GraphQL IDE', path: `/${PROJECT_NAME}`, icon: IconGraphQL }],
+  [{
+    label: 'GraphQL IDE',
+    path: `/${PROJECT_NAME}`,
+    icon: IconGraphQL
+  }],
   Root,
   'react'
 );

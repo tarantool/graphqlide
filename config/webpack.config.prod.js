@@ -153,9 +153,8 @@ module.exports = {
                 loader: 'svgo-loader',
                 options: {
                   plugins: [
-                    { removeTitle: true },
-                    { convertPathData: false },
-                    { removeUselessStrokeAndFill: true }
+                    { "name": "removeTitle" },
+                    { "name": "removeUselessStrokeAndFill" }
                   ]
                 }
               }
@@ -245,19 +244,21 @@ module.exports = {
                 options: {
                   // Necessary for external CSS imports to work
                   // https://github.com/facebookincubator/create-react-app/issues/2677
-                  ident: 'postcss',
-                  plugins: () => [
-                    require('postcss-flexbugs-fixes'),
-                    autoprefixer({
-                      overrideBrowserslist: [
-                        "defaults",
-                        "not IE 11",
-                        "not IE_Mob 11",
-                        "maintained node versions"
-                      ],
-                      flexbox: 'no-2009'
-                    })
-                  ]
+                  // ident: 'postcss',
+                  postcssOptions: {
+                    plugins: () => [
+                      require('postcss-flexbugs-fixes'),
+                      autoprefixer({
+                        overrideBrowserslist: [
+                          "defaults",
+                          "not IE 11",
+                          "not IE_Mob 11",
+                          "maintained node versions"
+                        ],
+                        flexbox: 'no-2009'
+                      })
+                    ]
+                  }
                 }
               }
             ]

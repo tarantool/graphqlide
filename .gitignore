@@ -12,3 +12,4 @@ package-lock.json
 *.deb
 *.tar.gz
 example/*
+tmp/*
