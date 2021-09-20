@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.11
+
+- `add extended graphql schema fields options`
+- `update @tarantool.io/frontend-core@7.8.0 to @tarantool.io/frontend-core@7.11.0`
+- `update @tarantool.io/ui-kit@0.37.0 to @tarantool.io/ui-kit@0.42.0`
+
 ## 0.0.10
 
 - `update @tarantool.io/ui-kit@0.35.0 to @tarantool.io/ui-kit@0.37.0`

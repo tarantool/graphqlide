@@ -6,7 +6,7 @@ Based on:
 
 - [Tarantool 1.10.x or 2.x.x](https://www.tarantool.io/en/download/)
 - [Tarantool Cartridge 2.3.0+](https://github.com/tarantool/cartridge) (optional)
-- [Tarantool Frontend Core 7.8.0](https://github.com/tarantool/frontend-core)
+- [Tarantool Frontend Core 7.11.0](https://github.com/tarantool/frontend-core)
 - [Tarantool Http 1.1.0](https://github.com/tarantool/http/tree/1.1.0)
 - [GraphiQL 1.4.2](https://github.com/graphql/graphiql)
 - [GraphiQL Explorer 0.6.3](https://github.com/OneGraph/graphiql-explorer)
@@ -21,12 +21,13 @@ Simply run from the root of Tarantool Cartridge App root the following:
 
 ```sh
     cd <tarantool-cartridge-application-dir>
-    tarantoolctl rocks install https://github.com/no1seman/graphqlide/releases/download/0.0.10/graphqlide-0.0.10-1.all.rock
+    tarantoolctl rocks install https://github.com/no1seman/graphqlide/releases/download/0.0.11/graphqlide-0.0.11-1.all.rock
 ```
 
 ## Lua API
 
 Note: This module is still under heavy development. API may be changed in further versions without notice.
+
 ### Init
 
 `init()` - used to initialize graphqlide module for non-Cartridge Tarantool Applications.
@@ -41,17 +42,30 @@ Note: This module is still under heavy development. API may be changed in furthe
 
 where:
 
-* `endpoint` (`table`) - mandatory, endpoint of GraphQL API description with the following parameters:
-  * `name` (`string`) - mandatory, schema display name;
-  * `path` (`string`) - mandatory, URI-path to graphql endpoint;
-  * `default` (`boolean`) - optional, flag to indicate that this endpoint is default, false - if not provided.
-
+- `endpoint` (`table`) - mandatory, endpoint of GraphQL API description with the following options:
+  - `name` (`string`) - mandatory, schema display name;
+  - `path` (`string`) - mandatory, URI-path to graphql endpoint;
+  - `default` (`boolean`) - optional, flag to indicate that this endpoint is default, false - if not;
+  - `options` (`table`) - optional, set of flags to enable or disable extended graphql schema fields,
+    where:
+    - `descriptions` (`boolean`) - optional, option to request or not for input fields `descriptions`, default is `true`;
+    - `specifiedByUrl` - optional, option to request or not for `specifiedByUrl` field for `Scalars`, default is `true`;
+    - `directiveIsRepeatable` - optional, option to request or not for `directiveIsRepeatable` field of `Directives`, default is `true`;
+    - `schemaDescription` - optional, option to request or not for `schemaDescription` field for `schema`, default is `false`;
+    - `inputValueDeprecation` - optional, option to deprecate or not for deprecated input fields, default is `false`;
 
 Example:
 
 ```lua
     graphqlide.set_endpoint({ name = 'Spaces', path = '/admin/graphql', default = true })
-    graphqlide.set_endpoint({ name = 'Admin', path = '/admin/api' })
+    graphqlide.set_endpoint({
+        name = 'Admin',
+        path = '/admin/api',
+        options = {
+            specifiedByUrl = false,
+            directiveIsRepeatable = false,
+        }
+    })
 ```
 
 ### Get endpoints
@@ -62,7 +76,7 @@ Returns `endpoints` (`table`) with the following structure:
 
 ```lua
     {
-        ["<endpoint_name>"] = {default = true/false, path = "<endpoint_path>"},
+        ["<endpoint_name>"] = { default = true/false, path = "<endpoint_path>" },
         ...
     }
 ```
@@ -73,7 +87,7 @@ Returns `endpoints` (`table`) with the following structure:
 
 where:
 
-* `name` (`string`) -  mandatory, schema display name.
+- `name` (`string`) -  mandatory, schema display name.
 
 Example:
 
@@ -91,11 +105,11 @@ Example:
 
 where:
 
-* `httpd` (`table`) - instance of a Tarantool HTTP server (only 1.x versions is supported).
+- `httpd` (`table`) - instance of a Tarantool HTTP server (only 1.x versions is supported).
 
-* `enforce_root_redirect` (`boolean`) - optional key which controls redirection to frontend core app from '/' path, default true;
-* `prefix` (`string`) - optional, adds path prefix to frontend core app;
-* `force_init` (`boolean`) - optional, flag to force frontend module initialization. By default front_init() checks whether frontend core module initialized or not, but if force_init == true front_init() will skip checks and init frontend core module anyways.
+- `enforce_root_redirect` (`boolean`) - optional key which controls redirection to frontend core app from '/' path, default true;
+- `prefix` (`string`) - optional, adds path prefix to frontend core app;
+- `force_init` (`boolean`) - optional, flag to force frontend module initialization. By default front_init() checks whether frontend core module initialized or not, but if force_init == true front_init() will skip checks and init frontend core module anyways.
 
 ### Version
 
@@ -257,7 +271,7 @@ Example:
 To build rock you will need the following to be installed:
 
 - [nodejs](https://nodejs.org/)
-- [Tarantool 1.10.x or 2.x.x](https://www.tarantool.io/en/download/) 
+- [Tarantool 2.x.x](https://www.tarantool.io/en/download/)
 
 ### Clone repo and install nodejs modules
 
@@ -266,6 +280,7 @@ To build rock you will need the following to be installed:
     cd graphqlide
     npm i
 ```
+
 ### Build rock
 
 ```sh
@@ -277,7 +292,7 @@ Also you can use `npm run build-rock` to build the rock.
 
 After build completion you will get:
 
-- packed graphqlide rock: `graphqlide/graphqlide-0.0.10-1.all.rock`
+- packed graphqlide rock: `graphqlide/graphqlide-0.0.11-1.all.rock`
 - graphqlide rock installed to: graphqlide/.rocks/tarantool
 
 ### Install built rock
@@ -286,7 +301,7 @@ Simply run from the root of Tarantool Cartridge App root the following:
 
 ```sh
     cd <Tarantool Cartridge application dir>
-    tarantoolctl rocks install <path_to_rock_file>/graphqlide-0.0.10-1.all.rock
+    tarantoolctl rocks install <path_to_rock_file>/graphqlide-0.0.11-1.all.rock
 ```
 
 ## Development
