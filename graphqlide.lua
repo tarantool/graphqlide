@@ -4,7 +4,7 @@ local checks = require('checks')
 local bundle = require('graphqlide.bundle')
 local front = require('frontend-core')
 
-local VERSION = '0.0.10-1'
+local VERSION = '0.0.11-1'
 local ENDPOINTS = {}
 local NAMESPACE = 'graphqlide'
 local DEFAULT_FRONT_VARIABLE = 'graphQLIDEPath'
@@ -29,6 +29,13 @@ local function set_endpoint(endpoint)
         name = 'string',
         path = 'string',
         default = '?boolean',
+        options = {
+            descriptions = '?boolean',
+            specifiedByUrl = '?boolean',
+            directiveIsRepeatable = '?boolean',
+            schemaDescription = '?boolean',
+            inputValueDeprecation = '?boolean',
+        },
     })
 
     if endpoint.default == true then
@@ -40,6 +47,7 @@ local function set_endpoint(endpoint)
     ENDPOINTS[endpoint.name] = {
         path = endpoint.path,
         default = endpoint.default or false,
+        options = endpoint.options
     }
 
     front.set_variable(DEFAULT_FRONT_VARIABLE, ENDPOINTS)

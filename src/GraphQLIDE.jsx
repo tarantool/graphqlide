@@ -70,6 +70,7 @@ class GraphQLIDE extends Component<{}, GraphQLIDEState> {
     const schemaSelected = this.state.schemaSelected ? this.state.schemaSelected : this._graphiql.state.schemaSelected
 
     let endpoint
+    let options = {}
 
     if (typeof window.__tarantool_variables !== 'undefined' &&
       typeof window.__tarantool_variables.graphQLIDEPath !== 'undefined') {
@@ -77,11 +78,16 @@ class GraphQLIDE extends Component<{}, GraphQLIDEState> {
         Object.entries(window.__tarantool_variables.graphQLIDEPath).forEach((name) => {
           if (typeof name[1].default !== 'undefined' && typeof name[0] !== 'undefined' && name[0] === schemaSelected) {
             endpoint = name[1].path
+            if ('options' in name[1]) { options = name[1].options }
           }
         })
       }
     }
-    return endpoint
+
+    if (!('descriptions' in options)) { options.descriptions = true }
+    if (!('specifiedByUrl' in options)) { options.specifiedByUrl = true }
+    if (!('directiveIsRepeatable' in options)) { options.directiveIsRepeatable = true }
+    return { endpoint, options }
   }
 
   _fetchWrapper = (url, options, timeout) => {
@@ -100,7 +106,7 @@ class GraphQLIDE extends Component<{}, GraphQLIDEState> {
       graphQLParams['variables'] = {};
     }
 
-    const endpoint = this._getGraphQLEndpoint()
+    const endpoint = this._getGraphQLEndpoint().endpoint
 
     if (typeof endpoint === 'undefined') {
       return '{}'
@@ -152,8 +158,9 @@ class GraphQLIDE extends Component<{}, GraphQLIDEState> {
   }
 
   componentDidMount() {
+    const options = this._getGraphQLEndpoint().options
     this._fetcher({
-      query: getIntrospectionQuery()
+      query: getIntrospectionQuery(options)
     }).then(result => {
       const editor = this._graphiql.getQueryEditor();
       editor.setOption('extraKeys', {
@@ -250,8 +257,9 @@ class GraphQLIDE extends Component<{}, GraphQLIDEState> {
 
   componentDidUpdate() {
     if (this.state.reloadSchema) {
+      const options = this._getGraphQLEndpoint().options
       this._fetcher({
-        query: getIntrospectionQuery()
+        query: getIntrospectionQuery(options)
       }).then(result => {
         const editor = this._graphiql.getQueryEditor();
         editor.setOption('extraKeys', {
@@ -328,16 +336,16 @@ class GraphQLIDE extends Component<{}, GraphQLIDEState> {
             <GraphiQL.Button
               onClick={() => this._graphiql.handlePrettifyQuery()}
               label="Prettify"
-              title="Prettify Query (Shift-Ctrl-P)"
+              title="Prettify Query"
             />
             <GraphiQL.Button
               onClick={() => this._graphiql.handleMergeQuery()}
-              title="Merge Query (Shift-Ctrl-M)"
+              title="Merge Query"
               label="Merge"
             />
             <GraphiQL.Button
               onClick={() => this._graphiql.handleCopyQuery()}
-              title="Copy Query (Shift-Ctrl-C)"
+              title="Copy Query"
               label="Copy"
             />
             <GraphiQL.Menu
