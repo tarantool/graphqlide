@@ -21,7 +21,7 @@ Simply run from the root of Tarantool Cartridge App root the following:
 
 ```sh
     cd <tarantool-cartridge-application-dir>
-    tarantoolctl rocks install https://github.com/no1seman/graphqlide/releases/download/0.0.11/graphqlide-0.0.11-1.all.rock
+    tarantoolctl rocks install https://github.com/no1seman/graphqlide/releases/download/0.0.12/graphqlide-0.0.12-1.all.rock
 ```
 
 ## Lua API
@@ -292,7 +292,7 @@ Also you can use `npm run build-rock` to build the rock.
 
 After build completion you will get:
 
-- packed graphqlide rock: `graphqlide/graphqlide-0.0.11-1.all.rock`
+- packed graphqlide rock: `graphqlide/graphqlide-0.0.12-1.all.rock`
 - graphqlide rock installed to: graphqlide/.rocks/tarantool
 
 ### Install built rock
@@ -301,7 +301,7 @@ Simply run from the root of Tarantool Cartridge App root the following:
 
 ```sh
     cd <Tarantool Cartridge application dir>
-    tarantoolctl rocks install <path_to_rock_file>/graphqlide-0.0.11-1.all.rock
+    tarantoolctl rocks install <path_to_rock_file>/graphqlide-0.0.12-1.all.rock
 ```
 
 ## Development

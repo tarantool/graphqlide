@@ -158,6 +158,7 @@ class GraphQLIDE extends Component<{}, GraphQLIDEState> {
   }
 
   componentDidMount() {
+    document.querySelector('.topBar').style = 'padding: 0px 14px 0px;'
     const options = this._getGraphQLEndpoint().options
     this._fetcher({
       query: getIntrospectionQuery(options)

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.12
+
+- `fixed GraphiQL topBar container styles`
+
 ## 0.0.11
 
 - `add extended graphql schema fields options`
