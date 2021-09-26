@@ -76,7 +76,17 @@ Returns `endpoints` (`table`) with the following structure:
 
 ```lua
     {
-        ["<endpoint_name>"] = { default = true/false, path = "<endpoint_path>" },
+        ["<endpoint_name>"] = { 
+            default = true/false,
+            path = "<endpoint_path>", 
+            options = {
+                descriptions = true/false,
+                specifiedByUrl = true/false,
+                directiveIsRepeatable = true/false,
+                schemaDescription = true/false,
+                inputValueDeprecation = true/false,
+            } 
+        },
         ...
     }
 ```
@@ -113,7 +123,7 @@ where:
 
 ### Version
 
-`VERSION` is a constant to determine which version of GraphQL IDE is installed.
+`VERSION` - is a constant to determine which version of GraphQL IDE is installed.
 
 Example:
 
@@ -122,6 +132,19 @@ Example:
     local log = require('log')
     log.info('GraphQL IDE version: %s', graphqlide.VERSION)
 ```
+
+### Add Tarantool Cartridge GraphQL API endpoint
+
+`add_cartridge_api_endpoint(name, default)` - used to set Tarantool Cartridge GraphQL Web UI endpoint,
+
+where:
+
+- `name` (`string`) -  mandatory, Tarantool Cartridge GraphQL schema display name;
+- `default` (`boolean`) - optional, flag to indicate that this endpoint is default, false - if not.
+
+### Remove Tarantool Cartridge GraphQL API endpoint
+
+`remove_cartridge_api_endpoint()` - used to remove Tarantool Cartridge GraphQL Web UI endpoint.
 
 ## Add GraphQL IDE to your Tarantool Cartridge App
 

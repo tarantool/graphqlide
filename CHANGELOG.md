@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- `add add_cartridge_api_endpoint() and remove_cartridge_api_endpoint() functions`
+
 ## 0.0.12
 
 - `fixed GraphiQL topBar container styles`

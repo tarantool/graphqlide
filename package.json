@@ -1,6 +1,6 @@
 {
   "name": "graphqlide",
-  "version": "0.0.12",
+  "version": "scm-1",
   "private": true,
   "homepage": "https://github.com/no1seman/graphqlide",
   "dependencies": {
@@ -92,7 +92,7 @@
     "test_once": "node ./scripts/test.js test --env=jsdom",
     "lint": "eslint ./src",
     "lint-fix": "eslint --fix ./src",
-    "build-rock": "./scripts/build_rock.sh"
+    "build-rock": "make rock"
   },
   "jest": {
     "collectCoverageFrom": [

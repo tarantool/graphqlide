@@ -21,3 +21,8 @@ test:
 	rm -f tmp/luacov*
 	.rocks/bin/luatest --verbose --coverage --shuffle group
 	.rocks/bin/luacov . && grep -A999 '^Summary' tmp/luacov.report.out
+
+.PHONY: rock
+rock: 	
+	tarantoolctl rocks make
+	tarantoolctl rocks pack graphqlide

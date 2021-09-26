@@ -1,5 +1,5 @@
 package = 'graphqlide'
-version = '0.0.12-1'
+version = 'scm-1'
 source  = {
     url = 'git+https://github.com/no1seman/graphqlide.git',
     branch = 'master',

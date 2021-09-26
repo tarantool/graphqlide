@@ -4,7 +4,7 @@ local checks = require('checks')
 local bundle = require('graphqlide.bundle')
 local front = require('frontend-core')
 
-local VERSION = '0.0.12-1'
+local VERSION = 'scm-1'
 local ENDPOINTS = {}
 local NAMESPACE = 'graphqlide'
 local DEFAULT_FRONT_VARIABLE = 'graphQLIDEPath'
