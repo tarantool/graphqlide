@@ -3,6 +3,14 @@ local g = t.group('graphqlide')
 
 require('test.helper')
 
+local function mock_argparse(params)
+    package.loaded['cartridge.argparse'] = {
+        parse = function()
+            return params
+        end,
+    }
+end
+
 g.test_reload = function()
     require('graphqlide')
     package.loaded['graphqlide'] = nil
@@ -80,4 +88,37 @@ g.test_endpoints = function()
 
     package.loaded['graphqlide'] = nil
     package.loaded['graphqlide.bundle'] = nil
+end
+
+g.test_set_default = function()
+    local graphqlide = require('graphqlide')
+    graphqlide.set_endpoint({ name = 'Admin', path = '/admin/api' })
+    graphqlide.set_endpoint({ name = 'Spaces', path = '/admin/graphql', default = true })
+
+    t.assert_equals(graphqlide.set_default('Admin'), true)
+    t.assert_equals(graphqlide.get_endpoints()['Admin'].default, true)
+    t.assert_equals(graphqlide.get_endpoints()['Spaces'].default, false)
+
+    t.assert_equals(graphqlide.set_default('admin'), false)
+
+    package.loaded['graphqlide'] = nil
+end
+
+g.test_add_remove_cartridge_api_endpoint = function()
+    mock_argparse({ webui_prefix = '/custom/' })
+    local graphqlide = require('graphqlide')
+    graphqlide.add_cartridge_api_endpoint('Admin', true)
+
+    t.assert_items_equals(graphqlide.get_endpoints(), {
+        Admin = {
+            default = true,
+            options = { directiveIsRepeatable = false, specifiedByUrl = false },
+            path = 'custom/admin/api'},
+    })
+
+    graphqlide.remove_cartridge_api_endpoint()
+    t.assert_items_equals(graphqlide.get_endpoints(), {})
+
+    package.loaded['graphqlide'] = nil
+    package.loaded['cartridge.argparse'] = nil
 end

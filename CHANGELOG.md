@@ -1,8 +1,12 @@
 # Changelog
 
-## Unreleased
+## 0.0.13
 
-- `add add_cartridge_api_endpoint() and remove_cartridge_api_endpoint() functions`
+- `added add_cartridge_api_endpoint() and remove_cartridge_api_endpoint() methods to simplify adding/removing Cartridge Schema`
+- `added set_default() method to change default schema`
+- `update luatest to 0.5.6`
+- `improve build/install/release scripts`
+- `update README.md`
 
 ## 0.0.12
 
@@ -10,7 +14,7 @@
 
 ## 0.0.11
 
-- `add extended graphql schema fields options`
+- `added extended graphql schema fields options`
 - `update @tarantool.io/frontend-core@7.8.0 to @tarantool.io/frontend-core@7.11.0`
 - `update @tarantool.io/ui-kit@0.37.0 to @tarantool.io/ui-kit@0.42.0`
 
@@ -22,7 +26,7 @@
 - `include graphiql-explorer@0.6.3 sources to project instead of importing external module`
 - `fix isLeaf check fields auto-selection for non-nullable scalars and enums`
 - `revert separating Tarantool Cartridge role and pure Tarantool module logic`
-- `add support for multiple schemas`
+- `added support for multiple schemas`
 - `fix non-working js/ts code linting and fix multiple lint warnings`
 - `add tests for lua part of this module`
 - `update README.md`
