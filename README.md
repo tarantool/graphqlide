@@ -5,7 +5,7 @@ GraphQL IDE module is used to add GraphQL IDE functionality into Tarantool Cartr
 Based on:
 
 - [Tarantool 1.10.x or 2.x.x](https://www.tarantool.io/en/download/)
-- [Tarantool Cartridge 2.3.0+](https://github.com/tarantool/cartridge) (optional)
+- [Tarantool Cartridge 2.4.0+](https://github.com/tarantool/cartridge) (optional, module can work without Tarantool Cartridge)
 - [Tarantool Frontend Core 7.11.0](https://github.com/tarantool/frontend-core)
 - [Tarantool Http 1.1.0](https://github.com/tarantool/http/tree/1.1.0)
 - [GraphiQL 1.4.2](https://github.com/graphql/graphiql)
@@ -21,12 +21,12 @@ Simply run from the root of Tarantool Cartridge App root the following:
 
 ```sh
     cd <tarantool-cartridge-application-dir>
-    tarantoolctl rocks install https://github.com/no1seman/graphqlide/releases/download/0.0.12/graphqlide-0.0.12-1.all.rock
+    tarantoolctl rocks install https://github.com/no1seman/graphqlide/releases/download/0.0.13/graphqlide-0.0.13-1.all.rock
 ```
 
 ## Lua API
 
-Note: This module is still under heavy development. API may be changed in further versions without notice.
+Note: **This module is still under heavy development. API may be changed in further versions without notice and may be not backward compatible. Use in production environments at your own risk.**
 
 ### Init
 
@@ -38,7 +38,7 @@ Note: This module is still under heavy development. API may be changed in furthe
 
 ### Set endpoint
 
-`set_endpoint(endpoint)` - used to set GraphQL Web UI endpoint in runtime.
+`set_endpoint(endpoint)` - used to set GraphQL Web UI schema endpoint in runtime.
 
 where:
 
@@ -68,11 +68,13 @@ Example:
     })
 ```
 
+Note: **Since Tarantool Cartridge WebUI doesn't support sending notifications to WebUI front after any changes feel free to reload page in browser**
+
 ### Get endpoints
 
-`get_endpoints()` - method is used to get endpoint.
+`get_endpoints()` - method is used to get schemas endpoints.
 
-Returns `endpoints` (`table`) with the following structure:
+Method returns `endpoints` (`table`) with the following structure:
 
 ```lua
     {
@@ -93,7 +95,7 @@ Returns `endpoints` (`table`) with the following structure:
 
 ### Remove endpoints
 
-`remove_endpoint(name)` - method is used to remove endpoint,
+`remove_endpoint(name)` - method is used to remove schema endpoint,
 
 where:
 
@@ -111,15 +113,40 @@ Example:
 
 ### Front init
 
-`front_init(httpd, opts)` - method to init frontend core. Used for non-Cartridge Tarantool Applications.
+`front_init(httpd, opts)` - method to init frontend core. This method must be used only for non-Cartridge Tarantool Applications since Tarantool Cartridge do this job for you under the hood,
 
 where:
 
 - `httpd` (`table`) - instance of a Tarantool HTTP server (only 1.x versions is supported).
+- `opts` (`table`) - optional, additional front-end initialization options:
+  - `enforce_root_redirect` (`boolean`) - optional key which controls redirection to frontend core app from '/' path, default true;
+  - `prefix` (`string`) - optional, adds path prefix to frontend core app;
+  - `force_init` (`boolean`) - optional, flag to force frontend module initialization. By default front_init() checks whether frontend core module initialized or not, but if force_init == true front_init() will skip checks and init frontend core module anyways.
 
-- `enforce_root_redirect` (`boolean`) - optional key which controls redirection to frontend core app from '/' path, default true;
-- `prefix` (`string`) - optional, adds path prefix to frontend core app;
-- `force_init` (`boolean`) - optional, flag to force frontend module initialization. By default front_init() checks whether frontend core module initialized or not, but if force_init == true front_init() will skip checks and init frontend core module anyways.
+### Set default schema
+
+`set_default(name)` - method to set default schema,
+
+where:
+
+- `name` (`string`) - mandatory, schema display name to be set as default.
+
+### Add Tarantool Cartridge GraphQL API schema endpoint
+
+`add_cartridge_api_endpoint(name, default)` - method to add Tarantool Cartridge GraphQL API schema endpoint,
+
+where:
+
+- `name` (`string`) - mandatory, Tarantool Cartridge GraphQL API schema name to be displayed in UI;
+- `default` (`boolean`) - optional, flag to set this schema to be default in list of GraphQL schemas in UI.
+
+Note: **This method will not be available if executed in non-Cartridge Tarantool Application.**
+
+### Remove Tarantool Cartridge GraphQL API schema endpoint
+
+`remove_cartridge_api_endpoint()` - method to remove Tarantool Cartridge GraphQL API schema endpoint from list of schemas in GraphQL IDE UI.
+
+Note: **This method will not be available if executed in non-Cartridge Tarantool Application.**
 
 ### Version
 
@@ -133,20 +160,7 @@ Example:
     log.info('GraphQL IDE version: %s', graphqlide.VERSION)
 ```
 
-### Add Tarantool Cartridge GraphQL API endpoint
-
-`add_cartridge_api_endpoint(name, default)` - used to set Tarantool Cartridge GraphQL Web UI endpoint,
-
-where:
-
-- `name` (`string`) -  mandatory, Tarantool Cartridge GraphQL schema display name;
-- `default` (`boolean`) - optional, flag to indicate that this endpoint is default, false - if not.
-
-### Remove Tarantool Cartridge GraphQL API endpoint
-
-`remove_cartridge_api_endpoint()` - used to remove Tarantool Cartridge GraphQL Web UI endpoint.
-
-## Add GraphQL IDE to your Tarantool Cartridge App
+## Adding GraphQL IDE to your Tarantool Cartridge App
 
 There are 3 ways to add GraphQL IDE to Tarantool Cartridge application:
 

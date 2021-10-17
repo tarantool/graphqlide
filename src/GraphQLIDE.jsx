@@ -84,6 +84,7 @@ class GraphQLIDE extends Component<{}, GraphQLIDEState> {
       }
     }
 
+    endpoint = '/' + endpoint
     if (!('descriptions' in options)) { options.descriptions = true }
     if (!('specifiedByUrl' in options)) { options.specifiedByUrl = true }
     if (!('directiveIsRepeatable' in options)) { options.directiveIsRepeatable = true }
