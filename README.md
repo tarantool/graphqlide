@@ -21,7 +21,7 @@ Simply run from the root of Tarantool Cartridge App root the following:
 
 ```sh
     cd <tarantool-cartridge-application-dir>
-    tarantoolctl rocks install https://github.com/no1seman/graphqlide/releases/download/0.0.13/graphqlide-0.0.13-1.all.rock
+    tarantoolctl rocks install https://github.com/no1seman/graphqlide/releases/download/0.0.14/graphqlide-0.0.14-1.all.rock
 ```
 
 ## Lua API

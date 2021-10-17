@@ -1,6 +1,6 @@
 {
   "name": "graphqlide",
-  "version": "scm-1",
+  "version": "0.0.14",
   "private": true,
   "homepage": "https://github.com/no1seman/graphqlide",
   "dependencies": {

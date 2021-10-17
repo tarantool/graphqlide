@@ -5,7 +5,7 @@ local checks = require('checks')
 local bundle = require('graphqlide.bundle')
 local front = require('frontend-core')
 
-local VERSION = 'scm-1'
+local VERSION = '0.0.14-1'
 local ENDPOINTS = {}
 local NAMESPACE = 'graphqlide'
 local DEFAULT_FRONT_VARIABLE = 'graphQLIDEPath'
@@ -23,6 +23,16 @@ local function stop()
         end
         front.set_variable(DEFAULT_FRONT_VARIABLE, nil)
     end
+end
+
+local function remove_side_slashes(path)
+    if path:startswith('/') then
+        path = path:sub(2)
+    end
+    if path:endswith('/') then
+        path = path:sub(1, -2)
+    end
+    return path
 end
 
 local function set_endpoint(endpoint)
@@ -46,7 +56,7 @@ local function set_endpoint(endpoint)
     end
 
     ENDPOINTS[endpoint.name] = {
-        path = endpoint.path,
+        path = remove_side_slashes(endpoint.path),
         default = endpoint.default or false,
         options = endpoint.options
     }
@@ -101,16 +111,6 @@ local function front_init(httpd, opts)
             prefix = opts.prefix,
         })
     end
-end
-
-local function remove_side_slashes(path)
-    if path:startswith('/') then
-        path = path:sub(2)
-    end
-    if path:endswith('/') then
-        path = path:sub(1, -2)
-    end
-    return path
 end
 
 local function get_cartridge_api_endpoint()
