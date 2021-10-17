@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.14
+
+- `fix backward compatibility: set_endpoint() now removes side-slashes before saving endpoint path`
+
 ## 0.0.13
 
 - `added add_cartridge_api_endpoint() and remove_cartridge_api_endpoint() methods to simplify adding/removing Cartridge Schema`
