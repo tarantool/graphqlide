@@ -25,7 +25,5 @@ jobs:
       - name: Install rocks
         shell: bash
         run: source sdk/env.sh && make .rocks
-      - name: Check lint
-        run: make lint
       - name: Run tests
         run: make test
