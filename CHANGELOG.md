@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.0.15
+
+- `update @tarantool.io/frontend-core@7.11.0 to @tarantool.io/frontend-core@7.12.0`
+- `update @tarantool.io/ui-kit@0.42.0 to @tarantool.io/ui-kit@0.50.1`
+- `update graphiql@1.4.2 to graphiql@1.4.6`
+- `fixed https://github.com/tarantool/graphqlide/issues/11`
+- `fix paths after moving repo to github.com/tarantool`
+
 ## 0.0.14
 
 - `fix backward compatibility: set_endpoint() now removes side-slashes before saving endpoint path`
