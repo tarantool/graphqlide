@@ -41,3 +41,10 @@ rock:
 	@ if [ ! -d ".rocks" ]; then make .rocks; fi
 	tarantoolctl rocks make
 	tarantoolctl rocks pack graphqlide
+
+.PHONY: sdk
+sdk: Makefile
+	wget https://tarantool:$(DOWNLOAD_TOKEN)@download.tarantool.io/enterprise/tarantool-enterprise-bundle-$(BUNDLE_VERSION).tar.gz
+	tar -xzf tarantool-enterprise-bundle-$(BUNDLE_VERSION).tar.gz
+	rm tarantool-enterprise-bundle-$(BUNDLE_VERSION).tar.gz
+	mv tarantool-enterprise sdk
