@@ -5,15 +5,15 @@ GraphQL IDE module is used to add GraphQL IDE functionality into Tarantool Cartr
 Based on:
 
 - [Tarantool 1.10.x or 2.x.x](https://www.tarantool.io/en/download/)
-- [Tarantool Cartridge 2.4.0+](https://github.com/tarantool/cartridge) (optional, module can work without Tarantool Cartridge)
-- [Tarantool Frontend Core 7.11.0](https://github.com/tarantool/frontend-core)
+- [Tarantool Cartridge 2.6.0+](https://github.com/tarantool/cartridge) (optional, module can work without Tarantool Cartridge)
+- [Tarantool Frontend Core 7.12.0](https://github.com/tarantool/frontend-core)
 - [Tarantool Http 1.1.0](https://github.com/tarantool/http/tree/1.1.0)
-- [GraphiQL 1.4.2](https://github.com/graphql/graphiql)
+- [GraphiQL 1.4.6](https://github.com/graphql/graphiql)
 - [GraphiQL Explorer 0.6.3](https://github.com/OneGraph/graphiql-explorer)
 
 GraphQL IDE interface:
 
-![GraphQL IDE](https://github.com/no1seman/graphqlide/blob/master/resources/graphqlide.jpg "GraphQL IDE")
+![GraphQL IDE](https://github.com/tarantool/graphqlide/blob/master/resources/graphqlide.jpg "GraphQL IDE")
 
 ## Install pre-built rock
 
@@ -21,7 +21,7 @@ Simply run from the root of Tarantool Cartridge App root the following:
 
 ```sh
     cd <tarantool-cartridge-application-dir>
-    tarantoolctl rocks install https://github.com/no1seman/graphqlide/releases/download/0.0.14/graphqlide-0.0.14-1.all.rock
+    tarantoolctl rocks install graphqlide
 ```
 
 ## Lua API
@@ -313,7 +313,7 @@ To build rock you will need the following to be installed:
 ### Clone repo and install nodejs modules
 
 ```sh
-    git clone git@github.com:no1seman/graphqlide.git graphqlide
+    git clone git@github.com:tarantool/graphqlide.git graphqlide
     cd graphqlide
     npm i
 ```
@@ -329,7 +329,7 @@ Also you can use `npm run build-rock` to build the rock.
 
 After build completion you will get:
 
-- packed graphqlide rock: `graphqlide/graphqlide-0.0.12-1.all.rock`
+- packed graphqlide rock: `graphqlide/graphqlide-scm-1.all.rock`
 - graphqlide rock installed to: graphqlide/.rocks/tarantool
 
 ### Install built rock
@@ -338,7 +338,7 @@ Simply run from the root of Tarantool Cartridge App root the following:
 
 ```sh
     cd <Tarantool Cartridge application dir>
-    tarantoolctl rocks install <path_to_rock_file>/graphqlide-0.0.12-1.all.rock
+    tarantoolctl rocks install <path_to_rock_file>/graphqlide-scm-1.all.rock
 ```
 
 ## Development
