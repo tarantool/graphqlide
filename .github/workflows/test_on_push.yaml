@@ -20,6 +20,10 @@ jobs:
           yum -y install wget git222 cmake make unzip
       - name: Checkout sources
         uses: actions/checkout@v2
+      - name: Install npm
+        uses: actions/setup-node@v1
+        with:
+          node-version: '17.0.1'
       - name: Install sdk
         run: make sdk
       - name: Install rocks
