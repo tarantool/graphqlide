@@ -11,6 +11,7 @@ BUNDLE_VERSION=2.8.2-0-gfc96d10f5-r428
 		tarantoolctl rocks install luacov 0.13.0
 		tarantoolctl rocks install luacheck 0.26.0
 		tarantoolctl rocks install cartridge 2.7.2
+		tarantoolctl rocks make graphqlide-scm-1.rockspec
 
 .PHONY: all install
 
