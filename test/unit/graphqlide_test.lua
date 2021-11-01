@@ -57,33 +57,33 @@ end
 g.test_endpoints = function()
     local graphqlide = require('graphqlide')
     graphqlide.set_endpoint({ name = 'Default', path = '/admin/graphql', default = true })
-    t.assert_items_equals(graphqlide.get_endpoints(), {Default = {default = true, path = "/admin/graphql"}})
+    t.assert_items_equals(graphqlide.get_endpoints(), {Default = {default = true, path = "admin/graphql"}})
 
     graphqlide.set_endpoint({ name = 'Admin', path = '/admin/api' })
     t.assert_items_equals(graphqlide.get_endpoints(), {
-        Admin = {default = false, path = "/admin/api"},
-        Default = {default = true, path = "/admin/graphql"},
+        Admin = {default = false, path = "admin/api"},
+        Default = {default = true, path = "admin/graphql"},
     })
 
     graphqlide.set_endpoint({ name = 'Spaces', path = '/admin/graphql', default = true })
     t.assert_items_equals(graphqlide.get_endpoints(), {
-        Admin = {default = false, path = "/admin/api"},
-        Default = {default = false, path = "/admin/graphql"},
-        Spaces = {default = true, path = "/admin/graphql"},
+        Admin = {default = false, path = "admin/api"},
+        Default = {default = false, path = "admin/graphql"},
+        Spaces = {default = true, path = "admin/graphql"},
     })
 
     graphqlide.remove_endpoint('Spaces')
     t.assert_items_equals(graphqlide.get_endpoints(), {
-        Admin = {default = false, path = "/admin/api"},
-        Default = {default = false, path = "/admin/graphql"},
+        Admin = {default = false, path = "admin/api"},
+        Default = {default = false, path = "admin/graphql"},
     })
 
     local res = graphqlide.remove_endpoint('Spaces')
 
     t.assert_equals(res, false)
     t.assert_items_equals(graphqlide.get_endpoints(), {
-        Admin = {default = false, path = "/admin/api"},
-        Default = {default = false, path = "/admin/graphql"},
+        Admin = {default = false, path = "admin/api"},
+        Default = {default = false, path = "admin/graphql"},
     })
 
     package.loaded['graphqlide'] = nil
