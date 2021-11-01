@@ -2,12 +2,12 @@
   "name": "graphqlide",
   "version": "scm-1",
   "private": true,
-  "homepage": "https://github.com/no1seman/graphqlide",
+  "homepage": "https://github.com/tarantool/graphqlide",
   "dependencies": {
-    "@tarantool.io/frontend-core": "7.11.0",
-    "@tarantool.io/ui-kit": "0.42.0",
+    "@tarantool.io/frontend-core": "7.12.0",
+    "@tarantool.io/ui-kit": "0.50.1",
     "emotion": "^10.0.27",
-    "graphiql": "1.4.2",
+    "graphiql": "1.4.6",
     "graphql": "^15.5.0"
   },
   "devDependencies": {
