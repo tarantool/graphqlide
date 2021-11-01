@@ -6,7 +6,8 @@ exclude_files = {
     'tmp/',
     '.history/',
     'node_modules/*',
-    'build/*'
+    'build/*',
+    'sdk/'
 }
 
 max_line_length = 120
