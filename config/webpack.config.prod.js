@@ -11,6 +11,10 @@ const getClientEnvironment = require('./env');
 const moduleConfig = require('../module-config');
 const LuaBundlerPlugin = require('@tarantool.io/lua-bundler-webpack-plugin')
 
+const crypto = require("crypto");
+const crypto_orig_createHash = crypto.createHash;
+crypto.createHash = algorithm => crypto_orig_createHash(algorithm == "md4" ? "sha256" : algorithm);
+
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
 const publicPath = paths.servedPath;
