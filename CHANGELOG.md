@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.0.16
+
+- `update graphiql@1.4.6 to graphiql@1.5.1`
+- `update babel-jest@26.3.0 to babel-jest@27.3.1`
+- `update jest@26.4.2 to jest@27.3.1`
+- `update react-dev-utils@11.0.4 to react-dev-utils@12.0.0-next.47`
+- `update svg-sprite-loader@5.0.0 to svg-sprite-loader@6.0.11`
+- `update svgo@2.3.0 to svgo@2.8.0`
+- `update webpack-dev-server@3.11.2 to webpack-dev-server@4.4.0`
+
 ## 0.0.15
 
 - `update @tarantool.io/frontend-core@7.11.0 to @tarantool.io/frontend-core@7.12.0`
