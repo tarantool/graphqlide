@@ -115,10 +115,13 @@ end
 
 local function get_cartridge_api_endpoint()
     local path = 'admin/api'
-    local webui_prefix = argparse.parse().webui_prefix
-    if webui_prefix ~= nil then
-        webui_prefix = remove_side_slashes(webui_prefix)
-        path = webui_prefix..'/'..path
+    local args = argparse.parse()
+    if args ~= nil then
+        local webui_prefix = args.webui_prefix
+        if webui_prefix ~= nil then
+            webui_prefix = remove_side_slashes(webui_prefix)
+            path = webui_prefix..'/'..path
+        end
     end
     return path
 end

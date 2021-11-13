@@ -1,8 +1,7 @@
 {
     "parser": "babel-eslint",
     "extends": [
-      "prettier",
-      "standard"
+      "prettier"
     ],
     "plugins": [
       "flowtype",
