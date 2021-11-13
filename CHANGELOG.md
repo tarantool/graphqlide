@@ -9,6 +9,8 @@
 - `update svg-sprite-loader@5.0.0 to svg-sprite-loader@6.0.11`
 - `update svgo@2.3.0 to svgo@2.8.0`
 - `update webpack-dev-server@3.11.2 to webpack-dev-server@4.4.0`
+- `update @babel/*@7.10.*-7.11.* to @babel/*@7.16.*`
+- `update webpack@4.46.0 to webpack@5.64.0 and all related dependencies`
 
 ## 0.0.15
 
