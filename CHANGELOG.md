@@ -11,6 +11,9 @@
 - `update webpack-dev-server@3.11.2 to webpack-dev-server@4.4.0`
 - `update @babel/*@7.10.*-7.11.* to @babel/*@7.16.*`
 - `update webpack@4.46.0 to webpack@5.64.0 and all related dependencies`
+- `replace emotion@10.0.27 with @emotion/css@11.5.0`
+- `update graphql@15.5.0 to graphql@15.7.2`
+- `update multiple dependencies to latest versions`
 
 ## 0.0.15
 
