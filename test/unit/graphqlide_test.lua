@@ -16,6 +16,9 @@ g.test_reload = function()
     require('graphqlide')
     package.loaded['graphqlide'] = nil
     require('graphqlide')
+    package.loaded['graphqlide'] = nil
+    require('graphqlide')
+    package.loaded['graphqlide'] = nil
 end
 
 g.test_init_stop = function()
