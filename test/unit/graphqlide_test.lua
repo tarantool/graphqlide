@@ -4,6 +4,7 @@ local g = t.group('graphqlide')
 require('test.helper')
 
 local function mock_argparse(params)
+    package.loaded['cartridge.argparse'] = nil
     package.loaded['cartridge.argparse'] = {
         parse = function()
             return params
@@ -107,6 +108,7 @@ end
 g.test_add_remove_cartridge_api_endpoint = function()
     mock_argparse({ webui_prefix = '/custom/' })
     local graphqlide = require('graphqlide')
+
     graphqlide.add_cartridge_api_endpoint('Admin', true)
 
     t.assert_items_equals(graphqlide.get_endpoints(), {

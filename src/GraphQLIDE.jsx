@@ -1,7 +1,7 @@
 // @ts-check
 
 import React, { Component } from 'react';
-import { css, cx } from 'emotion'
+import { css, cx } from '@emotion/css'
 import { GraphiQL, ToolbarSelect } from 'graphiql';
 import GraphiQLExplorer from './graphiql-explorer';
 import {

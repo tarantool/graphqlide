@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.0.16
+
+- `update graphiql@1.4.6 to graphiql@1.5.1`
+- `update babel-jest@26.3.0 to babel-jest@27.3.1`
+- `update jest@26.4.2 to jest@27.3.1`
+- `update react-dev-utils@11.0.4 to react-dev-utils@12.0.0-next.47`
+- `update svg-sprite-loader@5.0.0 to svg-sprite-loader@6.0.11`
+- `update svgo@2.3.0 to svgo@2.8.0`
+- `update webpack-dev-server@3.11.2 to webpack-dev-server@4.4.0`
+- `update @babel/*@7.10.*-7.11.* to @babel/*@7.16.*`
+- `update webpack@4.46.0 to webpack@5.64.0 and all related dependencies`
+- `replace emotion@10.0.27 with @emotion/css@11.5.0`
+- `update graphql@15.5.0 to graphql@15.7.2`
+- `update multiple dependencies to latest versions`
+
 ## 0.0.15
 
 - `update @tarantool.io/frontend-core@7.11.0 to @tarantool.io/frontend-core@7.12.0`

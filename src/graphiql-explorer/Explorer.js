@@ -2224,8 +2224,8 @@ class RootView extends React.PureComponent<
     const operationDef = definition;
     const selections = operationDef.selectionSet.selections;
 
-    const operationDisplayName =
-      this.props.name || `${capitalize(operationType)} Name`;
+    // const operationDisplayName =
+    //   this.props.name || `${capitalize(operationType)} Name`;
 
     return (
       <div
@@ -2250,8 +2250,8 @@ class RootView extends React.PureComponent<
                 color: styleConfig.colors.def,
                 border: 'none',
                 borderBottom: '1px solid #888',
-                outline: 'none',
-                width: `${Math.max(4, operationDisplayName.length)}ch`
+                outline: 'none'
+                // width: `${Math.max(4, operationDisplayName.length)}ch`
               }}
               autoComplete="false"
               placeholder={`${capitalize(operationType)} Name`}

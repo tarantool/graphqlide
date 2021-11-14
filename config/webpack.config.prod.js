@@ -1,7 +1,7 @@
 const autoprefixer = require('autoprefixer');
 const path = require('path');
 const webpack = require('webpack');
-const ManifestPlugin = require('webpack-manifest-plugin');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
@@ -99,7 +99,14 @@ module.exports = {
       // please link the files into your node_modules/ and let module-resolution kick in.
       // Make sure your source files are compiled, as they will not be processed in any way.
       new ModuleScopePlugin(paths.appSrc, [paths.appPackageJson])
-    ]
+    ],
+    fallback: {
+          dgram: false,
+          fs: false,
+          net: false,
+          tls: false,
+          child_process: false
+        }
   },
   externals: {
     react: 'react',
@@ -123,7 +130,13 @@ module.exports = {
           }
       },
       {
-        test: /\.(js|jsx|mjs)$/,
+        test: /\.m?js/,
+        resolve: {
+          fullySpecified: false
+        }
+      },
+      {
+        test: /\.(js|jsx|m?js)$/,
         enforce: 'pre',
         use: [
           {
@@ -329,7 +342,7 @@ module.exports = {
     // Generate a manifest file which contains a mapping of all asset filenames
     // to their corresponding output file so that tools can pick it up without
     // having to parse `index.html`.
-    new ManifestPlugin({
+    new WebpackManifestPlugin ({
       fileName: 'asset-manifest.json'
     }),
     // Generate a service worker script that will precache, and keep up to date,
@@ -339,7 +352,9 @@ module.exports = {
     // solution that requires the user to opt into importing specific locales.
     // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
     // You can remove this if you don't use Moment.js:
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.IgnorePlugin({
+      resourceRegExp: /^\.\/locale$/,
+      contextRegExp: /moment$/}),
     new BundleAnalyzerPlugin({
       analyzerMode: 'static',
       reportFilename: 'bundle-analyzer-report.html',
@@ -347,15 +362,6 @@ module.exports = {
     }),
     new LuaBundlerPlugin({ namespace: moduleConfig.namespace }),
   ],
-  // Some libraries import Node modules but don't use them in the browser.
-  // Tell Webpack to provide empty mocks for them so importing them works.
-  node: {
-    dgram: 'empty',
-    fs: 'empty',
-    net: 'empty',
-    tls: 'empty',
-    child_process: 'empty'
-  },
   performance: {
     maxEntrypointSize: 4000000,
     maxAssetSize: 4000000

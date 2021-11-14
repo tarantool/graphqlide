@@ -1,6 +1,6 @@
 // @ts-check
 import * as React from 'react';
-import { css, cx } from 'emotion';
+import { css, cx } from '@emotion/css';
 import { Icon, type GenericIconProps } from '@tarantool.io/ui-kit';
 import GraphQLIDE from './GraphQLIDE';
 import image from './graphql.svg';
