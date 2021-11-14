@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-18.04
     container:
       image: centos:7
-    timeout-minutes: 10
+    timeout-minutes: 20
     env:
       DOWNLOAD_TOKEN: ${{ secrets.DOWNLOAD_TOKEN }}
       ROCKS_USERNAME: ${{ secrets.ROCKS_USERNAME }}
