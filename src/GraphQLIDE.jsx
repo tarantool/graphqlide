@@ -1,6 +1,7 @@
 // @ts-check
 
 import React, { Component } from 'react';
+import Hotkeys from 'react-hot-keys';
 import { css, cx } from '@emotion/css'
 import { GraphiQL, ToolbarSelect } from 'graphiql';
 import GraphiQLExplorer from './graphiql-explorer';
@@ -164,12 +165,6 @@ class GraphQLIDE extends Component<{}, GraphQLIDEState> {
     this._fetcher({
       query: getIntrospectionQuery(options)
     }).then(result => {
-      const editor = this._graphiql.getQueryEditor();
-      editor.setOption('extraKeys', {
-        ...(editor.options.extraKeys || {}),
-        'Shift-Alt-LeftClick': this._handleInspectOperation
-      });
-
       this.setState({ schema: buildClientSchema(result.data), reloadSchema: false });
     });
   }
@@ -238,6 +233,10 @@ class GraphQLIDE extends Component<{}, GraphQLIDEState> {
     this.setState({ explorerIsOpen: !this.state.explorerIsOpen });
   };
 
+  _handleToggleDocExplorer = () => {
+    this._graphiql.setState({ docExplorerOpen: !this._graphiql.state.docExplorerOpen });
+  };
+
   _handleSaveQuery = () => {
     const queryEditor = this._graphiql.getQueryEditor();
     const query = queryEditor && queryEditor.getValue();
@@ -263,12 +262,6 @@ class GraphQLIDE extends Component<{}, GraphQLIDEState> {
       this._fetcher({
         query: getIntrospectionQuery(options)
       }).then(result => {
-        const editor = this._graphiql.getQueryEditor();
-        editor.setOption('extraKeys', {
-          ...(editor.options.extraKeys || {}),
-          'Shift-Alt-LeftClick': this._handleInspectOperation
-        });
-
         this.setState({ schema: buildClientSchema(result.data), reloadSchema: false });
       });
     }
@@ -302,74 +295,116 @@ class GraphQLIDE extends Component<{}, GraphQLIDEState> {
     }
   }
 
+  onKeyDown(keyName) {
+    switch (keyName) {
+      case 'alt+shift+e':
+        this._handleToggleExplorer()
+        break;
+      case 'alt+shift+h':
+        this._graphiql.handleToggleHistory()
+        break;
+      case 'alt+shift+p':
+        this._graphiql.handlePrettifyQuery()
+        break;
+      case 'alt+shift+m':
+        this._graphiql.handleMergeQuery()
+        break;
+      case 'alt+shift+c':
+        this._graphiql.handleCopyQuery()
+        break;
+      case 'alt+shift+q':
+        this._handleSaveQuery()
+        break;
+      case 'alt+shift+r':
+        this._handleSaveResponse()
+        break;
+      case 'alt+shift+d':
+        this._handleToggleDocExplorer()
+        break;
+      default:
+        break;
+    }
+  }
+
   render() {
     const { query, schema } = this.state;
+    const keyNames = 'alt+shift+e,alt+shift+h,alt+shift+p,alt+shift+m,\
+                      alt+shift+c,alt+shift+q,alt+shift+r,alt+shift+d'
     return (
-      <div className={cx(styles.container, 'graphiql-container')} >
-        <GraphiQLExplorer
-          schema={schema}
-          query={query}
-          onEdit={this._handleEditQuery}
-          onRunOperation={operationName => this._graphiql.handleRunQuery(operationName)}
-          explorerIsOpen={this.state.explorerIsOpen}
-          onToggleExplorer={this._handleToggleExplorer}
-        />
-        <GraphiQL
-          ref={ref => (this._graphiql = ref)}
-          fetcher={this._fetcher}
-          schema={schema}
-          query={query}
-          onEditQuery={this._handleEditQuery}
-          getDefaultFieldNames={this._defaultGetDefaultFieldNames}
-          docExplorerOpen={false}
-        >
-          <GraphiQL.Toolbar>
-            {this._schemasMenuReducer()}
-            <GraphiQL.Button
-              onClick={this._handleToggleExplorer}
-              label="Explorer"
-              title="Toggle Explorer"
-            />
-            <GraphiQL.Button
-              onClick={() => this._graphiql.handleToggleHistory()}
-              label="History"
-              title="Show History"
-            />
-            <GraphiQL.Button
-              onClick={() => this._graphiql.handlePrettifyQuery()}
-              label="Prettify"
-              title="Prettify Query"
-            />
-            <GraphiQL.Button
-              onClick={() => this._graphiql.handleMergeQuery()}
-              title="Merge Query"
-              label="Merge"
-            />
-            <GraphiQL.Button
-              onClick={() => this._graphiql.handleCopyQuery()}
-              title="Copy Query"
-              label="Copy"
-            />
-            <GraphiQL.Menu
-              label="Save"
-              title="Save..."
-            >
-              <GraphiQL.MenuItem
-                label="Query"
-                title="Save query"
-                onSelect={() => this._handleSaveQuery()}
+      <Hotkeys
+        keyName={keyNames}
+        onKeyDown={this.onKeyDown.bind(this)}
+        filter={(event) => {
+          return true;
+        }}
+      >
+        <div className={cx(styles.container, 'graphiql-container')} >
+          <GraphiQLExplorer
+            schema={schema}
+            query={query}
+            onEdit={this._handleEditQuery}
+            onRunOperation={operationName => this._graphiql.handleRunQuery(operationName)}
+            explorerIsOpen={this.state.explorerIsOpen}
+            onToggleExplorer={this._handleToggleExplorer}
+          />
+          <GraphiQL
+            ref={ref => (this._graphiql = ref)}
+            fetcher={this._fetcher}
+            schema={schema}
+            query={query}
+            onEditQuery={this._handleEditQuery}
+            getDefaultFieldNames={this._defaultGetDefaultFieldNames}
+            docExplorerOpen={false}
+            headerEditorEnabled={false}
+          >
+            <GraphiQL.Toolbar>
+              {this._schemasMenuReducer()}
+              <GraphiQL.Button
+                onClick={() => this._handleToggleExplorer()}
+                label="Explorer"
+                title="Toggle Explorer (Alt+Shift+E)"
               />
-              <GraphiQL.MenuItem
-                label="Response"
-                title="Save response"
-                onSelect={() => this._handleSaveResponse()}
+              <GraphiQL.Button
+                onClick={() => this._graphiql.handleToggleHistory()}
+                label="History"
+                title="Show History (Alt+Shift+H)"
               />
-            </GraphiQL.Menu>
-          </GraphiQL.Toolbar>
-          <GraphiQL.Footer>
-          </GraphiQL.Footer>
-        </GraphiQL>
-      </div>
+              <GraphiQL.Button
+                onClick={() => this._graphiql.handlePrettifyQuery()}
+                label="Prettify"
+                title="Prettify Query (Alt+Shift+P)"
+              />
+              <GraphiQL.Button
+                onClick={() => this._graphiql.handleMergeQuery()}
+                label="Merge"
+                title="Merge Query (Alt+Shift+M)"
+              />
+              <GraphiQL.Button
+                onClick={() => this._graphiql.handleCopyQuery()}
+                label="Copy"
+                title="Copy Query (Alt+Shift+C)"
+              />
+              <GraphiQL.Menu
+                label="Save"
+                title="Save..."
+              >
+                <GraphiQL.MenuItem
+                  label="Query"
+                  title="Save query (Alt+Shift+Q)"
+                  onSelect={() => this._handleSaveQuery()}
+                />
+                <GraphiQL.MenuItem
+                  label="Response"
+                  title="Save response (Alt+Shift+R)"
+                  onSelect={() => this._handleSaveResponse()}
+                />
+              </GraphiQL.Menu>
+            </GraphiQL.Toolbar>
+            <GraphiQL.Footer>
+            </GraphiQL.Footer>
+          </GraphiQL>
+        </div>
+      </Hotkeys>
     );
   }
 }
