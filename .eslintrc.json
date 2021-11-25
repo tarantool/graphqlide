@@ -1,13 +1,12 @@
 {
-    "parser": "babel-eslint",
+    "parser": "@babel/eslint-parser",
     "extends": [
       "prettier"
     ],
     "plugins": [
       "flowtype",
       "react",
-      "prettier",
-      "@emotion"
+      "prettier"
     ],
     "rules": {
       "dot-notation": "off",

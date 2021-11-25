@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.0.17
+
+- `update graphiql@1.5.1 to graphiql@1.5.4`
+- `update graphql@15.7.2 to graphiql@16.0.1`
+- `update eslint@7.x and dependencies to eslint@8.x`
+- `remove most of unused dependencies`
+
 ## 0.0.16
 
 - `update graphiql@1.4.6 to graphiql@1.5.1`

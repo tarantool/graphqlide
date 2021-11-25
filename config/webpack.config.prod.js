@@ -6,6 +6,7 @@ const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const TerserPlugin = require("terser-webpack-plugin");
+const ESLintPlugin = require('eslint-webpack-plugin');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 const moduleConfig = require('../module-config');
@@ -134,21 +135,6 @@ module.exports = {
         resolve: {
           fullySpecified: false
         }
-      },
-      {
-        test: /\.(js|jsx|m?js)$/,
-        enforce: 'pre',
-        use: [
-          {
-            options: {
-              formatter: eslintFormatter,
-              eslintPath: require.resolve('eslint'),
-              quiet: true
-            },
-            loader: require.resolve('eslint-loader')
-          }
-        ],
-        include: paths.appSrc
       },
       {
         // "oneOf" will traverse all following loaders until one will
@@ -360,6 +346,7 @@ module.exports = {
       reportFilename: 'bundle-analyzer-report.html',
       openAnalyzer: false
     }),
+    new ESLintPlugin(),
     new LuaBundlerPlugin({ namespace: moduleConfig.namespace }),
   ],
   performance: {
