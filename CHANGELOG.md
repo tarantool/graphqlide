@@ -2,10 +2,13 @@
 
 ## 0.0.17
 
-- `update graphiql@1.5.1 to graphiql@1.5.4`
+- `update graphiql@1.5.1 to graphiql@1.5.12`
 - `update graphql@15.7.2 to graphiql@16.0.1`
 - `update eslint@7.x and dependencies to eslint@8.x`
+- `update @tarantool.io/frontend-core@7.12.1 to  @tarantool.io/frontend-core8.0.0`
+- `update webpack@5.64.0 to webpack@5.65.0`
 - `remove most of unused dependencies`
+- `added keyboard shortcuts to all main menu buttons`
 
 ## 0.0.16
 

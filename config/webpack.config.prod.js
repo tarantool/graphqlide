@@ -106,7 +106,8 @@ module.exports = {
           fs: false,
           net: false,
           tls: false,
-          child_process: false
+          child_process: false,
+          path: require.resolve("path-browserify")
         }
   },
   externals: {
@@ -348,6 +349,9 @@ module.exports = {
     }),
     new ESLintPlugin(),
     new LuaBundlerPlugin({ namespace: moduleConfig.namespace }),
+        new webpack.ProvidePlugin({
+      process: 'process/browser',
+    }),
   ],
   performance: {
     maxEntrypointSize: 4000000,

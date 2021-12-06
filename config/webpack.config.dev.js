@@ -108,7 +108,8 @@ module.exports = {
           fs: false,
           net: false,
           tls: false,
-          child_process: false
+          child_process: false,
+          path: require.resolve("path-browserify"),
         }
   },
   externals: {
@@ -325,11 +326,17 @@ module.exports = {
       resourceRegExp: /^\.\/locale$/,
       contextRegExp: /moment$/}),
     new ESLintPlugin(),
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+    }),
+      new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('development')
+    }),
   ],
   // Turn off performance hints during development because we don't do any
   // splitting or minification in interest of speed. These warnings become
   // cumbersome.
   performance: {
     hints: false
-  }
+  },
 };
