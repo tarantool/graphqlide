@@ -256,6 +256,20 @@ class GraphQLIDE extends Component<{}, GraphQLIDEState> {
     saveAs(Response, 'response.json');
   };
 
+  _handleCopyResponse = () => {
+    const response = this._graphiql.state.response;
+    if (!response || response.length === 0) {
+      return;
+    }
+
+    navigator.clipboard.writeText(response).then(
+        ()=>{},
+        function () {
+          console.error('Response copying failed!')
+        }
+    );
+  }
+
   componentDidUpdate() {
     if (this.state.reloadSchema) {
       const options = this._getGraphQLEndpoint().options
@@ -312,6 +326,9 @@ class GraphQLIDE extends Component<{}, GraphQLIDEState> {
       case 'alt+shift+c':
         this._graphiql.handleCopyQuery()
         break;
+      case 'alt+shift+x':
+        this._handleCopyResponse()
+        break;
       case 'alt+shift+q':
         this._handleSaveQuery()
         break;
@@ -329,7 +346,7 @@ class GraphQLIDE extends Component<{}, GraphQLIDEState> {
   render() {
     const { query, schema } = this.state;
     const keyNames = 'alt+shift+e,alt+shift+h,alt+shift+p,alt+shift+m,\
-                      alt+shift+c,alt+shift+q,alt+shift+r,alt+shift+d'
+                      alt+shift+c,alt+shift+x,alt+shift+q,alt+shift+r,alt+shift+d'
     return (
       <Hotkeys
         keyName={keyNames}
@@ -379,11 +396,21 @@ class GraphQLIDE extends Component<{}, GraphQLIDEState> {
                 label="Merge"
                 title="Merge Query (Alt+Shift+M)"
               />
-              <GraphiQL.Button
-                onClick={() => this._graphiql.handleCopyQuery()}
+              <GraphiQL.Menu
                 label="Copy"
-                title="Copy Query (Alt+Shift+C)"
-              />
+                title="Copy..."
+              >
+                <GraphiQL.MenuItem
+                  onSelect={() => this._graphiql.handleCopyQuery()}
+                  label="Query"
+                  title="Copy Query (Alt+Shift+C)"
+                />
+                <GraphiQL.MenuItem
+                  onSelect={() => this._handleCopyResponse()}
+                  label="Response"
+                  title="Copy Response (Alt+Shift+X)"
+                />
+              </GraphiQL.Menu>
               <GraphiQL.Menu
                 label="Save"
                 title="Save..."

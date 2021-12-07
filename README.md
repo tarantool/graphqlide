@@ -1,5 +1,28 @@
 # Tarantool Cartridge WebUI GraphQL IDE module
 
+- [Tarantool Cartridge WebUI GraphQL IDE module](#tarantool-cartridge-webui-graphql-ide-module)
+  - [Main menu](#main-menu)
+  - [Install pre-built rock](#install-pre-built-rock)
+  - [Lua API](#lua-api)
+    - [Init](#init)
+    - [Stop](#stop)
+    - [Set endpoint](#set-endpoint)
+    - [Get endpoints](#get-endpoints)
+    - [Remove endpoints](#remove-endpoints)
+    - [Front init](#front-init)
+    - [Set default schema](#set-default-schema)
+    - [Add Tarantool Cartridge GraphQL API schema endpoint](#add-tarantool-cartridge-graphql-api-schema-endpoint)
+    - [Remove Tarantool Cartridge GraphQL API schema endpoint](#remove-tarantool-cartridge-graphql-api-schema-endpoint)
+    - [Version](#version)
+  - [Adding GraphQL IDE to your Tarantool Cartridge App](#adding-graphql-ide-to-your-tarantool-cartridge-app)
+  - [Use GraphQL IDE with pure Tarantool (without Tarantool Cartridge)](#use-graphql-ide-with-pure-tarantool-without-tarantool-cartridge)
+  - [Build from sources](#build-from-sources)
+    - [Prerequisites](#prerequisites)
+    - [Clone repo and install nodejs modules](#clone-repo-and-install-nodejs-modules)
+    - [Build rock](#build-rock)
+    - [Install built rock](#install-built-rock)
+  - [Development](#development)
+
 GraphQL IDE module is used to add GraphQL IDE functionality into Tarantool Cartridge WebUI or pure Tarantool (without Tarantool Cartridge). Module it self and Cartridge role are hot-reloadable.
 
 Based on:
@@ -14,6 +37,30 @@ Based on:
 GraphQL IDE interface:
 
 ![GraphQL IDE](https://github.com/tarantool/graphqlide/blob/master/resources/graphqlide.jpg "GraphQL IDE")
+
+## Main menu
+
+GraphQL IDE main menu contains the following items:
+
+
+![GraphQL IDE main menu with Copy opened](https://github.com/tarantool/graphqlide/blob/master/resources/main_menu_1.jpg "GraphQL IDE menu with Copy item opened")
+
+![GraphQL IDE main menu with Save opened](https://github.com/tarantool/graphqlide/blob/master/resources/main_menu_2.jpg "GraphQL IDE menu with Save item opened")
+
+Items description:
+
+- `Play` - execute request. Keyboard shortcut: `Ctrl-Enter`;
+- `Explorer` - toggle Explorer window. Keyboard shortcut Windows/Linux: `Alt-Shift-E`, MacOS: `Option-Shift-E`;
+- `History` - toggle History window. Keyboard shortcut Windows/Linux: `Alt-Shift-H`, MacOS: `Option-Shift-H`;
+- `Prettify` - prettify request.  Keyboard shortcut Windows/Linux: `Alt-Shift-P`, MacOS: `Option-Shift-P`;
+- `Merge` - merge request fragments. Keyboard shortcut Windows/Linux: `Alt-Shift-M`, MacOS: `Option-Shift-M`;
+- `Copy` - group of copy to clipboard items:
+  - `Query` - copy query to clipboard. Keyboard shortcut Windows/Linux: `Alt-Shift-C`, MacOS: `Option-Shift-C`;
+  - `Response` - copy response to clipboard. Keyboard shortcut Windows/Linux: `Alt-Shift-X`, MacOS: `Option-Shift-X`;
+- `Save` 
+  - `Query` - save query to *.graphql file. Keyboard shortcut Windows/Linux: `Alt-Shift-Q`, MacOS: `Option-Shift-Q`;
+  - `Response` - save response to *.json file. Keyboard shortcut Windows/Linux: `Alt-Shift-R`, MacOS: `Option-Shift-R`;
+- `Doc` - toggle Documentation Explorer. Keyboard shortcut Windows/Linux: `Alt-Shift-D`, MacOS: `Option-Shift-D`.
 
 ## Install pre-built rock
 

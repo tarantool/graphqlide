@@ -9,6 +9,8 @@
 - `update webpack@5.64.0 to webpack@5.65.0`
 - `remove most of unused dependencies`
 - `added keyboard shortcuts to all main menu buttons`
+- `added 'Copy response' menu item and suitable shortcut`
+- `added description of main menu items and it's keyboard shortcuts to README.md`
 
 ## 0.0.16
 
