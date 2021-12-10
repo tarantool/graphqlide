@@ -7,8 +7,8 @@
     "@emotion/css": "11.5.0",
     "@tarantool.io/frontend-core": "8.0.0",
     "@tarantool.io/ui-kit": "0.50.2",
-    "graphiql": "1.5.12",
-    "graphql": "16.0.1",
+    "graphiql": "1.5.16",
+    "graphql": "16.1.0",
     "react-hot-keys": "^2.7.1"
   },
   "devDependencies": {
