@@ -1494,8 +1494,14 @@ class FieldView extends React.PureComponent<FieldViewProps, {}> {
     const selection = this._getSelection();
     const type = unwrapOutputType(field.type);
     const args = field.args.sort((a, b) => a.name.localeCompare(b.name));
+    let className = 'graphiql-explorer-node';
+
+    if (field.isDeprecated) {
+      className += ' deprecated';
+    }
+
     const node = (
-      <div className="graphiql-explorer-node">
+      <div className={className}>
         <Tooltip arrowPointAtCenter placement="rightTop" title={field.description || ''}>
           <span
             style={{
@@ -1977,7 +1983,7 @@ class Explorer extends React.PureComponent<Props, State> {
         }}
         style={{
           fontSize: 12,
-          overflow: 'scroll',
+          //overflow: 'scroll',
           textOverflow: 'ellipsis',
           whiteSpace: 'nowrap',
           margin: 0,
