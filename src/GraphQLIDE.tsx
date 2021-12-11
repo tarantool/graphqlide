@@ -31,7 +31,7 @@ const styles = {
 const DEFAULT_QUERY = '';
 
 type GraphQLIDEState = {
-  schema: ?GraphQLSchema,
+  schema?: GraphQLSchema,
   query: string,
   explorerIsOpen: boolean,
   schemaSelected: string,
@@ -50,14 +50,14 @@ class GraphQLIDE extends Component<{}, GraphQLIDEState> {
         if (typeof name[0] !== 'undefined' && typeof name[1].default !== 'undefined' && name[1].default === true) {
           selection = name[0]
         }
-      })
+      });
 
       if (selection === null && Object.entries(window.__tarantool_variables.graphQLIDEPath).length > 0) {
         selection = Object.entries(window.__tarantool_variables.graphQLIDEPath)[0][0]
       }
     }
     return selection
-  }
+  };
 
   state = {
     schema: null,
@@ -144,7 +144,6 @@ class GraphQLIDE extends Component<{}, GraphQLIDEState> {
       return [];
     }
     const fields = type.getFields();
-    // Include all leaf-type fields and nonNull leaf-type fields.
     const leafFieldNames: Array<string> = [];
     Object.keys(fields).forEach(fieldName => {
       if (isLeafType(fields[fieldName].type) ||
