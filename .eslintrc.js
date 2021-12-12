@@ -21,6 +21,7 @@ module.exports = {
       "before": true,
       "after": true
     }],
+    "no-extra-boolean-cast": "off",
     "dot-notation": "off",
     "no-var": "error",
     "prefer-const": ["error"],

@@ -128,8 +128,12 @@ type Props = {
   },
 };
 
+type OperationType = 'query' | 'mutation' | 'subscription' | 'fragment';
+type NewOperationType = 'query' | 'mutation' | 'subscription';
+
 type State = {
-  operation : OperationDefinitionNode;
+  operation ?: OperationDefinitionNode;
+  newOperationType : NewOperationType;
 };
 
 type Selections = readonly SelectionNode[];
@@ -1498,7 +1502,7 @@ class FieldView extends React.PureComponent<FieldViewProps, any> {
     let className = 'graphiql-explorer-node';
 
     if (field.isDeprecated) {
-      className += ' deprecated';
+      className += 'graphiql-explorer-deprecated';
     }
 
     const node = (
@@ -1684,8 +1688,9 @@ const defaultStyles : Styles = {
 
 type RootViewProps = {
   schema : GraphQLSchema;
+  isLast : boolean;
   fields ?: GraphQLFieldMap<any, any>;
-  operation : 'query' | 'mutation' | 'subscription' | 'fragment';
+  operation : OperationType;
   name ?: string;
   onTypeName ?: string;
   definition : FragmentDefinitionNode | OperationDefinitionNode;
@@ -1700,6 +1705,7 @@ type RootViewProps = {
 };
 
 class RootView extends React.PureComponent<RootViewProps, any> {
+  state = {newOperationType: 'query'};
   _previousOperationDef ?: OperationDefinitionNode | FragmentDefinitionNode;
 
   _modifySelections = (selections : Selections) => {
@@ -1711,9 +1717,7 @@ class RootView extends React.PureComponent<RootViewProps, any> {
 
     let newOperationDef : OperationDefinitionNode | FragmentDefinitionNode | undefined;
 
-    if (selections.length === 0) {
-      this._previousOperationDef = operationDef;
-    } else if (operationDef.kind === 'FragmentDefinition') {
+    if (operationDef.kind === 'FragmentDefinition') {
       newOperationDef = {
         ...operationDef,
         selectionSet: {
@@ -1722,11 +1726,29 @@ class RootView extends React.PureComponent<RootViewProps, any> {
         },
       };
     } else if (operationDef.kind === 'OperationDefinition') {
+      let cleanedSelections = selections.filter(selection => {
+        return !(
+          selection.kind === 'Field' && selection.name.value === '__typename'
+        );
+      });
+
+      if (cleanedSelections.length === 0) {
+        cleanedSelections = [
+          {
+            kind: 'Field',
+            name: {
+              kind: 'Name',
+              value: '__typename',
+            },
+          },
+        ];
+      }
+
       newOperationDef = {
         ...operationDef,
         selectionSet: {
           ...operationDef.selectionSet,
-          selections,
+          selections: cleanedSelections,
         },
       };
     }
@@ -1757,13 +1779,13 @@ class RootView extends React.PureComponent<RootViewProps, any> {
     const operationDef = definition;
     const selections = operationDef.selectionSet.selections;
 
-    const operationDisplayName = this.props.name || `${capitalize(operation)} Name`;
+    // const operationDisplayName = this.props.name || `${capitalize(operation)} Name`;
 
     return (
       <div
         id={`${operation}-${name || 'unknown'}`}
         style={{
-          borderBottom: '1px solid #d6d6d6',
+          borderBottom: this.props.isLast ? 'none' : '1px solid #d6d6d6',
           marginLeft: 16,
           marginBottom: '0em',
           paddingBottom: '1em',
@@ -1777,8 +1799,8 @@ class RootView extends React.PureComponent<RootViewProps, any> {
                 color: styleConfig.colors.def,
                 border: 'none',
                 borderBottom: '1px solid #888',
-                outline: 'none',
-                width: `${Math.max(4, operationDisplayName.length)}ch`,
+                outline: 'none'//,
+                //width: `${Math.max(4, operationDisplayName.length)}ch`,
               }}
               autoComplete="false"
               placeholder={`${capitalize(operation)} Name`}
@@ -1826,6 +1848,8 @@ class Explorer extends React.PureComponent<Props, State> {
     getScalarArgInput: () => true,
   };
 
+  state = {newOperationType: 'query', operation: null};
+
   _ref ?: any;
   _resetScroll = () => {
     const container = this._ref;
@@ -1837,6 +1861,10 @@ class Explorer extends React.PureComponent<Props, State> {
     this._resetScroll();
   }
   _onEdit = (query : string) : void => this.props.onEdit(query);
+
+  _setAddOperationType = (value : NewOperationType) => {
+    this.setState({newOperationType: value});
+  };
 
   render() {
     const { schema, query, makeDefaultArg, getScalarArgInput } = this.props;
@@ -1910,7 +1938,7 @@ class Explorer extends React.PureComponent<Props, State> {
       };
     };
 
-    const addOperation = (kind : 'query' | 'mutation' | 'subscription') => {
+    const addOperation = (kind : NewOperationType) => {
       const existingDefs = parsedQuery.definitions;
 
       const viewingDefaultOperation =
@@ -1933,7 +1961,7 @@ class Explorer extends React.PureComponent<Props, State> {
       }`;
 
       // Add this as the default field as it guarantees a valid selectionSet
-      const firstFieldName = '__typename # Placeholder value';
+      const firstFieldName = '__typename';
 
       const selectionSet : SelectionSetNode = {
         kind: 'SelectionSet',
@@ -1977,6 +2005,79 @@ class Explorer extends React.PureComponent<Props, State> {
       this.props.onEdit(prettify(print(newOperationDef)));
     };
 
+    const actionsOptions = [
+      !!queryFields ? (
+        <option
+          className={'toolbar-button'}
+          style={styleConfig.styles.buttonStyle}
+          type='link'
+          value={'query'}>
+          New Query
+        </option>
+      ) : null,
+      !!mutationFields ? (
+        <option
+          className={'toolbar-button'}
+          style={styleConfig.styles.buttonStyle}
+          type="link"
+          value={'mutation'}>
+          New Mutation
+        </option>
+      ) : null,
+      !!subscriptionFields ? (
+        <option
+          className={'toolbar-button'}
+          style={styleConfig.styles.buttonStyle}
+          type="link"
+          value={'subscription'}>
+          New Subscription
+        </option>
+      ) : null,
+    ].filter(Boolean);
+
+    const actionsEl =
+      actionsOptions.length === 0 ? null : (
+        <div
+          style={{
+            minHeight: '50px',
+            maxHeight: '50px',
+            overflow: 'none',
+          }}>
+          <form
+            className="variable-editor-title graphiql-explorer-actions"
+            style={{
+              ...styleConfig.styles.explorerActionsStyle,
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              borderTop: '1px solid rgb(214, 214, 214)',
+            }}
+            onSubmit={event => event.preventDefault()}>
+            <select
+              onChange={event => this._setAddOperationType(event.target.value)}
+              value={this.state.newOperationType}
+              style={{flexGrow: '2'}}>
+              {actionsOptions}
+            </select>
+            <button
+              type="submit"
+              className="toolbar-button"
+              onClick={() =>
+                this.state.newOperationType
+                  ? addOperation(this.state.newOperationType)
+                  : null
+              }
+              style={{
+                ...styleConfig.styles.buttonStyle,
+                height: '22px',
+                width: '22px',
+              }}>
+              <span>+</span>
+            </button>
+          </form>
+        </div>
+      );
+
     return (
       <div
         ref={ref => {
@@ -1990,112 +2091,102 @@ class Explorer extends React.PureComponent<Props, State> {
           margin: 0,
           padding: 8,
           fontFamily: 'Consolas, Inconsolata, "Droid Sans Mono", Monaco, monospace',
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
         }}
         className="graphiql-explorer-root"
       >
-        {relevantOperations.map(
-          (operation : OperationDefinitionNode | FragmentDefinitionNode, index : number) => {
-            const operationName = operation && operation.name && operation.name.value;
+        <div
+        style={{
+            flexGrow: '1',
+            overflow: 'scroll',
+          }}>
+          {relevantOperations.map(
+            (
+              operation : OperationDefinitionNode | FragmentDefinitionNode,
+              index,
+            ) => {
+              const operationName =
+                operation && operation.name && operation.name.value;
 
-            const operationKind =
-              operation.kind === 'FragmentDefinition'
-                ? 'fragment'
-                : (operation && operation.operation) || 'query';
+              const operationKind =
+                operation.kind === 'FragmentDefinition'
+                  ? 'fragment'
+                  : (operation && operation.operation) || 'query';
 
-            const onOperationRename = (newName : string) => {
-              const newOperationDef = renameOperation(operation, newName);
-              this.props.onEdit(prettify(print(newOperationDef)));
-            };
+              const onOperationRename = newName => {
+                const newOperationDef = renameOperation(operation, newName);
+                this.props.onEdit(print(newOperationDef));
+              };
 
-            const fragmentType =
-              operation.kind === 'FragmentDefinition' &&
-              operation.typeCondition.kind === 'NamedType' &&
-              schema.getType(operation.typeCondition.name.value);
+              const fragmentType =
+                operation.kind === 'FragmentDefinition' &&
+                operation.typeCondition.kind === 'NamedType' &&
+                schema.getType(operation.typeCondition.name.value);
 
-            const fragmentFields =
-              fragmentType instanceof GraphQLObjectType ? fragmentType.getFields() : undefined;
+              const fragmentFields =
+                fragmentType instanceof GraphQLObjectType
+                  ? fragmentType.getFields()
+                  : null;
 
-            const fields =
-              operationKind === 'query'
-                ? queryFields
-                : operationKind === 'mutation'
-                ? mutationFields
-                : operationKind === 'subscription'
-                ? subscriptionFields
-                : operation.kind === 'FragmentDefinition'
-                ? fragmentFields
-                : undefined;
+              const fields =
+                operationKind === 'query'
+                  ? queryFields
+                  : operationKind === 'mutation'
+                  ? mutationFields
+                  : operationKind === 'subscription'
+                  ? subscriptionFields
+                  : operation.kind === 'FragmentDefinition'
+                  ? fragmentFields
+                  : null;
 
-            const fragmentTypeName =
-              operation.kind === 'FragmentDefinition'
-                ? operation.typeCondition.name.value
-                : undefined;
+              const fragmentTypeName =
+                operation.kind === 'FragmentDefinition'
+                  ? operation.typeCondition.name.value
+                  : null;
 
-            return (
-              <RootView
-                key={index}
-                fields={fields}
-                operation={operationKind}
-                name={operationName}
-                definition={operation}
-                onOperationRename={onOperationRename}
-                onTypeName={fragmentTypeName}
-                onEdit={newDefinition => {
-                  if (newDefinition) {
+              return (
+                <RootView
+                  key={index}
+                  isLast={index === relevantOperations.length - 1}
+                  fields={fields}
+                  operation={operationKind}
+                  name={operationName}
+                  definition={operation}
+                  onOperationRename={onOperationRename}
+                  onTypeName={fragmentTypeName}
+                  onEdit={newDefinition => {
                     const newQuery = {
                       ...parsedQuery,
-                      definitions: parsedQuery.definitions.map(existingDefinition =>
-                        existingDefinition === operation ? newDefinition : existingDefinition
+                      definitions: parsedQuery.definitions.map(
+                        existingDefinition =>
+                          existingDefinition === operation
+                            ? newDefinition
+                            : existingDefinition,
                       ),
                     };
-                    const textualNewQuery = prettify(print(newQuery));
+
+                    const textualNewQuery = print(newQuery);
+
                     this.props.onEdit(textualNewQuery);
-                  }
-                }}
-                schema={schema}
-                getDefaultFieldNames={getDefaultFieldNames}
-                getDefaultScalarArgValue={getDefaultScalarArgValue}
-                getScalarArgInput={getScalarArgInput}
-                makeDefaultArg={makeDefaultArg}
-                onRunOperation={() => {
-                  if (this.props.onRunOperation) {
-                    this.props.onRunOperation(operationName);
-                  }
-                }}
-                styleConfig={styleConfig}
-              />
-            );
-          }
-        )}
-        <div className="variable-editor-title" style={styleConfig.styles.explorerActionsStyle}>
-          {queryFields ? (
-            <button
-              className={'toolbar-button'}
-              style={styleConfig.styles.buttonStyle}
-              onClick={() => addOperation('query')}
-            >
-              + ADD NEW QUERY
-            </button>
-          ) : null}
-          {mutationFields ? (
-            <button
-              className={'toolbar-button'}
-              style={styleConfig.styles.buttonStyle}
-              onClick={() => addOperation('mutation')}
-            >
-              + ADD NEW MUTATION
-            </button>
-          ) : null}
-          {subscriptionFields ? (
-            <button
-              className={'toolbar-button'}
-              style={styleConfig.styles.buttonStyle}
-              onClick={() => addOperation('subscription')}
-            >
-              + ADD NEW SUBSCRIPTION
-            </button>
-          ) : null}
+                  }}
+                  schema={schema}
+                  getDefaultFieldNames={getDefaultFieldNames}
+                  getDefaultScalarArgValue={getDefaultScalarArgValue}
+                  makeDefaultArg={makeDefaultArg}
+                  onRunOperation={() => {
+                    if (!!this.props.onRunOperation) {
+                      this.props.onRunOperation(operationName);
+                    }
+                  }}
+                  styleConfig={styleConfig}
+                />
+              );
+            },
+          )}
         </div>
+        {actionsEl}
       </div>
     );
   }
@@ -2135,29 +2226,39 @@ class ErrorBoundary extends React.Component<any, ErrorBoundaryState> {
 class GraphiQLExplorer extends React.PureComponent<Props, any> {
   static defaultValue = defaultValue;
   static defaultProps = {
-    width: 380,
+    width: 320,
     title: 'Explorer',
   };
   render() {
     return (
       <div
-        className="historyPaneWrap"
+        className="docExplorerWrap"
         style={{
           height: '100%',
           width: this.props.width,
+          minWidth: this.props.width,
           zIndex: 7,
-          display: this.props.explorerIsOpen ? 'block' : 'none',
+          display: this.props.explorerIsOpen ? 'flex' : 'none',
+          flexDirection: 'column',
+          overflow: 'hidden',
         }}
       >
-        <div className="history-title-bar">
-          <div className="history-title">{this.props.title}</div>
+        <div className="doc-explorer-title-bar">
+          <div className="doc-explorer-title">{this.props.title}</div>
           <div className="doc-explorer-rhs">
             <div className="docExplorerHide" onClick={this.props.onToggleExplorer}>
               {'\u2715'}
             </div>
           </div>
         </div>
-        <div className="history-contents">
+        <div
+          className="doc-explorer-contents"
+          style={{
+            padding: '0px',
+            /* Unset overflowY since docExplorerWrap sets it and it'll
+            cause two scrollbars (one for the container and one for the schema tree) */
+            overflowY: 'unset',
+          }}>
           <ErrorBoundary>
             <Explorer {...this.props} />
           </ErrorBoundary>
