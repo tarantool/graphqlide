@@ -1089,7 +1089,7 @@ class AbstractArgView extends React.PureComponent<AbstractArgViewProps, any> {
             {isInputObjectType(argType) &&
               (argValue ? this.props.styleConfig.arrowOpen : this.props.styleConfig.arrowClosed)}
             <Checkbox checked={!!argValue} styleConfig={this.props.styleConfig} />
-            <Tooltip arrowPointAtCenter placement="rightTop" title={arg.description || ''}>
+            <Tooltip transitionName={null} arrowPointAtCenter placement="rightTop" title={arg.description || ''}>
               <span style={{ color: styleConfig.colors.attribute }}>
                 {arg.name}
                 {isRequiredArgument(arg) ? '*' : ''}:
@@ -1105,7 +1105,7 @@ class AbstractArgView extends React.PureComponent<AbstractArgViewProps, any> {
           {isListArgument(arg) && (
             <Fragment>
               {' '}
-              <Tooltip title="Add array item">
+              <Tooltip transitionName={null} title="Add array item">
                 <span onClick={this.props.addArg} style={{ cursor: 'pointer' }}>
                   ＋
                 </span>
@@ -1503,7 +1503,7 @@ class FieldView extends React.PureComponent<FieldViewProps, any> {
 
     const node = (
       <div className={className}>
-        <Tooltip arrowPointAtCenter placement="rightTop" title={field.description || ''}>
+        <Tooltip transitionName={null} arrowPointAtCenter placement="rightTop" title={field.description || ''}>
           <span
             style={{
               cursor: 'pointer',
