@@ -54,93 +54,93 @@ import {
 type Field = GraphQLField<any, any>;
 
 type GetDefaultScalarArgValue = (
-  parentField: Field,
-  arg: GraphQLArgument | GraphQLInputField,
-  underlyingArgType: GraphQLEnumType | GraphQLScalarType,
-  directParentArg?: GraphQLArgument | GraphQLInputField
+  parentField : Field,
+  arg : GraphQLArgument | GraphQLInputField,
+  underlyingArgType : GraphQLEnumType | GraphQLScalarType,
+  directParentArg ?: GraphQLArgument | GraphQLInputField
 ) => ValueNode;
 
 type GetScalarArgInput = (
-  parentField: Field,
-  arg: GraphQLArgument | GraphQLInputField,
-  underlyingArgType: GraphQLEnumType | GraphQLScalarType,
-  argValue: ValueNode,
-  onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void,
-  styleConfig: StyleConfig,
-  directParentArg?: GraphQLArgument | GraphQLInputField
+  parentField : Field,
+  arg : GraphQLArgument | GraphQLInputField,
+  underlyingArgType : GraphQLEnumType | GraphQLScalarType,
+  argValue : ValueNode,
+  onChange : (event : React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void,
+  styleConfig : StyleConfig,
+  directParentArg ?: GraphQLArgument | GraphQLInputField
 ) => JSX.Element | void;
 
 type MakeDefaultArg = (
-  parentField: Field,
-  arg: GraphQLArgument | GraphQLInputField,
-  directParentArg?: GraphQLArgument | GraphQLInputField
+  parentField : Field,
+  arg : GraphQLArgument | GraphQLInputField,
+  directParentArg ?: GraphQLArgument | GraphQLInputField
 ) => boolean;
 
 type Colors = {
-  keyword: string;
-  def: string;
-  property: string;
-  qualifier: string;
-  attribute: string;
-  number: string;
-  string: string;
-  builtin: string;
-  string2: string;
-  variable: string;
-  atom: string;
+  keyword : string;
+  def : string;
+  property : string;
+  qualifier : string;
+  attribute : string;
+  number : string;
+  string : string;
+  builtin : string;
+  string2 : string;
+  variable : string;
+  atom : string;
 };
 
 type Styles = {
-  explorerActionsStyle: React.CSSProperties;
-  buttonStyle: React.CSSProperties;
+  explorerActionsStyle : React.CSSProperties;
+  buttonStyle : React.CSSProperties;
 };
 
 type StyleConfig = {
-  colors: Colors;
-  arrowOpen: React.ReactNode;
-  arrowClosed: React.ReactNode;
-  checkboxChecked: React.ReactNode;
-  checkboxUnchecked: React.ReactNode;
-  styles: Styles;
+  colors : Colors;
+  arrowOpen : React.ReactNode;
+  arrowClosed : React.ReactNode;
+  checkboxChecked : React.ReactNode;
+  checkboxUnchecked : React.ReactNode;
+  styles : Styles;
 };
 
 type Props = {
-  query: string;
-  width?: number;
-  title?: string;
-  schema?: GraphQLSchema;
-  onEdit: (x: string) => void;
-  getDefaultFieldNames?: (type: GraphQLObjectType) => Array<string>;
-  getDefaultScalarArgValue?: GetDefaultScalarArgValue;
-  getScalarArgInput: GetScalarArgInput;
-  makeDefaultArg?: MakeDefaultArg;
-  onToggleExplorer: () => void;
-  explorerIsOpen: boolean;
-  onRunOperation?: (name?: string) => void;
-  colors?: Colors;
-  arrowOpen?: React.ReactNode;
-  arrowClosed?: React.ReactNode;
-  checkboxChecked?: React.ReactNode;
-  checkboxUnchecked?: React.ReactNode;
-  styles?: {
-    explorerActionsStyle?: React.CSSProperties;
-    buttonStyle?: React.CSSProperties;
+  query : string;
+  width ?: number;
+  title ?: string;
+  schema ?: GraphQLSchema;
+  onEdit : (x : string) => void;
+  getDefaultFieldNames ?: (type : GraphQLObjectType) => Array<string>;
+  getDefaultScalarArgValue ?: GetDefaultScalarArgValue;
+  getScalarArgInput : GetScalarArgInput;
+  makeDefaultArg ?: MakeDefaultArg;
+  onToggleExplorer : () => void;
+  explorerIsOpen : boolean;
+  onRunOperation ?: (name ?: string) => void;
+  colors ?: Colors;
+  arrowOpen ?: React.ReactNode;
+  arrowClosed ?: React.ReactNode;
+  checkboxChecked ?: React.ReactNode;
+  checkboxUnchecked ?: React.ReactNode;
+  styles ?: {
+    explorerActionsStyle ?: React.CSSProperties;
+    buttonStyle ?: React.CSSProperties;
   },
 };
 
 type State = {
-  operation: OperationDefinitionNode;
+  operation : OperationDefinitionNode;
 };
 
 type Selections = readonly SelectionNode[];
 
-function capitalize(str: string) {
+function capitalize(str : string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 // Names match class names in graphiql app.css
 // https://github.com/graphql/graphiql/blob/master/packages/graphiql/css/app.css
-const defaultColors: Colors = {
+const defaultColors : Colors = {
   keyword: '#B11A04',
   // OperationName, FragmentName
   def: '#D2054E',
@@ -183,7 +183,8 @@ const defaultCheckboxChecked = (
     xmlns="http://www.w3.org/2000/svg"
   >
     <path
-      d="M16 0H2C0.9 0 0 0.9 0 2V16C0 17.1 0.9 18 2 18H16C17.1 18 18 17.1 18 16V2C18 0.9 17.1 0 16 0ZM16 16H2V2H16V16ZM14.99 6L13.58 4.58L6.99 11.17L4.41 8.6L2.99 10.01L6.99 14L14.99 6Z"
+      d="M16 0H2C0.9 0 0 0.9 0 2V16C0 17.1 0.9 18 2 18H16C17.1 18 18 17.1 18 16V2C18 0.9 17.1 0 16 0ZM16
+      16H2V2H16V16ZM14.99 6L13.58 4.58L6.99 11.17L4.41 8.6L2.99 10.01L6.99 14L14.99 6Z"
       fill="#666"
     />
   </svg>
@@ -205,7 +206,7 @@ const defaultCheckboxUnchecked = (
   </svg>
 );
 
-function Checkbox(props: { checked: boolean; styleConfig: StyleConfig }) {
+function Checkbox(props : { checked : boolean; styleConfig : StyleConfig }) {
   return (
     <Fragment>
       {props.checked ? props.styleConfig.checkboxChecked : props.styleConfig.checkboxUnchecked}
@@ -213,7 +214,7 @@ function Checkbox(props: { checked: boolean; styleConfig: StyleConfig }) {
   );
 }
 
-function defaultGetDefaultFieldNames(type: GraphQLObjectType): Array<string> {
+function defaultGetDefaultFieldNames(type : GraphQLObjectType) : Array<string> {
   const fields = type.getFields();
 
   // Is there an `id` field?
@@ -242,7 +243,7 @@ function defaultGetDefaultFieldNames(type: GraphQLObjectType): Array<string> {
   }
 
   // Include all leaf-type fields.
-  const leafFieldNames: any[] = [];
+  const leafFieldNames : any[] = [];
   Object.keys(fields).forEach(fieldName => {
     if (isLeafType(fields[fieldName].type)) {
       leafFieldNames.push(fieldName);
@@ -256,7 +257,7 @@ function defaultGetDefaultFieldNames(type: GraphQLObjectType): Array<string> {
   return leafFieldNames.slice(0, 2); // Prevent too many fields from being added
 }
 
-function isListArgument(arg: GraphQLArgument): boolean {
+function isListArgument(arg : GraphQLArgument) : boolean {
   let unwrappedType = arg.type;
   while (isNonNullType(unwrappedType)) {
     unwrappedType = unwrappedType.ofType;
@@ -264,11 +265,11 @@ function isListArgument(arg: GraphQLArgument): boolean {
   return isListType(unwrappedType);
 }
 
-function isRequiredArgument(arg: GraphQLArgument): boolean {
+function isRequiredArgument(arg : GraphQLArgument) : boolean {
   return isNonNullType(arg.type) && arg.defaultValue === undefined;
 }
 
-function unwrapOutputType(outputType: GraphQLOutputType): any {
+function unwrapOutputType(outputType : GraphQLOutputType) : any {
   let unwrappedType = outputType;
   while (isWrappingType(unwrappedType)) {
     unwrappedType = unwrappedType.ofType;
@@ -276,7 +277,7 @@ function unwrapOutputType(outputType: GraphQLOutputType): any {
   return unwrappedType;
 }
 
-function unwrapInputType(inputType: GraphQLInputType): any {
+function unwrapInputType(inputType : GraphQLInputType) : any {
   let unwrappedType = inputType;
   while (isWrappingType(unwrappedType)) {
     unwrappedType = unwrappedType.ofType;
@@ -284,7 +285,7 @@ function unwrapInputType(inputType: GraphQLInputType): any {
   return unwrappedType;
 }
 
-function coerceArgValue(argType: GraphQLScalarType | GraphQLEnumType, value: string): ValueNode {
+function coerceArgValue(argType : GraphQLScalarType | GraphQLEnumType, value : string) : ValueNode {
   if (isScalarType(argType)) {
     try {
       switch (argType.name) {
@@ -341,28 +342,28 @@ function coerceArgValue(argType: GraphQLScalarType | GraphQLEnumType, value: str
   }
 }
 
-const prettify = (query: string): string =>
+const prettify = (query : string) : string =>
   prettier.format(query, {
     parser: 'graphql',
     plugins: [parserGraphql],
   });
 
 type InputArgViewProps = {
-  arg: GraphQLArgument;
-  argName?: String;
-  selection: ObjectValueNode;
-  parentField: Field;
-  directParentArg: GraphQLArgument;
-  modifyFields: (fields: readonly ObjectFieldNode[]) => void;
-  getDefaultScalarArgValue: GetDefaultScalarArgValue;
-  getScalarArgInput: GetScalarArgInput;
-  makeDefaultArg?: MakeDefaultArg;
-  onRunOperation: (e: React.KeyboardEvent<HTMLInputElement | HTMLSelectElement>) => void;
-  styleConfig: StyleConfig;
+  arg : GraphQLArgument;
+  argName ?: string;
+  selection : ObjectValueNode;
+  parentField : Field;
+  directParentArg : GraphQLArgument;
+  modifyFields : (fields : readonly ObjectFieldNode[]) => void;
+  getDefaultScalarArgValue : GetDefaultScalarArgValue;
+  getScalarArgInput : GetScalarArgInput;
+  makeDefaultArg ?: MakeDefaultArg;
+  onRunOperation : (e : React.KeyboardEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  styleConfig : StyleConfig;
 };
 
-class InputArgView extends React.PureComponent<InputArgViewProps, {}> {
-  _previousArgSelection?: ObjectFieldNode;
+class InputArgView extends React.PureComponent<InputArgViewProps, any> {
+  _previousArgSelection ?: ObjectFieldNode;
 
   _getArgSelection = () => {
     return this.props.selection.fields.find(field => field.name.value === this.props.arg.name);
@@ -455,7 +456,7 @@ class InputArgView extends React.PureComponent<InputArgViewProps, {}> {
     }
   };
 
-  _setArgValue = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  _setArgValue = (event : React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { selection } = this.props;
     const argSelection = this._getArgSelection();
     if (!argSelection) {
@@ -480,7 +481,7 @@ class InputArgView extends React.PureComponent<InputArgViewProps, {}> {
     );
   };
 
-  _modifyChildFields = (fields: ObjectFieldNode[] | ListValueNode) => {
+  _modifyChildFields = (fields : ObjectFieldNode[] | ListValueNode) => {
     const { modifyFields, selection } = this.props;
     if ((fields as ListValueNode).kind === 'ListValue') {
       modifyFields(
@@ -535,18 +536,18 @@ class InputArgView extends React.PureComponent<InputArgViewProps, {}> {
 }
 
 type InputArgListViewProps = {
-  arg: GraphQLArgument;
-  selection: ListValueNode;
-  parentField: Field;
-  modifyArgument: (list: ListValueNode) => void;
-  getDefaultScalarArgValue: GetDefaultScalarArgValue;
-  getScalarArgInput: GetScalarArgInput;
-  makeDefaultArg?: MakeDefaultArg;
-  onRunOperation: (e: React.KeyboardEvent<HTMLInputElement | HTMLSelectElement>) => void;
-  styleConfig: StyleConfig;
+  arg : GraphQLArgument;
+  selection : ListValueNode;
+  parentField : Field;
+  modifyArgument : (list : ListValueNode) => void;
+  getDefaultScalarArgValue : GetDefaultScalarArgValue;
+  getScalarArgInput : GetScalarArgInput;
+  makeDefaultArg ?: MakeDefaultArg;
+  onRunOperation : (e : React.KeyboardEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  styleConfig : StyleConfig;
 };
 
-class InputArgListView extends React.PureComponent<InputArgListViewProps, {}> {
+class InputArgListView extends React.PureComponent<InputArgListViewProps, any> {
   _addArg = () => {
     const { arg, getDefaultScalarArgValue, makeDefaultArg, parentField } = this.props;
     const argType = unwrapInputType(arg.type);
@@ -569,7 +570,7 @@ class InputArgListView extends React.PureComponent<InputArgListViewProps, {}> {
     this.props.modifyArgument(modifiedListValue);
   };
 
-  _removeArg = (index: number) => () => {
+  _removeArg = (index : number) => () => {
     const { selection } = this.props;
     const modifiedListValue = {
       kind: 'ListValue',
@@ -578,7 +579,7 @@ class InputArgListView extends React.PureComponent<InputArgListViewProps, {}> {
     this.props.modifyArgument(modifiedListValue);
   };
 
-  _setArgFields = (index: number) => (fields: readonly ObjectFieldNode[]) => {
+  _setArgFields = (index : number) => (fields : readonly ObjectFieldNode[]) => {
     const { selection } = this.props;
     const objectValue = selection.values[index] as ObjectValueNode;
     const modifiedListValue = {
@@ -586,7 +587,7 @@ class InputArgListView extends React.PureComponent<InputArgListViewProps, {}> {
       values: Object.assign([], selection.values, {
         [index.toString()]: {
           ...objectValue,
-          fields: [...fields].sort((a: ObjectFieldNode, b: ObjectFieldNode) =>
+          fields: [...fields].sort((a : ObjectFieldNode, b : ObjectFieldNode) =>
             a.name.value.localeCompare(b.name.value)
           ),
         },
@@ -595,8 +596,8 @@ class InputArgListView extends React.PureComponent<InputArgListViewProps, {}> {
     this.props.modifyArgument(modifiedListValue);
   };
 
-  _setArgValue = (index: number) => (
-    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  _setArgValue = (index : number) => (
+    event : React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { selection } = this.props;
     const targetValue = event.target.value;
@@ -650,20 +651,20 @@ class InputArgListView extends React.PureComponent<InputArgListViewProps, {}> {
 }
 
 type ArgViewProps = {
-  parentField: Field;
-  arg: GraphQLArgument;
-  selection: FieldNode;
-  modifyArguments: (argumentNodes: readonly ArgumentNode[]) => void;
-  getDefaultScalarArgValue: GetDefaultScalarArgValue;
-  getScalarArgInput: GetScalarArgInput;
-  makeDefaultArg?: MakeDefaultArg;
-  onRunOperation: () => void;
-  styleConfig: StyleConfig;
+  parentField : Field;
+  arg : GraphQLArgument;
+  selection : FieldNode;
+  modifyArguments : (argumentNodes : readonly ArgumentNode[]) => void;
+  getDefaultScalarArgValue : GetDefaultScalarArgValue;
+  getScalarArgInput : GetScalarArgInput;
+  makeDefaultArg ?: MakeDefaultArg;
+  onRunOperation : () => void;
+  styleConfig : StyleConfig;
 };
 
-type ArgViewState = {};
+type ArgViewState = Record<string, unknown>;
 
-export function defaultValue(argType: GraphQLEnumType | GraphQLScalarType): ValueNode {
+export function defaultValue(argType : GraphQLEnumType | GraphQLScalarType) : ValueNode {
   if (isEnumType(argType)) {
     return { kind: 'EnumValue', value: argType.getValues()[0].name };
   } else {
@@ -683,16 +684,16 @@ export function defaultValue(argType: GraphQLEnumType | GraphQLScalarType): Valu
 }
 
 function defaultGetDefaultScalarArgValue(
-  parentField: Field,
-  arg: GraphQLArgument | GraphQLInputField,
-  argType: GraphQLEnumType | GraphQLScalarType,
-  directParentArg: GraphQLArgument | GraphQLInputField
-): ValueNode {
+  parentField : Field,
+  arg : GraphQLArgument | GraphQLInputField,
+  argType : GraphQLEnumType | GraphQLScalarType,
+  // directParentArg?: GraphQLArgument | GraphQLInputField
+) : ValueNode {
   return defaultValue(argType);
 }
 
 class ArgView extends React.PureComponent<ArgViewProps, ArgViewState> {
-  _previousArgSelection?: ArgumentNode;
+  _previousArgSelection ?: ArgumentNode;
 
   _getArgSelection = () => {
     const { selection } = this.props;
@@ -778,7 +779,7 @@ class ArgView extends React.PureComponent<ArgViewProps, ArgViewState> {
     }
   };
 
-  _setArgValue = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  _setArgValue = (event : React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { selection } = this.props;
     const argSelection = this._getArgSelection();
     if (!argSelection) {
@@ -808,7 +809,7 @@ class ArgView extends React.PureComponent<ArgViewProps, ArgViewState> {
    * When fields is ObjectFieldNode[], we are modifying fields of an InputObject. But if it
    * is a ListValueNode, then the argument is a list, in which case we return the entire list.
    */
-  _setArgFields = (fields: ObjectFieldNode[] | ListValueNode) => {
+  _setArgFields = (fields : ObjectFieldNode[] | ListValueNode) => {
     const { selection } = this.props;
     const argSelection = this._getArgSelection();
     if (!argSelection) {
@@ -867,37 +868,37 @@ class ArgView extends React.PureComponent<ArgViewProps, ArgViewState> {
   }
 }
 
-function isRunShortcut(event: React.KeyboardEvent<HTMLInputElement>) {
+function isRunShortcut(event : React.KeyboardEvent<HTMLInputElement>) {
   return event.metaKey && event.key === 'Enter';
 }
 
 type AbstractArgViewProps = {
-  argValue?: ValueNode;
-  arg: GraphQLArgument;
-  parentField: Field;
-  directParentArg?: GraphQLArgument;
-  setArgValue: (event: React.SyntheticEvent) => void;
-  setArgFields: (fields: readonly ObjectFieldNode[] | ListValueNode) => void;
-  addArg: () => void;
-  removeArg: () => void;
-  getDefaultScalarArgValue: GetDefaultScalarArgValue;
-  getScalarArgInput: GetScalarArgInput;
-  makeDefaultArg?: MakeDefaultArg;
-  onRunOperation: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-  styleConfig: StyleConfig;
+  argValue ?: ValueNode;
+  arg : GraphQLArgument;
+  parentField : Field;
+  directParentArg ?: GraphQLArgument;
+  setArgValue : (event : React.SyntheticEvent) => void;
+  setArgFields : (fields : readonly ObjectFieldNode[] | ListValueNode) => void;
+  addArg : () => void;
+  removeArg : () => void;
+  getDefaultScalarArgValue : GetDefaultScalarArgValue;
+  getScalarArgInput : GetScalarArgInput;
+  makeDefaultArg ?: MakeDefaultArg;
+  onRunOperation : (e : React.KeyboardEvent<HTMLInputElement>) => void;
+  styleConfig : StyleConfig;
 };
 
 type ScalarInputProps = {
-  arg: GraphQLArgument;
-  argValue: ValueNode;
-  setArgValue: (event: React.SyntheticEvent) => void;
-  onRunOperation: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-  styleConfig: StyleConfig;
+  arg : GraphQLArgument;
+  argValue : ValueNode;
+  setArgValue : (event : React.SyntheticEvent) => void;
+  onRunOperation : (e : React.KeyboardEvent<HTMLInputElement>) => void;
+  styleConfig : StyleConfig;
 };
 
-class ScalarInput extends React.PureComponent<ScalarInputProps, {}> {
-  _ref?: any;
-  _handleChange = (event: React.SyntheticEvent) => {
+class ScalarInput extends React.PureComponent<ScalarInputProps, any> {
+  _ref ?: any;
+  _handleChange = (event : React.SyntheticEvent) => {
     this.props.setArgValue(event);
   };
 
@@ -947,7 +948,7 @@ class ScalarInput extends React.PureComponent<ScalarInputProps, {}> {
   }
 }
 
-class AbstractArgView extends React.PureComponent<AbstractArgViewProps, {}> {
+class AbstractArgView extends React.PureComponent<AbstractArgViewProps, any> {
   render() {
     const {
       argValue,
@@ -1086,7 +1087,7 @@ class AbstractArgView extends React.PureComponent<AbstractArgViewProps, {}> {
             onClick={argValue ? this.props.removeArg : this.props.addArg}
           >
             {isInputObjectType(argType) &&
-              (!!argValue ? this.props.styleConfig.arrowOpen : this.props.styleConfig.arrowClosed)}
+              (argValue ? this.props.styleConfig.arrowOpen : this.props.styleConfig.arrowClosed)}
             <Checkbox checked={!!argValue} styleConfig={this.props.styleConfig} />
             <Tooltip arrowPointAtCenter placement="rightTop" title={arg.description || ''}>
               <span style={{ color: styleConfig.colors.attribute }}>
@@ -1119,20 +1120,20 @@ class AbstractArgView extends React.PureComponent<AbstractArgViewProps, {}> {
 }
 
 type AbstractViewProps = {
-  implementingType: GraphQLObjectType;
-  selections: Selections;
-  modifySelections: (selections: Selections) => void;
-  schema: GraphQLSchema;
-  getDefaultFieldNames: (type: GraphQLObjectType) => Array<string>;
-  getDefaultScalarArgValue: GetDefaultScalarArgValue;
-  getScalarArgInput: GetScalarArgInput;
-  makeDefaultArg?: MakeDefaultArg;
-  onRunOperation: () => void;
-  styleConfig: StyleConfig;
+  implementingType : GraphQLObjectType;
+  selections : Selections;
+  modifySelections : (selections : Selections) => void;
+  schema : GraphQLSchema;
+  getDefaultFieldNames : (type : GraphQLObjectType) => Array<string>;
+  getDefaultScalarArgValue : GetDefaultScalarArgValue;
+  getScalarArgInput : GetScalarArgInput;
+  makeDefaultArg ?: MakeDefaultArg;
+  onRunOperation : () => void;
+  styleConfig : StyleConfig;
 };
 
-class AbstractView extends React.PureComponent<AbstractViewProps, {}> {
-  _previousSelection?: InlineFragmentNode;
+class AbstractView extends React.PureComponent<AbstractViewProps, any> {
+  _previousSelection ?: InlineFragmentNode;
 
   _addFragment = () => {
     this.props.modifySelections([
@@ -1162,7 +1163,7 @@ class AbstractView extends React.PureComponent<AbstractViewProps, {}> {
     this.props.modifySelections(this.props.selections.filter(s => s !== thisSelection));
   };
 
-  _getSelection = (): InlineFragmentNode | undefined => {
+  _getSelection = () : InlineFragmentNode | undefined => {
     const selection = this.props.selections.find(
       selection =>
         selection.kind === 'InlineFragment' &&
@@ -1178,7 +1179,7 @@ class AbstractView extends React.PureComponent<AbstractViewProps, {}> {
     return undefined;
   };
 
-  _modifyChildSelections = (selections: Selections) => {
+  _modifyChildSelections = (selections : Selections) => {
     const thisSelection = this._getSelection();
     this.props.modifySelections(
       this.props.selections.map(selection => {
@@ -1252,25 +1253,25 @@ class AbstractView extends React.PureComponent<AbstractViewProps, {}> {
 }
 
 type FieldViewProps = {
-  field: Field;
-  selections: Selections;
-  modifySelections: (selections: Selections) => void;
-  schema: GraphQLSchema;
-  getDefaultFieldNames: (type: GraphQLObjectType) => Array<string>;
-  getDefaultScalarArgValue: GetDefaultScalarArgValue;
-  getScalarArgInput: GetScalarArgInput;
-  makeDefaultArg?: MakeDefaultArg;
-  onRunOperation: () => void;
-  styleConfig: StyleConfig;
+  field : Field;
+  selections : Selections;
+  modifySelections : (selections : Selections) => void;
+  schema : GraphQLSchema;
+  getDefaultFieldNames : (type : GraphQLObjectType) => Array<string>;
+  getDefaultScalarArgValue : GetDefaultScalarArgValue;
+  getScalarArgInput : GetScalarArgInput;
+  makeDefaultArg ?: MakeDefaultArg;
+  onRunOperation : () => void;
+  styleConfig : StyleConfig;
 };
 
 function defaultInputObjectFields(
-  getDefaultScalarArgValue: GetDefaultScalarArgValue,
-  makeDefaultArg: MakeDefaultArg | null,
-  parentField: Field,
-  fields: GraphQLInputField[],
-  directParentArg: GraphQLArgument
-): ObjectFieldNode[] {
+  getDefaultScalarArgValue : GetDefaultScalarArgValue,
+  makeDefaultArg : MakeDefaultArg | null,
+  parentField : Field,
+  fields : GraphQLInputField[],
+  directParentArg : GraphQLArgument
+) : ObjectFieldNode[] {
   const nodes = [];
   for (const field of fields) {
     if (
@@ -1307,10 +1308,10 @@ function defaultInputObjectFields(
 }
 
 function defaultArgs(
-  getDefaultScalarArgValue: GetDefaultScalarArgValue,
-  makeDefaultArg: MakeDefaultArg | null,
-  field: Field
-): ArgumentNode[] {
+  getDefaultScalarArgValue : GetDefaultScalarArgValue,
+  makeDefaultArg : MakeDefaultArg | null,
+  field : Field
+) : ArgumentNode[] {
   const args = [];
   for (const arg of field.args) {
     if (isRequiredArgument(arg) || (makeDefaultArg && makeDefaultArg(field, arg))) {
@@ -1343,11 +1344,11 @@ function defaultArgs(
   return args;
 }
 
-class FieldView extends React.PureComponent<FieldViewProps, {}> {
-  _previousSelection?: FieldNode;
+class FieldView extends React.PureComponent<FieldViewProps, any> {
+  _previousSelection ?: FieldNode;
 
-  _addAllFieldsToSelections = (rawSubfields?: GraphQLFieldMap<any, any>) => {
-    const subFields: FieldNode[] = !!rawSubfields
+  _addAllFieldsToSelections = (rawSubfields ?: GraphQLFieldMap<any, any>) => {
+    const subFields : FieldNode[] = rawSubfields
       ? Object.keys(rawSubfields).map(fieldName => {
           return {
             kind: 'Field',
@@ -1357,7 +1358,7 @@ class FieldView extends React.PureComponent<FieldViewProps, {}> {
         })
       : [];
 
-    const subSelectionSet: SelectionSetNode = {
+    const subSelectionSet : SelectionSetNode = {
       kind: 'SelectionSet',
       selections: subFields,
     };
@@ -1386,7 +1387,7 @@ class FieldView extends React.PureComponent<FieldViewProps, {}> {
     this.props.modifySelections(nextSelections);
   };
 
-  _addFieldToSelections = (_rawSubfields?: GraphQLFieldMap<any, any>) => {
+  _addFieldToSelections = (/*_rawSubfields?: GraphQLFieldMap<any, any>*/) => {
     const nextSelections = [
       ...this.props.selections,
       this._previousSelection || {
@@ -1403,13 +1404,13 @@ class FieldView extends React.PureComponent<FieldViewProps, {}> {
     this.props.modifySelections(nextSelections);
   };
 
-  _handleUpdateSelections = (event: React.MouseEvent) => {
+  _handleUpdateSelections = (event : React.MouseEvent) => {
     const selection = this._getSelection();
     if (selection && !event.altKey) {
       this._removeFieldFromSelections();
     } else {
       const fieldType = getNamedType(this.props.field.type);
-      const rawSubfields: GraphQLFieldMap<any, any> | undefined = isObjectType(fieldType)
+      const rawSubfields : GraphQLFieldMap<any, any> | undefined = isObjectType(fieldType)
         ? fieldType.getFields()
         : undefined;
 
@@ -1425,13 +1426,13 @@ class FieldView extends React.PureComponent<FieldViewProps, {}> {
     const previousSelection = this._getSelection();
     this._previousSelection = previousSelection;
     this.props.modifySelections(
-      this.props.selections.filter((selection: FieldNode) => selection !== previousSelection)
+      this.props.selections.filter((selection : FieldNode) => selection !== previousSelection)
     );
   };
 
-  _getSelection = (): FieldNode | undefined => {
+  _getSelection = () : FieldNode | undefined => {
     const selection = this.props.selections.find(
-      (selection: FieldNode) =>
+      (selection : FieldNode) =>
         selection.kind === 'Field' && this.props.field.name === selection.name.value
     );
     if (!selection) {
@@ -1443,14 +1444,14 @@ class FieldView extends React.PureComponent<FieldViewProps, {}> {
     return undefined;
   };
 
-  _setArguments = (argumentNodes: readonly ArgumentNode[]) => {
+  _setArguments = (argumentNodes : readonly ArgumentNode[]) => {
     const selection = this._getSelection();
     if (!selection) {
       console.error('Missing selection when setting arguments', argumentNodes);
       return;
     }
     this.props.modifySelections(
-      this.props.selections.map((s: FieldNode) =>
+      this.props.selections.map((s : FieldNode) =>
         s === selection
           ? {
               alias: selection.alias,
@@ -1465,9 +1466,9 @@ class FieldView extends React.PureComponent<FieldViewProps, {}> {
     );
   };
 
-  _modifyChildSelections = (selections: Selections) => {
+  _modifyChildSelections = (selections : Selections) => {
     this.props.modifySelections(
-      this.props.selections.map((selection: SelectionNode) => {
+      this.props.selections.map((selection : SelectionNode) => {
         if (selection.kind === 'Field' && this.props.field.name === selection.name.value) {
           if (selection.kind !== 'Field') {
             throw new Error('invalid selection');
@@ -1518,7 +1519,7 @@ class FieldView extends React.PureComponent<FieldViewProps, {}> {
           >
             {isObjectType(type) ? (
               <span>
-                {!!selection
+                {selection
                   ? this.props.styleConfig.arrowOpen
                   : this.props.styleConfig.arrowClosed}
               </span>
@@ -1603,7 +1604,7 @@ class FieldView extends React.PureComponent<FieldViewProps, {}> {
   }
 }
 
-function parseQuery(text: string): DocumentNode | Error | null {
+function parseQuery(text : string) : DocumentNode | Error | null {
   try {
     if (!text.trim()) {
       return null;
@@ -1630,12 +1631,12 @@ const DEFAULT_OPERATION = {
     selections: [],
   },
 } as OperationDefinitionNode;
-const DEFAULT_DOCUMENT: DocumentNode = {
+const DEFAULT_DOCUMENT : DocumentNode = {
   kind: 'Document',
   definitions: [DEFAULT_OPERATION],
 };
-let parseQueryMemoize: [string, DocumentNode] | null = null;
-function memoizeParseQuery(query: string): DocumentNode {
+let parseQueryMemoize : [string, DocumentNode] | null = null;
+function memoizeParseQuery(query : string) : DocumentNode {
   if (parseQueryMemoize && parseQueryMemoize[0] === query) {
     return parseQueryMemoize[1];
   } else {
@@ -1656,7 +1657,7 @@ function memoizeParseQuery(query: string): DocumentNode {
   }
 }
 
-const defaultStyles: Styles = {
+const defaultStyles : Styles = {
   buttonStyle: {
     fontSize: '1.2em',
     padding: '0px',
@@ -1682,33 +1683,33 @@ const defaultStyles: Styles = {
 };
 
 type RootViewProps = {
-  schema: GraphQLSchema;
-  fields?: GraphQLFieldMap<any, any>;
-  operation: 'query' | 'mutation' | 'subscription' | 'fragment';
-  name?: string;
-  onTypeName?: string;
-  definition: FragmentDefinitionNode | OperationDefinitionNode;
-  onEdit: (operationDef?: OperationDefinitionNode | FragmentDefinitionNode) => void;
-  onOperationRename: (query: string) => void;
-  onRunOperation: (name?: string) => void;
-  getDefaultFieldNames: (type: GraphQLObjectType) => Array<string>;
-  getDefaultScalarArgValue: GetDefaultScalarArgValue;
-  getScalarArgInput: GetScalarArgInput;
-  makeDefaultArg?: MakeDefaultArg;
-  styleConfig: StyleConfig;
+  schema : GraphQLSchema;
+  fields ?: GraphQLFieldMap<any, any>;
+  operation : 'query' | 'mutation' | 'subscription' | 'fragment';
+  name ?: string;
+  onTypeName ?: string;
+  definition : FragmentDefinitionNode | OperationDefinitionNode;
+  onEdit : (operationDef ?: OperationDefinitionNode | FragmentDefinitionNode) => void;
+  onOperationRename : (query : string) => void;
+  onRunOperation : (name ?: string) => void;
+  getDefaultFieldNames : (type : GraphQLObjectType) => Array<string>;
+  getDefaultScalarArgValue : GetDefaultScalarArgValue;
+  getScalarArgInput : GetScalarArgInput;
+  makeDefaultArg ?: MakeDefaultArg;
+  styleConfig : StyleConfig;
 };
 
-class RootView extends React.PureComponent<RootViewProps, {}> {
-  _previousOperationDef?: OperationDefinitionNode | FragmentDefinitionNode;
+class RootView extends React.PureComponent<RootViewProps, any> {
+  _previousOperationDef ?: OperationDefinitionNode | FragmentDefinitionNode;
 
-  _modifySelections = (selections: Selections) => {
-    let operationDef: FragmentDefinitionNode | OperationDefinitionNode = this.props.definition;
+  _modifySelections = (selections : Selections) => {
+    let operationDef : FragmentDefinitionNode | OperationDefinitionNode = this.props.definition;
 
     if (operationDef.selectionSet.selections.length === 0 && this._previousOperationDef) {
       operationDef = this._previousOperationDef;
     }
 
-    let newOperationDef: OperationDefinitionNode | FragmentDefinitionNode | undefined;
+    let newOperationDef : OperationDefinitionNode | FragmentDefinitionNode | undefined;
 
     if (selections.length === 0) {
       this._previousOperationDef = operationDef;
@@ -1733,10 +1734,10 @@ class RootView extends React.PureComponent<RootViewProps, {}> {
     this.props.onEdit(newOperationDef);
   };
 
-  _onOperationRename = (event: React.ChangeEvent<HTMLInputElement>) =>
+  _onOperationRename = (event : React.ChangeEvent<HTMLInputElement>) =>
     this.props.onOperationRename(event.target.value);
 
-  _handlePotentialRun = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  _handlePotentialRun = (event : React.KeyboardEvent<HTMLInputElement>) => {
     if (isRunShortcut(event)) {
       this.props.onRunOperation(this.props.name);
     }
@@ -1786,7 +1787,7 @@ class RootView extends React.PureComponent<RootViewProps, {}> {
               onChange={this._onOperationRename}
             />
           </span>
-          {!!this.props.onTypeName ? (
+          {this.props.onTypeName ? (
             <span>
               <br />
               {`on ${this.props.onTypeName}`}
@@ -1798,7 +1799,7 @@ class RootView extends React.PureComponent<RootViewProps, {}> {
 
         {Object.keys(fields)
           .sort()
-          .map((fieldName: string) => (
+          .map((fieldName : string) => (
             <FieldView
               key={fieldName}
               field={fields[fieldName]}
@@ -1822,10 +1823,10 @@ class Explorer extends React.PureComponent<Props, State> {
   static defaultProps = {
     getDefaultFieldNames: defaultGetDefaultFieldNames,
     getDefaultScalarArgValue: defaultGetDefaultScalarArgValue,
-    getScalarArgInput: () => {},
+    getScalarArgInput: () => true,
   };
 
-  _ref?: any;
+  _ref ?: any;
   _resetScroll = () => {
     const container = this._ref;
     if (container) {
@@ -1835,7 +1836,7 @@ class Explorer extends React.PureComponent<Props, State> {
   componentDidMount() {
     this._resetScroll();
   }
-  _onEdit = (query: string): void => this.props.onEdit(query);
+  _onEdit = (query : string) : void => this.props.onEdit(query);
 
   render() {
     const { schema, query, makeDefaultArg, getScalarArgInput } = this.props;
@@ -1847,7 +1848,7 @@ class Explorer extends React.PureComponent<Props, State> {
         </div>
       );
     }
-    const styleConfig: StyleConfig = {
+    const styleConfig : StyleConfig = {
       colors: this.props.colors || defaultColors,
       checkboxChecked: this.props.checkboxChecked || defaultCheckboxChecked,
       checkboxUnchecked: this.props.checkboxUnchecked || defaultCheckboxUnchecked,
@@ -1870,7 +1871,7 @@ class Explorer extends React.PureComponent<Props, State> {
     const mutationFields = mutationType ? mutationType.getFields() : undefined;
     const subscriptionFields = subscriptionType ? subscriptionType.getFields() : undefined;
 
-    const parsedQuery: DocumentNode = memoizeParseQuery(query);
+    const parsedQuery : DocumentNode = memoizeParseQuery(query);
     const getDefaultFieldNames = this.props.getDefaultFieldNames || defaultGetDefaultFieldNames;
     const getDefaultScalarArgValue =
       this.props.getDefaultScalarArgValue || defaultGetDefaultScalarArgValue;
@@ -1887,10 +1888,10 @@ class Explorer extends React.PureComponent<Props, State> {
       _relevantOperations.length === 0 ? DEFAULT_DOCUMENT.definitions : _relevantOperations;
 
     const renameOperation = (
-      targetOperation: OperationDefinitionNode | FragmentDefinitionNode,
-      name?: string
+      targetOperation : OperationDefinitionNode | FragmentDefinitionNode,
+      name ?: string
     ) => {
-      const newName: NameNode = { kind: 'Name', value: name || '', loc: undefined };
+      const newName : NameNode = { kind: 'Name', value: name || '', loc: undefined };
       const newOperation = { ...targetOperation, name: newName };
 
       const existingDefs = parsedQuery.definitions;
@@ -1909,7 +1910,7 @@ class Explorer extends React.PureComponent<Props, State> {
       };
     };
 
-    const addOperation = (kind: 'query' | 'mutation' | 'subscription') => {
+    const addOperation = (kind : 'query' | 'mutation' | 'subscription') => {
       const existingDefs = parsedQuery.definitions;
 
       const viewingDefaultOperation =
@@ -1934,7 +1935,7 @@ class Explorer extends React.PureComponent<Props, State> {
       // Add this as the default field as it guarantees a valid selectionSet
       const firstFieldName = '__typename # Placeholder value';
 
-      const selectionSet: SelectionSetNode = {
+      const selectionSet : SelectionSetNode = {
         kind: 'SelectionSet',
         selections: [
           {
@@ -1953,7 +1954,7 @@ class Explorer extends React.PureComponent<Props, State> {
         loc: undefined,
       };
 
-      const newDefinition: OperationDefinitionNode = {
+      const newDefinition : OperationDefinitionNode = {
         kind: 'OperationDefinition',
         operation: kind,
         name: { kind: 'Name', value: newOperationName },
@@ -1993,7 +1994,7 @@ class Explorer extends React.PureComponent<Props, State> {
         className="graphiql-explorer-root"
       >
         {relevantOperations.map(
-          (operation: OperationDefinitionNode | FragmentDefinitionNode, index: number) => {
+          (operation : OperationDefinitionNode | FragmentDefinitionNode, index : number) => {
             const operationName = operation && operation.name && operation.name.value;
 
             const operationKind =
@@ -2001,7 +2002,7 @@ class Explorer extends React.PureComponent<Props, State> {
                 ? 'fragment'
                 : (operation && operation.operation) || 'query';
 
-            const onOperationRename = (newName: string) => {
+            const onOperationRename = (newName : string) => {
               const newOperationDef = renameOperation(operation, newName);
               this.props.onEdit(prettify(print(newOperationDef)));
             };
@@ -2057,7 +2058,7 @@ class Explorer extends React.PureComponent<Props, State> {
                 getScalarArgInput={getScalarArgInput}
                 makeDefaultArg={makeDefaultArg}
                 onRunOperation={() => {
-                  if (!!this.props.onRunOperation) {
+                  if (this.props.onRunOperation) {
                     this.props.onRunOperation(operationName);
                   }
                 }}
@@ -2067,7 +2068,7 @@ class Explorer extends React.PureComponent<Props, State> {
           }
         )}
         <div className="variable-editor-title" style={styleConfig.styles.explorerActionsStyle}>
-          {!!queryFields ? (
+          {queryFields ? (
             <button
               className={'toolbar-button'}
               style={styleConfig.styles.buttonStyle}
@@ -2076,7 +2077,7 @@ class Explorer extends React.PureComponent<Props, State> {
               + ADD NEW QUERY
             </button>
           ) : null}
-          {!!mutationFields ? (
+          {mutationFields ? (
             <button
               className={'toolbar-button'}
               style={styleConfig.styles.buttonStyle}
@@ -2085,7 +2086,7 @@ class Explorer extends React.PureComponent<Props, State> {
               + ADD NEW MUTATION
             </button>
           ) : null}
-          {!!subscriptionFields ? (
+          {subscriptionFields ? (
             <button
               className={'toolbar-button'}
               style={styleConfig.styles.buttonStyle}
@@ -2101,14 +2102,14 @@ class Explorer extends React.PureComponent<Props, State> {
 }
 
 type ErrorBoundaryState = {
-  hasError: boolean;
-  error?: Error;
-  errorInfo?: React.ErrorInfo;
+  hasError : boolean;
+  error ?: Error;
+  errorInfo ?: React.ErrorInfo;
 };
 class ErrorBoundary extends React.Component<any, ErrorBoundaryState> {
   state = { hasError: false, error: undefined, errorInfo: undefined };
 
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+  componentDidCatch(error : Error, errorInfo : React.ErrorInfo) {
     this.setState({ hasError: true, error, errorInfo });
     console.error('Error in component', error, errorInfo);
   }
@@ -2131,7 +2132,7 @@ class ErrorBoundary extends React.Component<any, ErrorBoundaryState> {
   }
 }
 
-class GraphiQLExplorer extends React.PureComponent<Props, {}> {
+class GraphiQLExplorer extends React.PureComponent<Props, any> {
   static defaultValue = defaultValue;
   static defaultProps = {
     width: 380,

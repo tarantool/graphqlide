@@ -17,6 +17,8 @@
     "@babel/eslint-parser": "7.16.3",
     "@babel/preset-flow": "7.16.0",
     "@tarantool.io/lua-bundler-webpack-plugin": "1.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.6.0",
+    "@typescript-eslint/parser": "^5.6.0",
     "autoprefixer": "10.4.0",
     "babel-jest": "27.4.2",
     "babel-loader": "8.2.3",
@@ -70,7 +72,7 @@
     "analyze": "source-map-explorer build/static/graphqlide/main.*",
     "test": "node scripts/test.js test --env=jsdom --watch",
     "test_once": "node ./scripts/test.js test --env=jsdom",
-    "lint": "eslint ./src",
+    "lint": "NODE_ENV=production eslint --ext .ts,.tsx ./src",
     "lint-fix": "eslint --fix ./src",
     "build-rock": "make rock"
   },

@@ -31,17 +31,17 @@ const styles = {
 const DEFAULT_QUERY = '';
 
 type GraphQLIDEState = {
-  schema?: GraphQLSchema,
-  query: string,
-  explorerIsOpen: boolean,
-  schemaSelected: string,
-  reloadSchema: boolean,
+  schema ?: GraphQLSchema,
+  query : string,
+  explorerIsOpen : boolean,
+  schemaSelected : string,
+  reloadSchema : boolean,
 };
 
-class GraphQLIDE extends Component<{}, GraphQLIDEState> {
-  _graphiql: GraphiQL;
+class GraphQLIDE extends Component<any, GraphQLIDEState> {
+  _graphiql : GraphiQL;
 
-  _getDefaultSchema = (): String => {
+  _getDefaultSchema = () : string => {
     let selection = null
 
     if (typeof window.__tarantool_variables !== 'undefined' &&
@@ -67,7 +67,7 @@ class GraphQLIDE extends Component<{}, GraphQLIDEState> {
     reloadSchema: true
   };
 
-  _getGraphQLEndpoint = (): String => {
+  _getGraphQLEndpoint = () : string => {
     const schemaSelected = this.state.schemaSelected ? this.state.schemaSelected : this._graphiql.state.schemaSelected
 
     let endpoint
@@ -102,8 +102,8 @@ class GraphQLIDE extends Component<{}, GraphQLIDEState> {
       }
     });
   }
-
-  _fetcher = async(graphQLParams: Object): Object => {
+    
+  _fetcher = async(graphQLParams : Record<string, unknown>) : Record<string, unknown> => {
     if (typeof graphQLParams['variables'] === 'undefined') {
       graphQLParams['variables'] = {};
     }
@@ -139,12 +139,12 @@ class GraphQLIDE extends Component<{}, GraphQLIDEState> {
     return json;
   }
 
-  _defaultGetDefaultFieldNames(type: GraphQLType) {
+  _defaultGetDefaultFieldNames(type : GraphQLType) {
     if (!('getFields' in type)) {
       return [];
     }
     const fields = type.getFields();
-    const leafFieldNames: Array<string> = [];
+    const leafFieldNames : Array<string> = [];
     Object.keys(fields).forEach(fieldName => {
       if (isLeafType(fields[fieldName].type) ||
         (
@@ -169,8 +169,8 @@ class GraphQLIDE extends Component<{}, GraphQLIDEState> {
   }
 
   _handleInspectOperation = (
-    cm: any,
-    mousePos: { line: Number, ch: Number }
+    cm : any,
+    mousePos : { line : number, ch : number }
   ) => {
     const parsedQuery = parse(this.state.query || '');
 
@@ -226,7 +226,7 @@ class GraphQLIDE extends Component<{}, GraphQLIDEState> {
     el && el.scrollIntoView();
   };
 
-  _handleEditQuery = (query: string): void => this.setState({ query });
+  _handleEditQuery = (query : string) : void => this.setState({ query });
 
   _handleToggleExplorer = () => {
     this.setState({ explorerIsOpen: !this.state.explorerIsOpen });
@@ -262,10 +262,8 @@ class GraphQLIDE extends Component<{}, GraphQLIDEState> {
     }
 
     navigator.clipboard.writeText(response).then(
-        ()=>{},
-        function () {
-          console.error('Response copying failed!')
-        }
+        ()=>true,
+        ()=>{ console.error('Response copying failed!') }
     );
   }
 
@@ -350,7 +348,7 @@ class GraphQLIDE extends Component<{}, GraphQLIDEState> {
       <Hotkeys
         keyName={keyNames}
         onKeyDown={this.onKeyDown.bind(this)}
-        filter={(event) => {
+        filter={() => {
           return true;
         }}
       >
