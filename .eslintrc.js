@@ -7,7 +7,8 @@ module.exports = {
   extends: [
     "prettier",
     "eslint:recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
   ],
   plugins: [
     "flowtype",
@@ -21,6 +22,7 @@ module.exports = {
       "before": true,
       "after": true
     }],
+    "indent": ["error", 2],
     "no-extra-boolean-cast": "off",
     "dot-notation": "off",
     "no-var": "error",

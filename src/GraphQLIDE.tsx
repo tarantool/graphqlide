@@ -1,5 +1,3 @@
-// @ts-check
-
 import React, { Component } from 'react';
 import Hotkeys from 'react-hot-keys';
 import { css, cx } from '@emotion/css'
@@ -262,8 +260,8 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
     }
 
     navigator.clipboard.writeText(response).then(
-        ()=>true,
-        ()=>{ console.error('Response copying failed!') }
+      ()=>true,
+      ()=>{ console.error('Response copying failed!') }
     );
   }
 
@@ -289,18 +287,18 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
 
       return (
         <div>
-        <ToolbarSelect
-          onSelect={(selection) => this._handleSchemaSelect(selection)}
-          title="Select schema"
-        >
-          {schemas.map(schema =>
-            <GraphiQL.SelectOption
-              label={schema[0]}
-              value={schema[0]}
-              selected={this.state.schemaSelected === schema[0]}
-            />
-          )}
-        </ToolbarSelect>
+          <ToolbarSelect
+            onSelect={(selection) => this._handleSchemaSelect(selection)}
+            title="Select schema"
+          >
+            {schemas.map(schema =>
+              <GraphiQL.SelectOption
+                label={schema[0]}
+                value={schema[0]}
+                selected={this.state.schemaSelected === schema[0]}
+              />
+            )}
+          </ToolbarSelect>
         </div>
       )
     }
@@ -308,35 +306,35 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
 
   onKeyDown(keyName) {
     switch (keyName) {
-      case 'alt+shift+e':
-        this._handleToggleExplorer()
-        break;
-      case 'alt+shift+h':
-        this._graphiql.handleToggleHistory()
-        break;
-      case 'alt+shift+p':
-        this._graphiql.handlePrettifyQuery()
-        break;
-      case 'alt+shift+m':
-        this._graphiql.handleMergeQuery()
-        break;
-      case 'alt+shift+c':
-        this._graphiql.handleCopyQuery()
-        break;
-      case 'alt+shift+x':
-        this._handleCopyResponse()
-        break;
-      case 'alt+shift+q':
-        this._handleSaveQuery()
-        break;
-      case 'alt+shift+r':
-        this._handleSaveResponse()
-        break;
-      case 'alt+shift+d':
-        this._handleToggleDocExplorer()
-        break;
-      default:
-        break;
+    case 'alt+shift+e':
+      this._handleToggleExplorer()
+      break;
+    case 'alt+shift+h':
+      this._graphiql.handleToggleHistory()
+      break;
+    case 'alt+shift+p':
+      this._graphiql.handlePrettifyQuery()
+      break;
+    case 'alt+shift+m':
+      this._graphiql.handleMergeQuery()
+      break;
+    case 'alt+shift+c':
+      this._graphiql.handleCopyQuery()
+      break;
+    case 'alt+shift+x':
+      this._handleCopyResponse()
+      break;
+    case 'alt+shift+q':
+      this._handleSaveQuery()
+      break;
+    case 'alt+shift+r':
+      this._handleSaveResponse()
+      break;
+    case 'alt+shift+d':
+      this._handleToggleDocExplorer()
+      break;
+    default:
+      break;
     }
   }
 
