@@ -30,6 +30,7 @@ install:
 lint:
 	@ if [ ! -d ".rocks" ]; then make .rocks; fi
 	.rocks/bin/luacheck .
+	npm run lint
 
 .PHONY: test
 test:

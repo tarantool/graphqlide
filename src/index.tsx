@@ -34,7 +34,7 @@ const styles = {
   `
 };
 
-const IconGraphQL = ({ className }: GenericIconProps) => <Icon className={cx(styles.icon, className)} glyph={image} />;
+const IconGraphQL = ({ className } : GenericIconProps) => <Icon className={cx(styles.icon, className)} glyph={image} />;
 
 class Root extends React.PureComponent {
   render() {
