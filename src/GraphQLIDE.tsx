@@ -360,30 +360,6 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
             onRunOperation={operationName => this._graphiql.handleRunQuery(operationName)}
             explorerIsOpen={this.state.explorerIsOpen}
             onToggleExplorer={this._handleToggleExplorer}
-            styles={{
-              buttonStyle: {
-                fontSize: '1.2em',
-                padding: '0px',
-                backgroundColor: 'white',
-                border: 'none',
-                margin: '5px 0px',
-                height: '40px',
-                width: '100%',
-                display: 'block',
-                maxWidth: 'none',
-              },
-
-              explorerActionsStyle: {
-                margin: '4px -8px -8px',
-                paddingLeft: '8px',
-                bottom: '0px',
-                width: '100%',
-                textAlign: 'center',
-                background: 'none',
-                borderTop: 'none',
-                borderBottom: 'none',
-              },
-            }}
           />
           <GraphiQL
             ref={ref => (this._graphiql = ref)}

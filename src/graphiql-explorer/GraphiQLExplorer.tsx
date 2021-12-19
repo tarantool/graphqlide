@@ -231,31 +231,6 @@ function Checkbox(props : { checked : boolean; styleConfig : StyleConfig }) {
 function defaultGetDefaultFieldNames(type : GraphQLObjectType) : Array<string> {
   const fields = type.getFields();
 
-  // // Is there an `id` field?
-  // if (fields['id']) {
-  //   const res = ['id'];
-  //   if (fields['email']) {
-  //     res.push('email');
-  //   } else if (fields['name']) {
-  //     res.push('name');
-  //   }
-  //   return res;
-  // }
-
-  // // Is there an `edges` field?
-  // if (fields['edges']) {
-  //   return ['edges'];
-  // }
-
-  // // Is there an `node` field?
-  // if (fields['node']) {
-  //   return ['node'];
-  // }
-
-  // if (fields['nodes']) {
-  //   return ['nodes'];
-  // }
-
   // Include all leaf-type fields.
   const leafFieldNames : any[] = [];
   Object.keys(fields).forEach(fieldName => {
@@ -1117,6 +1092,7 @@ class AbstractArgView extends React.PureComponent<
       styleConfig,
     } = this.props;
     const argType = unwrapInputType(arg.type);
+
     let input = null;
     if (argValue) {
       if (argValue.kind === 'Variable') {
@@ -1462,7 +1438,8 @@ const variablize = () => {
                 isArgValueVariable
                   ? 'Remove the variable'
                   : 'Extract the current value into a GraphQL variable'
-        }>
+          }
+        >
           <span style={{ cursor: 'pointer' }}>
             <button
               type="submit"
@@ -1478,7 +1455,7 @@ const variablize = () => {
                 }
               }}
               style={styleConfig.styles.actionButtonStyle}>
-              <span style={{color: styleConfig.colors.variable}}>{'$'}</span>
+              <span style={{color: styleConfig.colors.variable}}><b>{'$'}</b></span>
             </button>
           </span>
         </Tooltip>
@@ -1530,14 +1507,14 @@ const variablize = () => {
           {isListArgument(arg) && (
             <Fragment>
               {' '}
-              <Tooltip transitionName={null} title="Add array item">
+              <Tooltip transitionName={null} title="Add list item">
                 <span style={{ cursor: 'pointer' }}>
                   <button
                     type="submit"
                     className="toolbar-button"
                     onClick={this.props.addArg}
                     style={styleConfig.styles.actionButtonStyle}>
-                    <span style={{color: styleConfig.colors.variable}}>{'+'}</span>
+                    <span><b>{'+'}</b></span>
                   </button>
                 </span>
               </Tooltip>
@@ -2343,11 +2320,12 @@ const defaultStyles : Styles = {
     width: '15px',
     display: 'inline-block',
     fontSize: 'smaller',
+    textAlign: 'center',
   },
 
   explorerActionsStyle: {
-    margin: '4px -8px -8px',
-    paddingLeft: '8px',
+    margin: 'auto',
+    padding: '4px',
     bottom: '0px',
     width: '100%',
     textAlign: 'center',
@@ -2503,7 +2481,7 @@ class RootView extends React.PureComponent<
                 color: styleConfig.colors.def,
                 border: 'none',
                 borderBottom: '1px solid #888',
-                outline: 'none'//,
+                outline: 'none'
                 //width: `${Math.max(4, operationDisplayName.length)}ch`,
               }}
               autoComplete="false"
@@ -2525,7 +2503,7 @@ class RootView extends React.PureComponent<
             <React.Fragment>
               <Fragment>
                 {' '}
-                <Tooltip transitionName={null} title="Delete fragment">
+                <Tooltip transitionName={null} title="Remove">
                   <span style={{ cursor: 'pointer' }}>
                     <button
                       type="submit"
@@ -2534,21 +2512,27 @@ class RootView extends React.PureComponent<
                       style={{
                         ...styleConfig.styles.actionButtonStyle,
                       }}>
-                      <span>{'\u2715'}</span>
+                      <span><b>{'\u2715'}</b></span>
                     </button>
                   </span>
                 </Tooltip>
                 {' '}
               </Fragment>
-              <button
-                type="submit"
-                className="toolbar-button"
-                onClick={() => this.props.onOperationClone()}
-                style={{
-                  ...styleConfig.styles.actionButtonStyle,
-                }}>
-                <span>{'\u2104'}</span>
-              </button>
+              <Fragment>
+                <Tooltip transitionName={null} title="Copy">
+                  <span style={{ cursor: 'pointer' }}>
+                    <button
+                      type="submit"
+                      className="toolbar-button"
+                      onClick={() => this.props.onOperationClone()}
+                      style={{
+                        ...styleConfig.styles.actionButtonStyle,
+                      }}>
+                      <span>{'📋'}</span>
+                    </button>
+                  </span>
+                </Tooltip>
+              </Fragment>
             </React.Fragment>
           ) : (
             ''
@@ -2848,9 +2832,12 @@ class Explorer extends React.PureComponent<Props, State> {
       actionsOptions.length === 0 ? null : (
         <div
           style={{
-            minHeight: '50px',
-            maxHeight: '50px',
+            minHeight: '40px',
+            maxHeight: '40px',
             overflow: 'none',
+            justifyContent: 'center',
+            paddingLeft: '5px',
+            paddingRight: '5px',
           }}>
           <form
             className="variable-editor-title graphiql-explorer-actions"
@@ -2868,7 +2855,7 @@ class Explorer extends React.PureComponent<Props, State> {
                 flexGrow: '0',
                 textAlign: 'right',
               }}>
-              Add new{' '}
+              Add new
             </span>
             <span>&nbsp;</span>
             <select
@@ -2877,21 +2864,26 @@ class Explorer extends React.PureComponent<Props, State> {
               style={{flexGrow: '2'}}>
               {actionsOptions}
             </select>
-            <button
-              type="submit"
-              className="toolbar-button"
-              onClick={() =>
-                this.state.newOperationType
-                  ? addOperation(this.state.newOperationType)
-                  : null
-              }
-              style={{
-                ...styleConfig.styles.buttonStyle,
-                height: '22px',
-                width: '22px',
-              }}>
-              <span>+</span>
-            </button>
+            <span>&nbsp;</span>
+            <Tooltip transitionName={null} title="Add operation">
+              <span style={{ cursor: 'pointer' }}>
+                <button
+                  type="submit"
+                  className="toolbar-button"
+                  onClick={() =>
+                    this.state.newOperationType
+                      ? addOperation(this.state.newOperationType)
+                      : null
+                  }
+                  style={{
+                    ...styleConfig.styles.buttonStyle,
+                    height: '22px',
+                    width: '22px',
+                  }}>
+                  <span><b>+</b></span>
+                </button>
+              </span>
+            </Tooltip>
           </form>
         </div>
       );
@@ -2926,7 +2918,7 @@ class Explorer extends React.PureComponent<Props, State> {
           textOverflow: 'ellipsis',
           whiteSpace: 'nowrap',
           margin: 0,
-          padding: 8,
+          padding: 0,
           fontFamily: 'Consolas, Inconsolata, "Droid Sans Mono", Monaco, monospace',
           display: 'flex',
           flexDirection: 'column',
@@ -2937,7 +2929,7 @@ class Explorer extends React.PureComponent<Props, State> {
         <div
         style={{
             flexGrow: '1',
-            overflow: 'scroll',
+            overflow: 'auto',
           }}>
           {relevantOperations.map(
             (
