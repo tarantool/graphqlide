@@ -24,11 +24,11 @@ jobs:
 
       - uses: actions/setup-node@v1
         with:
-          node-version: '17.1.0'
+          node-version: '17.2.0'
 
       - uses: tarantool/setup-tarantool@v1
         with:
-          tarantool-version: '2.5'
+          tarantool-version: '2.8'
       - run: echo $PWD/.rocks/bin >> $GITHUB_PATH
 
       # Make a release
