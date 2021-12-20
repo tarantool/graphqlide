@@ -16,6 +16,7 @@
 - `all codebase converted from flow to typescript`
 - `eslint tuned for typescript after conversion from flow to typescript`
 - `many minor UI fixes`
+- `use prettier to additionally prettify GraphQL code`
 
 ## 0.0.16
 

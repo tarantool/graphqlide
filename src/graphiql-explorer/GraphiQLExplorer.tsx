@@ -340,6 +340,7 @@ const prettify = (query : string) : string =>
   prettier.format(query, {
     parser: 'graphql',
     plugins: [parserGraphql],
+    printWidth: 60,
   });
 
 type InputArgViewProps = {
