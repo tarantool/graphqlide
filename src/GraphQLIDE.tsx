@@ -12,6 +12,8 @@ import {
 } from 'graphql';
 import { saveAs } from 'file-saver';
 import type { GraphQLSchema } from 'graphql';
+import prettier from 'prettier/standalone';
+import parserGraphql from 'prettier/parser-graphql';
 
 import 'graphiql/graphiql.css';
 
@@ -27,6 +29,12 @@ const styles = {
 }
 
 const DEFAULT_QUERY = '';
+
+const prettify = (query : string) : string =>
+  prettier.format(query, {
+    parser: 'graphql',
+    plugins: [parserGraphql],
+  });
 
 type GraphQLIDEState = {
   schema ?: GraphQLSchema,
@@ -265,6 +273,16 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
     );
   }
 
+  _handlePrettifyQuery = () => {
+    const editor = this._graphiql.getQueryEditor();
+    const editorContent = editor?.getValue() ?? '';
+    const prettifiedEditorContent = prettify(editorContent);
+
+    if (prettifiedEditorContent !== editorContent) {
+      editor?.setValue(prettifiedEditorContent);
+    }
+  }
+
   componentDidUpdate() {
     if (this.state.reloadSchema) {
       const options = this._getGraphQLEndpoint().options
@@ -313,7 +331,7 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
       this._graphiql.handleToggleHistory()
       break;
     case 'alt+shift+p':
-      this._graphiql.handlePrettifyQuery()
+      this._handlePrettifyQuery()
       break;
     case 'alt+shift+m':
       this._graphiql.handleMergeQuery()
@@ -382,7 +400,7 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
                 title="Show History (Alt+Shift+H)"
               />
               <GraphiQL.Button
-                onClick={() => this._graphiql.handlePrettifyQuery()}
+                onClick={() => this._handlePrettifyQuery()}
                 label="Prettify"
                 title="Prettify Query (Alt+Shift+P)"
               />
