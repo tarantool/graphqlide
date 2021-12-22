@@ -73,7 +73,7 @@
     "test": "node scripts/test.js test --env=jsdom --watch",
     "test_once": "node ./scripts/test.js test --env=jsdom",
     "lint": "NODE_ENV=production eslint --ext .ts,.tsx ./src",
-    "lint-fix": "eslint --fix ./src",
+    "lint-fix": "NODE_ENV=production eslint --ext .ts,.tsx --fix ./src",
     "build-rock": "make rock"
   },
   "jest": {

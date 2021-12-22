@@ -17,6 +17,9 @@
 - `eslint tuned for typescript after conversion from flow to typescript`
 - `many minor UI fixes`
 - `use prettier to additionally prettify GraphQL code`
+- `separate requests history by schemas`
+- `added Explorer support of interface fragments`
+- `fixed Explorer fragments rename not worked properly`
 
 ## 0.0.16
 
