@@ -340,6 +340,7 @@ const prettify = (query : string) : string =>
   prettier.format(query, {
     parser: 'graphql',
     plugins: [parserGraphql],
+    printWidth: 60,
   });
 
 type InputArgViewProps = {
@@ -2946,17 +2947,17 @@ class Explorer extends React.PureComponent<Props, State> {
 
               const onOperationRename = newName => {
                 const newOperationDef = renameOperation(operation, newName);
-                this.props.onEdit(print(newOperationDef));
+                this.props.onEdit(prettify(print(newOperationDef)));
               };
 
               const onOperationClone = () => {
                 const newOperationDef = cloneOperation(operation);
-                this.props.onEdit(print(newOperationDef));
+                this.props.onEdit(prettify(print(newOperationDef)));
               };
 
               const onOperationDestroy = () => {
                 const newOperationDef = destroyOperation(operation);
-                this.props.onEdit(print(newOperationDef));
+                this.props.onEdit(prettify(print(newOperationDef)));
               };
 
               const fragmentType =
@@ -2981,7 +2982,7 @@ class Explorer extends React.PureComponent<Props, State> {
                         : null;
 
               const onCommit = (parsedDocument : DocumentNode) => {
-                const textualNewDocument = print(parsedDocument);
+                const textualNewDocument = prettify(print(parsedDocument));
 
                 this.props.onEdit(textualNewDocument);
               };

@@ -24,7 +24,7 @@ jobs:
 
       - uses: actions/setup-node@v1
         with:
-          node-version: '17.2.0'
+          node-version: '17.3.0'
 
       - uses: tarantool/setup-tarantool@v1
         with:

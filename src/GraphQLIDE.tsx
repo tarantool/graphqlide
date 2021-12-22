@@ -12,6 +12,9 @@ import {
 } from 'graphql';
 import { saveAs } from 'file-saver';
 import type { GraphQLSchema } from 'graphql';
+import prettier from 'prettier/standalone';
+import parserGraphql from 'prettier/parser-graphql';
+import { CustomStorage } from './custom-storage';
 
 import 'graphiql/graphiql.css';
 
@@ -19,7 +22,7 @@ const DEFAULT_TIMEOUT = 5000
 
 const styles = {
   container: css`
-    height: 100%; 
+    height: 100%;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -27,6 +30,13 @@ const styles = {
 }
 
 const DEFAULT_QUERY = '';
+
+const prettify = (query : string) : string =>
+  prettier.format(query, {
+    parser: 'graphql',
+    plugins: [parserGraphql],
+    printWidth: 60,
+  });
 
 type GraphQLIDEState = {
   schema ?: GraphQLSchema,
@@ -38,6 +48,7 @@ type GraphQLIDEState = {
 
 class GraphQLIDE extends Component<any, GraphQLIDEState> {
   _graphiql : GraphiQL;
+  _storage : CustomStorage = new CustomStorage();
 
   _getDefaultSchema = () : string => {
     let selection = null
@@ -159,9 +170,11 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
   componentDidMount() {
     document.querySelector('.topBar').style = 'padding: 0px 14px 0px;'
     const options = this._getGraphQLEndpoint().options
+    const defaultSchema = this._getDefaultSchema();
     this._fetcher({
       query: getIntrospectionQuery(options)
     }).then(result => {
+      this._storage.schema = 'graphqlide:' + defaultSchema ?? 'unknown';
       this.setState({ schema: buildClientSchema(result.data), reloadSchema: false });
     });
   }
@@ -265,6 +278,16 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
     );
   }
 
+  _handlePrettifyQuery = () => {
+    const editor = this._graphiql.getQueryEditor();
+    const editorContent = editor?.getValue() ?? '';
+    const prettifiedEditorContent = prettify(editorContent);
+
+    if (prettifiedEditorContent !== editorContent) {
+      editor?.setValue(prettifiedEditorContent);
+    }
+  }
+
   componentDidUpdate() {
     if (this.state.reloadSchema) {
       const options = this._getGraphQLEndpoint().options
@@ -277,6 +300,18 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
   }
 
   _handleSchemaSelect = async(selection) => {
+    this._storage.schema = 'graphqlide:' + selection ?? 'unknown';
+    const queries = this._graphiql?._historyStore.fetchAllQueries() ?? [];
+
+    if (this._graphiql._queryHistory) {
+      this._graphiql._queryHistory.historyStore.queries = queries;
+      this._graphiql._queryHistory.historyStore.history.items =
+        this._graphiql._historyStore.history.fetchAll();
+      this._graphiql._queryHistory.historyStore.favorite.items =
+        this._graphiql._historyStore.favorite.fetchAll();
+    }
+
+    this?._graphiql?._queryHistory?.setState({queries : queries});
     this.setState({ schemaSelected: selection, reloadSchema: true });
   }
 
@@ -313,7 +348,7 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
       this._graphiql.handleToggleHistory()
       break;
     case 'alt+shift+p':
-      this._graphiql.handlePrettifyQuery()
+      this._handlePrettifyQuery()
       break;
     case 'alt+shift+m':
       this._graphiql.handleMergeQuery()
@@ -368,6 +403,7 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
             getDefaultFieldNames={this._defaultGetDefaultFieldNames}
             docExplorerOpen={false}
             headerEditorEnabled={false}
+            storage={this._storage}
           >
             <GraphiQL.Toolbar>
               {this._schemasMenuReducer()}
@@ -382,7 +418,7 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
                 title="Show History (Alt+Shift+H)"
               />
               <GraphiQL.Button
-                onClick={() => this._graphiql.handlePrettifyQuery()}
+                onClick={() => this._handlePrettifyQuery()}
                 label="Prettify"
                 title="Prettify Query (Alt+Shift+P)"
               />
