@@ -3,13 +3,31 @@
  * merged with https://github.com/OneGraph/graphiql-explorer/tree/v0.6.3
  * added a lot of minor changes
  */
-import { Tooltip } from 'antd';
 import prettier from 'prettier/standalone';
 import parserGraphql from 'prettier/parser-graphql';
 import React, { Fragment } from 'react';
+import { Tooltip } from 'antd';
 
 import {
+  ArgumentNode,
+  DefinitionNode,
+  DocumentNode,
+  FieldNode,
+  FragmentDefinitionNode,
+  FragmentSpread,
   getNamedType,
+  GraphQLArgument,
+  GraphQLEnumType,
+  GraphQLField,
+  GraphQLFieldMap,
+  GraphQLInputField,
+  GraphQLInputType,
+  GraphQLInterfaceType,
+  GraphQLObjectType,
+  GraphQLOutputType,
+  GraphQLScalarType,
+  GraphQLSchema,
+  InlineFragmentNode,
   isEnumType,
   isInputObjectType,
   isInterfaceType,
@@ -21,39 +39,19 @@ import {
   isScalarType,
   isUnionType,
   isWrappingType,
-  parse,
-  print,
-  parseType,
-  visit,
-} from 'graphql';
-
-import {
-  ArgumentNode,
-  DefinitionNode,
-  DocumentNode,
-  FieldNode,
-  FragmentSpread,
-  GraphQLArgument,
-  GraphQLEnumType,
-  GraphQLField,
-  GraphQLFieldMap,
-  GraphQLInputField,
-  GraphQLInputType,
-  GraphQLObjectType,
-  GraphQLOutputType,
-  GraphQLScalarType,
-  GraphQLSchema,
-  InlineFragmentNode,
-  FragmentDefinitionNode,
   ListValueNode,
   NameNode,
-  OperationDefinitionNode,
   ObjectFieldNode,
   ObjectValueNode,
+  OperationDefinitionNode,
+  parse,
+  parseType,
+  print,
   SelectionNode,
   SelectionSetNode,
-  VariableDefinitionNode,
   ValueNode,
+  VariableDefinitionNode,
+  visit,
 } from 'graphql';
 
 type Field = GraphQLField<any, any>;
@@ -2010,11 +2008,38 @@ class FieldView extends React.PureComponent<FieldViewProps, {displayFieldActions
       className += 'graphiql-explorer-deprecated';
     }
 
-    const applicableFragments =
+    const availableInterfaceFragments = isObjectType(type)
+      ? type.getInterfaces().reduce((acc, next) => {
+        if (next.name !== type.name) {
+          return [
+            ...acc,
+            ...((this.props.availableFragments || {})[next.name] || []),
+          ];
+        }
+
+        // Don't add these matches, since they'll be picked up by the simpler next check
+        return acc;
+      }, [])
+      : null;
+
+    const basicApplicableFragments =
       isObjectType(type) || isInterfaceType(type) || isUnionType(type)
         ? this.props.availableFragments &&
           this.props.availableFragments[type.name]
         : null;
+
+    const applicableFragments = [
+      ...(basicApplicableFragments || []),
+      ...(availableInterfaceFragments || []),
+    ];
+
+    const containsMeaningfulSubselection =
+      (isObjectType(type) || isInterfaceType(type)) &&
+      selection &&
+      selection.selectionSet &&
+      selection.selectionSet.selections.filter(
+        selection => selection.kind !== 'FragmentSpread',
+      ).length > 0;
 
     const node = (
       <div className={className}>
@@ -2031,20 +2056,7 @@ class FieldView extends React.PureComponent<FieldViewProps, {displayFieldActions
             data-field-name={field.name}
             data-field-type={type.name}
             onClick={this._handleUpdateSelections}
-            onMouseEnter={() => {
-              const containsMeaningfulSubselection =
-                isObjectType(type) &&
-                selection &&
-                selection.selectionSet &&
-                selection.selectionSet.selections.filter(
-                  selection => selection.kind !== 'FragmentSpread',
-                ).length > 0;
-
-              if (containsMeaningfulSubselection) {
-                this.setState({displayFieldActions: true});
-              }
-            }}
-            onMouseLeave={() => this.setState({displayFieldActions: false})}>
+          >
             {isObjectType(type) ? (
               <span>
                 {selection
@@ -2054,92 +2066,98 @@ class FieldView extends React.PureComponent<FieldViewProps, {displayFieldActions
             ) : null}
             <Checkbox checked={!!selection} styleConfig={this.props.styleConfig} />
             <span style={{ color: styleConfig.colors.property }}>{field.name}</span>
-            {!this.state.displayFieldActions ? null : (
-              <button
-                type="submit"
-                className="toolbar-button"
-                title="Extract selections into a new reusable fragment"
-                onClick={event => {
-                  event.preventDefault();
-                  event.stopPropagation();
-                  // 1. Create a fragment spread node
-                  // 2. Copy selections from this object to fragment
-                  // 3. Replace selections in this object with fragment spread
-                  // 4. Add fragment to document
-                  const typeName = type.name;
-                  let newFragmentName = `${typeName}Fragment`;
+          </span>
+        </Tooltip>
+        {!containsMeaningfulSubselection ? null : (
+          <Fragment>
+            {' '}
+            <Tooltip transitionName={null} title="Extract selections into a new reusable fragment">
+              <span style={{ cursor: 'pointer' }}>
+                <button
+                  type="submit"
+                  className="toolbar-button"
+                  onClick={event => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    // 1. Create a fragment spread node
+                    // 2. Copy selections from this object to fragment
+                    // 3. Replace selections in this object with fragment spread
+                    // 4. Add fragment to document
+                    const typeName = type.name;
+                    let newFragmentName = `${typeName}Fragment`;
 
-                  const conflictingNameCount = (applicableFragments || []).filter(
-                    (fragment : FragmentDefinitionNode) => {
-                      return fragment.name.value.startsWith(newFragmentName);
-                    },
-                  ).length;
+                    const conflictingNameCount = (applicableFragments || []).filter(
+                      (fragment : FragmentDefinitionNode) => {
+                        return fragment.name.value.startsWith(newFragmentName);
+                      },
+                    ).length;
 
-                  if (conflictingNameCount > 0) {
-                    newFragmentName = `${newFragmentName}${conflictingNameCount}`;
-                  }
+                    if (conflictingNameCount > 0) {
+                      newFragmentName = `${newFragmentName}${conflictingNameCount}`;
+                    }
 
-                  const childSelections = selection
-                    ? selection.selectionSet
-                      ? selection.selectionSet.selections
-                      : []
-                    : [];
+                    const childSelections = selection
+                      ? selection.selectionSet
+                        ? selection.selectionSet.selections
+                        : []
+                      : [];
 
-                  const nextSelections = [
-                    {
-                      kind: 'FragmentSpread',
+                    const nextSelections = [
+                      {
+                        kind: 'FragmentSpread',
+                        name: {
+                          kind: 'Name',
+                          value: newFragmentName,
+                        },
+                        directives: [],
+                      },
+                    ];
+
+                    const newFragmentDefinition : FragmentDefinitionNode = {
+                      kind: 'FragmentDefinition',
                       name: {
                         kind: 'Name',
                         value: newFragmentName,
                       },
-                      directives: [],
-                    },
-                  ];
-
-                  const newFragmentDefinition : FragmentDefinitionNode = {
-                    kind: 'FragmentDefinition',
-                    name: {
-                      kind: 'Name',
-                      value: newFragmentName,
-                    },
-                    typeCondition: {
-                      kind: 'NamedType',
-                      name: {
-                        kind: 'Name',
-                        value: type.name,
+                      typeCondition: {
+                        kind: 'NamedType',
+                        name: {
+                          kind: 'Name',
+                          value: type.name,
+                        },
                       },
-                    },
-                    directives: [],
-                    selectionSet: {
-                      kind: 'SelectionSet',
-                      selections: childSelections,
-                    },
-                  };
-
-                  const newDoc = this._modifyChildSelections(
-                    nextSelections,
-                    false,
-                  );
-
-                  if (newDoc) {
-                    const newDocWithFragment = {
-                      ...newDoc,
-                      definitions: [...newDoc.definitions, newFragmentDefinition],
+                      directives: [],
+                      selectionSet: {
+                        kind: 'SelectionSet',
+                        selections: childSelections,
+                      },
                     };
 
-                    this.props.onCommit(newDocWithFragment);
-                  } else {
-                    console.warn('Unable to complete extractFragment operation');
-                  }
-                }}
-                style={{
-                  ...styleConfig.styles.actionButtonStyle,
-                }}>
-                <span>{'…'}</span>
-              </button>
-            )}
-          </span>
-        </Tooltip>
+                    const newDoc = this._modifyChildSelections(
+                      nextSelections,
+                      false,
+                    );
+
+                    if (newDoc) {
+                      const newDocWithFragment = {
+                        ...newDoc,
+                        definitions: [...newDoc.definitions, newFragmentDefinition],
+                      };
+
+                      this.props.onCommit(newDocWithFragment);
+                    } else {
+                      console.warn('Unable to complete extractFragment operation');
+                    }
+                  }}
+                  style={{
+                    ...styleConfig.styles.actionButtonStyle,
+                  }}>
+                  <span>{'…'}</span>
+                </button>
+              </span>
+            </Tooltip>
+          </Fragment>
+        )}
         {selection && args.length ? (
           <div
             style={{ marginLeft: 16 }}
@@ -2317,8 +2335,8 @@ const defaultStyles : Styles = {
     border: 'none',
     margin: '0px',
     maxWidth: 'none',
-    height: '15px',
-    width: '15px',
+    height: '16px',
+    width: '16px',
     display: 'inline-block',
     fontSize: 'smaller',
     textAlign: 'center',
@@ -2366,7 +2384,7 @@ class RootView extends React.PureComponent<
   RootViewProps,
   {NewOperationType : NewOperationType, displayTitleActions : boolean}
 > {
-  state = {NewOperationType: 'query', displayTitleActions: false};
+  state = {NewOperationType: 'query', displayTitleActions: true};
   _previousOperationDef ?: OperationDefinitionNode | FragmentDefinitionNode;
 
   _modifySelections = (
@@ -2473,17 +2491,17 @@ class RootView extends React.PureComponent<
         <div
           style={{color: styleConfig.colors.keyword, paddingBottom: 4}}
           className="graphiql-operation-title-bar"
-          onMouseEnter={() => this.setState({displayTitleActions: true})}
-          onMouseLeave={() => this.setState({displayTitleActions: false})}>
-          {operationType}{' '}
+        >
+          {operationType}
+          {' '}
           <span style={{ color: styleConfig.colors.def }}>
             <input
               style={{
                 color: styleConfig.colors.def,
                 border: 'none',
                 borderBottom: '1px solid #888',
-                outline: 'none'
-                //width: `${Math.max(4, operationDisplayName.length)}ch`,
+                outline: 'none',
+                width: 'auto'
               }}
               autoComplete="false"
               placeholder={operationDisplayName}
@@ -2492,49 +2510,55 @@ class RootView extends React.PureComponent<
               onChange={this._onOperationRename}
             />
           </span>
+          <div
+            style={{float: 'right', paddingTop: '4px' }}
+          >
+            {!!this.state.displayTitleActions ? (
+              <React.Fragment>
+                <Fragment>
+                  {' '}
+                  <Tooltip transitionName={null} title="Remove">
+                    <span style={{ cursor: 'pointer' }}>
+                      <button
+                        type="submit"
+                        className="toolbar-button"
+                        onClick={() => this.props.onOperationDestroy()}
+                        style={{
+                          ...styleConfig.styles.actionButtonStyle,
+                        }}>
+                        <span><b>{'\u2715'}</b></span>
+                      </button>
+                    </span>
+                  </Tooltip>
+                  {' '}
+                </Fragment>
+                <Fragment>
+                  <Tooltip transitionName={null} title="Copy">
+                    <span style={{ cursor: 'pointer' }}>
+                      <button
+                        type="submit"
+                        className="toolbar-button"
+                        onClick={() => this.props.onOperationClone()}
+                        style={{
+                          ...styleConfig.styles.actionButtonStyle,
+                        }}>
+                        <span>{'📋'}</span>
+                      </button>
+                    </span>
+                    <span>&nbsp;</span>
+                  </Tooltip>
+                </Fragment>
+              </React.Fragment>
+            ) : (
+              ''
+            )
+            }
+          </div>
           {this.props.onTypeName ? (
             <span>
               <br />
               {`on ${this.props.onTypeName}`}
             </span>
-          ) : (
-            ''
-          )}{'  '}
-          {!!this.state.displayTitleActions ? (
-            <React.Fragment>
-              <Fragment>
-                {' '}
-                <Tooltip transitionName={null} title="Remove">
-                  <span style={{ cursor: 'pointer' }}>
-                    <button
-                      type="submit"
-                      className="toolbar-button"
-                      onClick={() => this.props.onOperationDestroy()}
-                      style={{
-                        ...styleConfig.styles.actionButtonStyle,
-                      }}>
-                      <span><b>{'\u2715'}</b></span>
-                    </button>
-                  </span>
-                </Tooltip>
-                {' '}
-              </Fragment>
-              <Fragment>
-                <Tooltip transitionName={null} title="Copy">
-                  <span style={{ cursor: 'pointer' }}>
-                    <button
-                      type="submit"
-                      className="toolbar-button"
-                      onClick={() => this.props.onOperationClone()}
-                      style={{
-                        ...styleConfig.styles.actionButtonStyle,
-                      }}>
-                      <span>{'📋'}</span>
-                    </button>
-                  </span>
-                </Tooltip>
-              </Fragment>
-            </React.Fragment>
           ) : (
             ''
           )}
@@ -2659,23 +2683,43 @@ class Explorer extends React.PureComponent<Props, State> {
       targetOperation : OperationDefinitionNode | FragmentDefinitionNode,
       name ?: string
     ) => {
+      const targetOperationExistingName =
+        (targetOperation.name && targetOperation.name.value) || 'unknown';
+
       const newName : NameNode = { kind: 'Name', value: name || '', loc: undefined };
-      const newOperation = { ...targetOperation, name: newName };
 
-      const existingDefs = parsedQuery.definitions;
+      const targetOperationIsFragment =
+        targetOperation.kind === 'FragmentDefinition';
 
-      const newDefinitions = existingDefs.map(existingOperation => {
-        if (targetOperation === existingOperation) {
-          return newOperation;
-        } else {
-          return existingOperation;
-        }
+      return visit(parsedQuery, {
+        OperationDefinition: node => {
+          if (
+            !targetOperationIsFragment &&
+            !!newName &&
+            node?.name?.value === targetOperation?.name?.value
+          ) {
+            return {...node, name: newName};
+          }
+        },
+        FragmentDefinition: node => {
+          if (
+            targetOperationIsFragment &&
+            !!newName &&
+            node?.name?.value === targetOperation?.name?.value
+          ) {
+            return {...node, name: newName};
+          }
+        },
+        FragmentSpread: node => {
+          if (
+            targetOperationIsFragment &&
+            node.name.value === targetOperationExistingName
+          ) {
+            return {...node, name: {...newName}};
+          }
+        },
       });
 
-      return {
-        ...parsedQuery,
-        definitions: newDefinitions,
-      };
     };
 
     const cloneOperation = (
@@ -2712,15 +2756,35 @@ class Explorer extends React.PureComponent<Props, State> {
     };
 
     const destroyOperation = targetOperation => {
+      const targetOperationExistingName =
+        (targetOperation.name && targetOperation.name.value) || 'unknown';
+
+      const targetOperationIsFragment =
+        targetOperation.kind === 'FragmentDefinition';
+
       const existingDefs = parsedQuery.definitions;
 
-      const newDefinitions = existingDefs.filter(existingOperation => {
+      let newDefinitions = existingDefs.filter(existingOperation => {
         if (targetOperation === existingOperation) {
           return false;
         } else {
           return true;
         }
       });
+
+
+      if (targetOperationIsFragment) {
+        newDefinitions = visit(newDefinitions, {
+          FragmentSpread: node => {
+            if (
+              targetOperationIsFragment &&
+              node.name.value === targetOperationExistingName
+            ) {
+              return null;
+            }
+          },
+        });
+      }
 
       return {
         ...parsedQuery,
@@ -2966,7 +3030,8 @@ class Explorer extends React.PureComponent<Props, State> {
                 schema.getType(operation.typeCondition.name.value);
 
               const fragmentFields =
-                fragmentType instanceof GraphQLObjectType
+                fragmentType instanceof GraphQLObjectType ||
+                fragmentType instanceof GraphQLInterfaceType
                   ? fragmentType.getFields()
                   : null;
 
