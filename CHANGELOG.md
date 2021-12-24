@@ -21,6 +21,7 @@
 - `added Explorer support of interface fragments`
 - `fixed Explorer fragments rename not worked properly`
 - `fixed Explorer fragment remove is not remove fragmentSpreads`
+- `fixed not injecting module version in release workflow`
 
 ## 0.0.16
 
