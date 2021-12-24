@@ -2335,8 +2335,8 @@ const defaultStyles : Styles = {
     border: 'none',
     margin: '0px',
     maxWidth: 'none',
-    height: '15px',
-    width: '15px',
+    height: '16px',
+    width: '16px',
     display: 'inline-block',
     fontSize: 'smaller',
     textAlign: 'center',
@@ -2511,7 +2511,7 @@ class RootView extends React.PureComponent<
             />
           </span>
           <div
-            style={{float: 'right'}}
+            style={{float: 'right', paddingTop: '4px' }}
           >
             {!!this.state.displayTitleActions ? (
               <React.Fragment>
@@ -2756,15 +2756,35 @@ class Explorer extends React.PureComponent<Props, State> {
     };
 
     const destroyOperation = targetOperation => {
+      const targetOperationExistingName =
+        (targetOperation.name && targetOperation.name.value) || 'unknown';
+
+      const targetOperationIsFragment =
+        targetOperation.kind === 'FragmentDefinition';
+
       const existingDefs = parsedQuery.definitions;
 
-      const newDefinitions = existingDefs.filter(existingOperation => {
+      let newDefinitions = existingDefs.filter(existingOperation => {
         if (targetOperation === existingOperation) {
           return false;
         } else {
           return true;
         }
       });
+
+
+      if (targetOperationIsFragment) {
+        newDefinitions = visit(newDefinitions, {
+          FragmentSpread: node => {
+            if (
+              targetOperationIsFragment &&
+              node.name.value === targetOperationExistingName
+            ) {
+              return null;
+            }
+          },
+        });
+      }
 
       return {
         ...parsedQuery,
