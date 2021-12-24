@@ -34,6 +34,7 @@ jobs:
       # Make a release
       - run: echo TAG=${GITHUB_REF##*/} >> $GITHUB_ENV
       - run: tarantoolctl rocks new_version --tag ${{ env.TAG }}
+      - run: sed -i "s/local VERSION = 'scm-1'/local VERSION = '${{ env.TAG }}-1'/g" graphqlide.lua
       - run: tarantoolctl rocks install graphqlide-${{ env.TAG }}-1.rockspec
       - run: tarantoolctl rocks pack graphqlide ${{ env.TAG }}
 
