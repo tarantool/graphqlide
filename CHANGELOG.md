@@ -20,6 +20,7 @@
 - `separate requests history by schemas`
 - `added Explorer support of interface fragments`
 - `fixed Explorer fragments rename not worked properly`
+- `fixed Explorer fragment remove is not remove fragmentSpreads`
 
 ## 0.0.16
 
