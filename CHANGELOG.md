@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.0.17
+## Unreleased
 
 - `update graphiql@1.5.1 to graphiql@1.5.16`
 - `update graphql@15.7.2 to graphiql@16.2.0`
@@ -22,6 +22,7 @@
 - `fixed Explorer fragments rename not worked properly`
 - `fixed Explorer fragment remove is not remove fragmentSpreads`
 - `fixed not injecting module version in release workflow`
+- `fixed DocExplorer was not reset on schema change`
 
 ## 0.0.16
 

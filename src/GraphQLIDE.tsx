@@ -313,6 +313,7 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
 
     this?._graphiql?._queryHistory?.setState({queries : queries});
     this.setState({ schemaSelected: selection, reloadSchema: true });
+    this._graphiql?.docExplorerComponent?.reset();
   }
 
   _schemasMenuReducer() {
