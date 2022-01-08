@@ -1490,7 +1490,12 @@ class AbstractArgView extends React.PureComponent<
             {isInputObjectType(argType) &&
               (argValue ? this.props.styleConfig.arrowOpen : this.props.styleConfig.arrowClosed)}
             <Checkbox checked={!!argValue} styleConfig={this.props.styleConfig} />
-            <Tooltip transitionName={null} arrowPointAtCenter placement="rightTop" title={arg.description || ''}>
+            <Tooltip
+              transitionName={null}
+              arrowPointAtCenter
+              placement="rightTop"
+              title={arg.description || ''}
+            >
               <span style={{ color: styleConfig.colors.attribute }}>
                 {arg.name}
                 {isRequiredArgument(arg) ? '*' : ''}:
@@ -1506,7 +1511,10 @@ class AbstractArgView extends React.PureComponent<
           {isListArgument(arg) && (
             <Fragment>
               {' '}
-              <Tooltip transitionName={null} title="Add list item">
+              <Tooltip
+                transitionName={null}
+                title="Add list item"
+              >
                 <span style={{ cursor: 'pointer' }}>
                   <button
                     type="submit"
@@ -2043,7 +2051,12 @@ class FieldView extends React.PureComponent<FieldViewProps, {displayFieldActions
 
     const node = (
       <div className={className}>
-        <Tooltip transitionName={null} arrowPointAtCenter placement="rightTop" title={field.description || ''}>
+        <Tooltip
+          transitionName={null}
+          arrowPointAtCenter
+          placement="rightTop"
+          title={field.description || ''}
+        >
           <span
             style={{
               cursor: 'pointer',
@@ -2071,7 +2084,10 @@ class FieldView extends React.PureComponent<FieldViewProps, {displayFieldActions
         {!containsMeaningfulSubselection ? null : (
           <Fragment>
             {' '}
-            <Tooltip transitionName={null} title="Extract selections into a new reusable fragment">
+            <Tooltip
+              transitionName={null}
+              title="Extract selections into a new reusable fragment"
+            >
               <span style={{ cursor: 'pointer' }}>
                 <button
                   type="submit"
@@ -2279,7 +2295,7 @@ function parseQuery(text : string) : DocumentNode | Error | null {
   }
 }
 
-const DEFAULT_OPERATION = {
+const DEFAULT_QUERY_OPERATION = {
   kind: 'OperationDefinition',
   operation: 'query',
   variableDefinitions: [],
@@ -2290,9 +2306,22 @@ const DEFAULT_OPERATION = {
     selections: [],
   },
 } as OperationDefinitionNode;
+
+const DEFAULT_MUTATION_OPERATION = {
+  kind: 'OperationDefinition',
+  operation: 'mutation',
+  variableDefinitions: [],
+  name: { kind: 'Name', value: 'MyMutation' },
+  directives: [],
+  selectionSet: {
+    kind: 'SelectionSet',
+    selections: [],
+  },
+} as OperationDefinitionNode;
+
 const DEFAULT_DOCUMENT : DocumentNode = {
   kind: 'Document',
-  definitions: [DEFAULT_OPERATION],
+  definitions: [DEFAULT_QUERY_OPERATION, DEFAULT_MUTATION_OPERATION],
 };
 let parseQueryMemoize : [string, DocumentNode] | null = null;
 function memoizeParseQuery(query : string) : DocumentNode {
@@ -2310,6 +2339,29 @@ function memoizeParseQuery(query : string) : DocumentNode {
         return DEFAULT_DOCUMENT;
       }
     } else {
+      const isQueryAbsent = !result?.definitions.find(definition =>
+        (definition?.operation === 'query' &&
+        (definition?.name?.value === 'MyQuery' || typeof definition?.name?.value === 'undefined')));
+      const isMutationAbsent = !result?.definitions.find(definition =>
+        (definition?.operation === 'mutation' &&
+        (definition?.name?.value === 'MyMutation' || typeof definition?.name?.value === 'undefined')));
+
+      if (isQueryAbsent) {
+        result.definitions.unshift(DEFAULT_QUERY_OPERATION);
+      }
+
+      if (isMutationAbsent) {
+        result.definitions.push(DEFAULT_MUTATION_OPERATION);
+      }
+
+      result.definitions.sort((a, b) => {
+        if (a?.operation === b?.operation) {
+          return a.name?.value < b.name?.value ? -1 : 1
+        } else {
+          return a?.operation === 'query' ? -1 : 1
+        }
+      });
+
       parseQueryMemoize = [query, result];
       return result;
     }
@@ -2517,7 +2569,10 @@ class RootView extends React.PureComponent<
               <React.Fragment>
                 <Fragment>
                   {' '}
-                  <Tooltip transitionName={null} title="Remove">
+                  <Tooltip
+                    transitionName={null}
+                    title="Remove"
+                  >
                     <span style={{ cursor: 'pointer' }}>
                       <button
                         type="submit"
@@ -2533,7 +2588,10 @@ class RootView extends React.PureComponent<
                   {' '}
                 </Fragment>
                 <Fragment>
-                  <Tooltip transitionName={null} title="Copy">
+                  <Tooltip
+                    transitionName={null}
+                    title="Copy"
+                  >
                     <span style={{ cursor: 'pointer' }}>
                       <button
                         type="submit"
@@ -2542,7 +2600,7 @@ class RootView extends React.PureComponent<
                         style={{
                           ...styleConfig.styles.actionButtonStyle,
                         }}>
-                        <span>{'📋'}</span>
+                        <span>{'⧉'}</span>
                       </button>
                     </span>
                     <span>&nbsp;</span>
@@ -2657,7 +2715,7 @@ class Explorer extends React.PureComponent<Props, State> {
     const mutationType = schema.getMutationType();
     const subscriptionType = schema.getSubscriptionType();
     if (!queryType && !mutationType && !subscriptionType) {
-      return <div>Missing query type</div>;
+      return <div>Missing any query or mutation or subscription</div>;
     }
     const queryFields = queryType ? queryType.getFields() : undefined;
     const mutationFields = mutationType ? mutationType.getFields() : undefined;
@@ -2741,7 +2799,21 @@ class Explorer extends React.PureComponent<Props, State> {
         loc: undefined,
       };
 
-      const newOperation = {...targetOperation, name: newName};
+      const clonedOperation = JSON.parse(JSON.stringify(targetOperation));
+
+      if (clonedOperation.selectionSet.selections.length === 0) {
+        clonedOperation.selectionSet.selections = [
+          {
+            kind: 'Field',
+            name: {
+              kind: 'Name',
+              value: '__typename',
+            },
+          },
+        ];
+      }
+
+      const newOperation = {...clonedOperation, name: newName};
 
       const existingDefs = parsedQuery.definitions;
 
@@ -2772,7 +2844,6 @@ class Explorer extends React.PureComponent<Props, State> {
         }
       });
 
-
       if (targetOperationIsFragment) {
         newDefinitions = visit(newDefinitions, {
           FragmentSpread: node => {
@@ -2796,22 +2867,22 @@ class Explorer extends React.PureComponent<Props, State> {
       const existingDefs = parsedQuery.definitions;
 
       const viewingDefaultOperation =
-        parsedQuery.definitions.length === 1 &&
-        parsedQuery.definitions[0] === DEFAULT_DOCUMENT.definitions[0];
+        parsedQuery.definitions.length === 2 &&
+        parsedQuery.definitions[0] === DEFAULT_DOCUMENT.definitions[0] &&
+        parsedQuery.definitions[1] === DEFAULT_DOCUMENT.definitions[1];
 
-      const MySiblingDefs = viewingDefaultOperation
-        ? []
-        : existingDefs.filter(def => {
-          if (def.kind === 'OperationDefinition') {
-            return def.operation === kind;
-          } else {
-            // Don't support adding fragments from explorer
-            return false;
-          }
-        });
+
+      const MySiblingDefs = existingDefs.filter(def => {
+        if (def.kind === 'OperationDefinition') {
+          return def.operation === kind;
+        } else {
+          // Don't support adding fragments from explorer
+          return false;
+        }
+      });
 
       const newOperationName = `My${capitalize(kind)}${
-        MySiblingDefs.length === 0 ? '' : MySiblingDefs.length + 1
+        MySiblingDefs.length === 0 ? '' : MySiblingDefs.length
       }`;
 
       // Add this as the default field as it guarantees a valid selectionSet
@@ -2857,6 +2928,8 @@ class Explorer extends React.PureComponent<Props, State> {
       };
 
       this.setState({operationToScrollTo: `${kind}-${newOperationName}`});
+      newOperationDef.definitions = newOperationDef.definitions.filter(
+        operation => operation.selectionSet.selections.length !== 0);
       this.props.onEdit(prettify(print(newOperationDef)));
     };
 
@@ -2930,7 +3003,10 @@ class Explorer extends React.PureComponent<Props, State> {
               {actionsOptions}
             </select>
             <span>&nbsp;</span>
-            <Tooltip transitionName={null} title="Add operation">
+            <Tooltip
+              transitionName={null}
+              title="Add operation"
+            >
               <span style={{ cursor: 'pointer' }}>
                 <button
                   type="submit"
@@ -3011,16 +3087,24 @@ class Explorer extends React.PureComponent<Props, State> {
 
               const onOperationRename = newName => {
                 const newOperationDef = renameOperation(operation, newName);
+                newOperationDef.definitions = newOperationDef.definitions.filter(
+                  operation => operation.selectionSet.selections.length !== 0);
                 this.props.onEdit(prettify(print(newOperationDef)));
               };
 
               const onOperationClone = () => {
                 const newOperationDef = cloneOperation(operation);
+                newOperationDef.definitions = newOperationDef.definitions.filter(
+                  operation => operation.selectionSet.selections.length !== 0);
+
                 this.props.onEdit(prettify(print(newOperationDef)));
               };
 
               const onOperationDestroy = () => {
                 const newOperationDef = destroyOperation(operation);
+                newOperationDef.definitions = newOperationDef.definitions.filter(
+                  operation => operation.selectionSet.selections.length !== 0);
+
                 this.props.onEdit(prettify(print(newOperationDef)));
               };
 
@@ -3047,8 +3131,11 @@ class Explorer extends React.PureComponent<Props, State> {
                         : null;
 
               const onCommit = (parsedDocument : DocumentNode) => {
-                const textualNewDocument = prettify(print(parsedDocument));
+                const filteredDocument = Object.assign({}, parsedDocument);
+                filteredDocument.definitions = filteredDocument.definitions.filter(
+                  operation => operation.selectionSet.selections.length !== 0);
 
+                const textualNewDocument = prettify(print(filteredDocument));
                 this.props.onEdit(textualNewDocument);
               };
 

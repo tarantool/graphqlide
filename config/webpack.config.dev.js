@@ -104,13 +104,14 @@ module.exports = {
       new ModuleScopePlugin(paths.appSrc, [paths.appPackageJson])
     ],
     fallback: {
-          dgram: false,
-          fs: false,
-          net: false,
-          tls: false,
-          child_process: false,
-          path: require.resolve("path-browserify"),
-        }
+      dgram: false,
+      fs: false,
+      net: false,
+      tls: false,
+      child_process: false,
+      path: require.resolve("path-browserify"),
+      url: require.resolve("url"),
+    }
   },
   externals: {
     react: 'react',
