@@ -5,7 +5,7 @@
 - `update graphiql@1.5.1 to graphiql@1.5.16`
 - `update graphql@15.7.2 to graphiql@16.2.0`
 - `update eslint@7.x and dependencies to eslint@8.x`
-- `update @tarantool.io/frontend-core@7.12.1 to  @tarantool.io/frontend-core8.0.0`
+- `update @tarantool.io/frontend-core@7.12.1 to  @tarantool.io/frontend-core@8.0.0`
 - `update webpack@5.64.0 to webpack@5.65.0`
 - `update all dependencies to latest versions`
 - `remove most of unused dependencies`
@@ -23,6 +23,7 @@
 - `fixed Explorer fragment remove is not remove fragmentSpreads`
 - `fixed not injecting module version in release workflow`
 - `fixed DocExplorer was not reset on schema change`
+- `show queries and mutations in Explorer by default`
 
 ## 0.0.16
 
