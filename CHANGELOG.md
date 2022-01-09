@@ -24,6 +24,7 @@
 - `fixed not injecting module version in release workflow`
 - `fixed DocExplorer was not reset on schema change`
 - `show queries and mutations in Explorer by default`
+- `added response status and latency indicators`
 
 ## 0.0.16
 

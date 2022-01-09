@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Hotkeys from 'react-hot-keys';
 import { css, cx } from '@emotion/css'
-import { GraphiQL, ToolbarSelect } from 'graphiql';
+import { GraphiQL, ToolbarSelect, ToolbarGroup } from 'graphiql';
 import GraphiQLExplorer from './graphiql-explorer';
 import {
   buildClientSchema,
@@ -44,6 +44,10 @@ type GraphQLIDEState = {
   explorerIsOpen : boolean,
   schemaSelected : string,
   reloadSchema : boolean,
+  latency : string,
+  status : string,
+  statusColor : string,
+  statusBackgroundColor : string,
 };
 
 class GraphQLIDE extends Component<any, GraphQLIDEState> {
@@ -73,7 +77,11 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
     query: DEFAULT_QUERY,
     explorerIsOpen: false,
     schemaSelected: this._getDefaultSchema(),
-    reloadSchema: true
+    reloadSchema: false,
+    latency: '-',
+    status: '-',
+    statusColor: 'black',
+    statusBackgroundColor: 'lightgrey'
   };
 
   _getGraphQLEndpoint = () : string => {
@@ -102,15 +110,19 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
   }
 
   _fetchWrapper = (url, options, timeout) => {
+    const { ...request } = options;
+    const controller = new AbortController();
+    const { signal } = controller;
     return new Promise((resolve, reject) => {
-      fetch(url, options).then(resolve, reject);
-
-      if (timeout) {
-        const e = new Error('Connection timed out');
-        setTimeout(reject, timeout, e);
-      }
+      const timer = setTimeout(() => {
+        reject(new Error("Request timeout"));
+        controller.abort();
+      }, timeout);
+      fetch(url, { signal, ...request })
+        .finally(() => clearTimeout(timer))
+        .then(resolve, reject);
     });
-  }
+  };
 
   _fetcher = async(graphQLParams : Record<string, unknown>) : Record<string, unknown> => {
     if (typeof graphQLParams['variables'] === 'undefined') {
@@ -123,6 +135,7 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
       return '{}'
     }
 
+    const start = performance.now()
     const data = await this._fetchWrapper(
       endpoint,
       {
@@ -135,13 +148,42 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
         body: JSON.stringify(graphQLParams)
       },
       DEFAULT_TIMEOUT
-    );
+    )
+      .then((res) => res)
+      .catch((error) => {
+        return error;
+      })
+
+    const finish = performance.now();
+    const latency = (finish - start).toFixed(0).toString();
+
+    if (!data?.status) {
+      this.setState({
+        latency: latency,
+        status: ' N/A ',
+        statusColor: 'black',
+        statusBackgroundColor: 'lightgrey',
+        reloadSchema: false
+      });
+    } else {
+      this.setState({
+        latency: latency,
+        status: (data.status + ' ' + (data.status < 400 ? 'OK' : 'Fail')),
+        statusColor: 'white',
+        statusBackgroundColor: data.status < 400 ? '#7EBC59' : 'red',
+        reloadSchema: false
+      });
+    }
 
     const json = (function(raw) {
       try {
         return raw.json();
       } catch (err) {
-        return '{}';
+        if (raw.message) {
+          return {errors: [{ message: raw.message}]}
+        } else {
+          return {errors: [{ message: "JSON cannot be decoded"}]}
+        }
       }
     })(data);
 
@@ -290,7 +332,7 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
 
   componentDidUpdate() {
     if (this.state.reloadSchema) {
-      const options = this._getGraphQLEndpoint().options
+      const options = this._getGraphQLEndpoint().options;
       this._fetcher({
         query: getIntrospectionQuery(options)
       }).then(result => {
@@ -458,6 +500,29 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
                   onSelect={() => this._handleSaveResponse()}
                 />
               </GraphiQL.Menu>
+              <ToolbarGroup>
+                <div>
+                  <span style={{
+                    marginLeft: '100px',
+                    color: this.state.statusColor,
+                    backgroundColor: this.state.statusBackgroundColor,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    padding: '3px 11px 5px',
+                    borderRadius: '3px',
+                    border: 0,
+                  }}
+                  >
+                    <b>{this.state.status}</b>
+                  </span>
+                  <span style={{
+                    marginLeft: '20px'
+                  }}
+                  >
+                    <b>{'\u23F1'}&nbsp;{this.state.latency}&nbsp;ms</b>
+                  </span>
+                </div>
+              </ToolbarGroup>
             </GraphiQL.Toolbar>
             <GraphiQL.Footer>
             </GraphiQL.Footer>
