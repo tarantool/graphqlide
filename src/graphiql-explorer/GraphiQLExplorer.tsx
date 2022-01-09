@@ -326,10 +326,10 @@ function coerceArgValue(
       if (parsedValue) {
         return { kind: 'EnumValue', value: String(parsedValue) };
       } else {
-        return { kind: 'EnumValue', value: argType.getValues()[0].name };
+        return { kind: 'EnumValue', value: argType.getValues().sort((a, b) => a.name < b.name ? -1 : 1)[0].name };
       }
     } catch (e) {
-      return { kind: 'EnumValue', value: argType.getValues()[0].name };
+      return { kind: 'EnumValue', value: argType.getValues().sort((a, b) => a.name < b.name ? -1 : 1)[0].name };
     }
   }
 }
@@ -728,7 +728,7 @@ type ArgViewState = Record<string, unknown>;
 
 export function defaultValue(argType : GraphQLEnumType | GraphQLScalarType) : ValueNode {
   if (isEnumType(argType)) {
-    return { kind: 'EnumValue', value: argType.getValues()[0].name };
+    return { kind: 'EnumValue', value: argType.getValues().sort((a, b) => a.name < b.name ? -1 : 1)[0].name };
   } else {
     switch (argType.name) {
     case 'String':
@@ -1162,7 +1162,7 @@ class AbstractArgView extends React.PureComponent<
               onChange={setArgValue}
               value={argValue.value}
             >
-              {argType.getValues().map(value => (
+              {argType.getValues().sort((a, b) => a.name < b.name ? -1 : 1).map(value => (
                 <option key={value.name} value={value.name}>
                   {value.name}
                 </option>
