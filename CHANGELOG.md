@@ -25,6 +25,7 @@
 - `fixed DocExplorer was not reset on schema change`
 - `show queries and mutations in Explorer by default`
 - `added response status and latency indicators`
+- `fixed explorer sort lists of Enums in select`
 
 ## 0.0.16
 
