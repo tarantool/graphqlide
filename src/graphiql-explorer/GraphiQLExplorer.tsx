@@ -3025,6 +3025,7 @@ class Explorer extends React.PureComponent<Props, State> {
                 </button>
               </span>
             </Tooltip>
+            <span>&nbsp;</span>
           </form>
         </div>
       );
