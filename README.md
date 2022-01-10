@@ -36,16 +36,16 @@ Based on:
 
 GraphQL IDE interface:
 
-![GraphQL IDE](https://github.com/tarantool/graphqlide/blob/master/resources/graphqlide.jpg "GraphQL IDE")
+![GraphQL IDE](https://github.com/tarantool/graphqlide/blob/master/resources/GraphQLIDE.png "GraphQL IDE")
 
 ## Main menu
 
 GraphQL IDE main menu contains the following items:
 
 
-![GraphQL IDE main menu with Copy opened](https://github.com/tarantool/graphqlide/blob/master/resources/main_menu_1.jpg "GraphQL IDE menu with Copy item opened")
+![GraphQL IDE main menu with Copy opened](https://github.com/tarantool/graphqlide/blob/master/resources/main_menu_1.png "GraphQL IDE menu with Copy item opened")
 
-![GraphQL IDE main menu with Save opened](https://github.com/tarantool/graphqlide/blob/master/resources/main_menu_2.jpg "GraphQL IDE menu with Save item opened")
+![GraphQL IDE main menu with Save opened](https://github.com/tarantool/graphqlide/blob/master/resources/main_menu_2.png "GraphQL IDE menu with Save item opened")
 
 Items description:
 

@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.0.17
 
 - `update graphiql@1.5.1 to graphiql@1.5.16`
 - `update graphql@15.7.2 to graphiql@16.2.0`
@@ -26,6 +26,7 @@
 - `show queries and mutations in Explorer by default`
 - `added response status and latency indicators`
 - `fixed explorer sort lists of Enums in select`
+- `update README.md`
 
 ## 0.0.16
 
