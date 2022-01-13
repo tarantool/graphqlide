@@ -291,10 +291,20 @@ function coerceArgValue(
           kind: 'FloatValue',
           value: String(argType.parseValue(parseFloat(value))),
         };
+      case 'Double':
+        return {
+          kind: 'FloatValue',
+          value: String(argType.parseValue(parseFloat(value))),
+        };
       case 'Int':
         return {
           kind: 'IntValue',
           value: String(argType.parseValue(parseInt(value, 10))),
+        };
+      case 'Long':
+        return {
+          kind: 'StringValue',
+          value: String(argType.parseValue(BigInt(value))),
         };
       case 'Boolean':
         try {
@@ -726,21 +736,31 @@ type ArgViewProps = {
 
 type ArgViewState = Record<string, unknown>;
 
-export function defaultValue(argType : GraphQLEnumType | GraphQLScalarType) : ValueNode {
+export function defaultValue(
+  arg : GraphQLArgument | GraphQLInputField,
+  argType : GraphQLEnumType | GraphQLScalarType,
+) : ValueNode {
   if (isEnumType(argType)) {
-    return { kind: 'EnumValue', value: argType.getValues().sort((a, b) => a.name < b.name ? -1 : 1)[0].name };
+    return {
+      kind: 'EnumValue',
+      value: arg?.defaultValue ?? argType.getValues().sort((a, b) => a.name < b.name ? -1 : 1)[0].name
+    };
   } else {
     switch (argType.name) {
     case 'String':
-      return { kind: 'StringValue', value: '' };
+      return { kind: 'StringValue', value: arg?.defaultValue ?? '' };
     case 'Float':
-      return { kind: 'FloatValue', value: '1.5' };
+      return { kind: 'FloatValue', value: arg?.defaultValue ?? '0' };
+    case 'Double':
+      return { kind: 'FloatValue', value: arg?.defaultValue ?? '0' };
     case 'Int':
-      return { kind: 'IntValue', value: '10' };
+      return { kind: 'IntValue', value: arg?.defaultValue ?? '0' };
+    case 'Long':
+      return { kind: 'StringValue', value: (arg?.defaultValue ?? 0).toString() };
     case 'Boolean':
-      return { kind: 'BooleanValue', value: false };
+      return { kind: 'BooleanValue', value: arg?.defaultValue ?? false };
     default:
-      return { kind: 'StringValue', value: '' };
+      return { kind: 'StringValue', value: arg?.defaultValue ?? '' };
     }
   }
 }
@@ -750,7 +770,7 @@ function defaultGetDefaultScalarArgValue(
   arg : GraphQLArgument | GraphQLInputField,
   argType : GraphQLEnumType | GraphQLScalarType,
 ) : ValueNode {
-  return defaultValue(argType);
+  return defaultValue(arg, argType);
 }
 
 class ArgView extends React.PureComponent<ArgViewProps, ArgViewState> {
@@ -1012,7 +1032,9 @@ class ScalarInput extends React.PureComponent<ScalarInputProps, any> {
     const activeElement = document.activeElement;
     if (input && activeElement && !(activeElement instanceof HTMLTextAreaElement)) {
       input.focus();
-      input.setSelectionRange(0, input.value.length);
+      if (input.type !== 'number') {
+        input.setSelectionRange(0, input.value.length);
+      }
     }
   }
 
@@ -1032,13 +1054,28 @@ class ScalarInput extends React.PureComponent<ScalarInputProps, any> {
             border: 'none',
             borderBottom: '1px solid #888',
             outline: 'none',
-            width: `${Math.max(1, Math.min(15, value.length))}ch`,
+            width: `${Math.max(
+              1,
+              Math.min(15, value.length + (
+                argType.name === 'Float' ||
+                argType.name === 'Double' ||
+                argType.name === 'Int' ||
+                argType.name === 'Long'
+                  ? 3
+                  : 0))
+            )}ch`,
             color,
           }}
           ref={ref => {
             this._ref = ref;
           }}
-          type="text"
+          type={(
+            argType.name === 'Float' ||
+            argType.name === 'Double' ||
+            argType.name === 'Int' ||
+            argType.name === 'Long'
+              ? "number"
+              : "text")}
           onChange={this._handleChange}
           value={value}
         />
