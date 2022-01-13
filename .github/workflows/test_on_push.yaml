@@ -23,7 +23,7 @@ jobs:
       - name: Install npm
         uses: actions/setup-node@v1
         with:
-          node-version: '17.3.0'
+          node-version: '17.3.1'
       - name: Install sdk
         run: make sdk
       - name: Install rocks

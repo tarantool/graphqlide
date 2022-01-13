@@ -4,4 +4,4 @@ SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
 cd $SCRIPTPATH/..
 tarantoolctl rocks make
-tarantoolctl rocks pack graphqlide
+tarantoolctl rocks pack graphqlide scm-1
