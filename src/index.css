@@ -5,3 +5,7 @@
 .graphiql-explorer-deprecated {
   color:grey;
 }
+
+.historyPaneWrap {
+  border-left: 2px solid rgb(214, 214, 214);
+}
