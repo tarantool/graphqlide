@@ -2599,7 +2599,7 @@ class RootView extends React.PureComponent<
         <div
           style={{
             color: styleConfig.colors.keyword,
-            paddingBottom: 4,
+            paddingBottom: 2,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -2676,15 +2676,24 @@ class RootView extends React.PureComponent<
             )
             }
           </div>
-          {this.props.onTypeName ? (
-            <span>
-              <br />
-              {`on ${this.props.onTypeName}`}
-            </span>
-          ) : (
-            ''
-          )}
         </div>
+        {this.props.onTypeName ? (
+          <div
+            style={{
+              paddingBottom: 2,
+              display: 'flex',
+            }}
+          >
+            <span style={{ color: styleConfig.colors.keyword }}>
+              on&nbsp;
+            </span>
+            <span style={{ color: styleConfig.colors.atom }}>
+              {`${this.props.onTypeName}`}
+            </span>
+          </div>
+        ) : (
+          ''
+        )}
 
         {Object.keys(fields)
           .sort()
