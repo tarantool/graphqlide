@@ -54,6 +54,8 @@ import {
   visit,
 } from 'graphql';
 
+import { Storage } from 'graphiql';
+
 type Field = GraphQLField<any, any>;
 
 type GetDefaultScalarArgValue = (
@@ -108,9 +110,9 @@ type StyleConfig = {
   styles : Styles;
 };
 
-type Props = {
+type GraphiQLExplorerProps = {
   query : string;
-  width ?: number;
+  explorerWidth ?: number;
   title ?: string;
   schema ?: GraphQLSchema;
   onEdit : (x : string) => void;
@@ -126,6 +128,7 @@ type Props = {
   arrowClosed ?: React.ReactNode;
   checkboxChecked ?: React.ReactNode;
   checkboxUnchecked ?: React.ReactNode;
+  storage : Storage;
   styles ?: {
     explorerActionsStyle ?: React.CSSProperties;
     buttonStyle ?: React.CSSProperties;
@@ -217,6 +220,22 @@ const defaultCheckboxUnchecked = (
     />
   </svg>
 );
+
+function debounce<F extends(...args : any[]) => any>(
+  duration : number,
+  fn : F,
+) {
+  let timeout : number | null;
+  return function(this : any, ...args : Parameters<F>) {
+    if (timeout) {
+      window.clearTimeout(timeout);
+    }
+    timeout = window.setTimeout(() => {
+      timeout = null;
+      fn.apply(this, args);
+    }, duration);
+  };
+}
 
 function Checkbox(props : { checked : boolean; styleConfig : StyleConfig }) {
   return (
@@ -2578,10 +2597,18 @@ class RootView extends React.PureComponent<
         }}
       >
         <div
-          style={{color: styleConfig.colors.keyword, paddingBottom: 4}}
+          style={{
+            color: styleConfig.colors.keyword,
+            paddingBottom: 4,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
           className="graphiql-operation-title-bar"
         >
-          {operationType}
+          <div style={{ width: '10ch', minWidth: '10ch'}}>
+            {operationType}
+          </div>
           {' '}
           <span style={{ color: styleConfig.colors.def }}>
             <input
@@ -2590,7 +2617,7 @@ class RootView extends React.PureComponent<
                 border: 'none',
                 borderBottom: '1px solid #888',
                 outline: 'none',
-                width: 'auto'
+                width: `${Math.max(15, this.props?.name?.length ?? 0)}ch`
               }}
               autoComplete="false"
               placeholder={operationDisplayName}
@@ -3010,10 +3037,23 @@ class Explorer extends React.PureComponent<Props, State> {
             minHeight: '40px',
             maxHeight: '40px',
             overflow: 'none',
-            justifyContent: 'center',
             paddingLeft: '5px',
             paddingRight: '5px',
+            justifyContent: 'space-between',
+            borderTop: '1px solid rgb(214, 214, 214)',
+            borderBottom: 'none',
+            display: 'flex',
+            alignItems: 'center',
           }}>
+          <div
+            style={{
+              display: 'inline-block',
+              flexGrow: '0',
+              textAlign: 'right',
+            }}>
+            Add new
+          </div>
+          {' '}
           <form
             className="variable-editor-title graphiql-explorer-actions"
             style={{
@@ -3021,49 +3061,42 @@ class Explorer extends React.PureComponent<Props, State> {
               display: 'flex',
               flexDirection: 'row',
               alignItems: 'center',
-              borderTop: '1px solid rgb(214, 214, 214)',
+              padding: '4px 10px 4px 10px',
             }}
             onSubmit={event => event.preventDefault()}>
-            <span
-              style={{
-                display: 'inline-block',
-                flexGrow: '0',
-                textAlign: 'right',
-              }}>
-              Add new
-            </span>
-            <span>&nbsp;</span>
             <select
               onChange={event => this._setAddOperationType(event.target.value)}
               value={this.state.newOperationType}
-              style={{flexGrow: '2'}}>
+              style={{
+                flexGrow: 1,
+                paddingRight: '10px',
+              }}>
               {actionsOptions}
             </select>
-            <span>&nbsp;</span>
-            <Tooltip
-              transitionName={null}
-              title="Add operation"
-            >
-              <span style={{ cursor: 'pointer' }}>
-                <button
-                  type="submit"
-                  className="toolbar-button"
-                  onClick={() =>
-                    this.state.newOperationType
-                      ? addOperation(this.state.newOperationType)
-                      : null
-                  }
-                  style={{
-                    ...styleConfig.styles.buttonStyle,
-                    height: '22px',
-                    width: '22px',
-                  }}>
-                  <span><b>+</b></span>
-                </button>
-              </span>
-            </Tooltip>
-            <span>&nbsp;</span>
           </form>
+          {' '}
+          <Tooltip
+            transitionName={null}
+            title="Add operation"
+          >
+            <span style={{ cursor: 'pointer' }}>
+              <button
+                type="submit"
+                className="toolbar-button"
+                onClick={() =>
+                  this.state.newOperationType
+                    ? addOperation(this.state.newOperationType)
+                    : null
+                }
+                style={{
+                  ...styleConfig.styles.buttonStyle,
+                  height: '22px',
+                  width: '22px',
+                }}>
+                <span><b>+</b></span>
+              </button>
+            </span>
+          </Tooltip>
         </div>
       );
 
@@ -3109,6 +3142,7 @@ class Explorer extends React.PureComponent<Props, State> {
           style={{
             flexGrow: '1',
             overflow: 'auto',
+            display: 'block',
           }}>
           {relevantOperations.map(
             (
@@ -3286,27 +3320,117 @@ class ErrorBoundary extends React.Component<any, ErrorBoundaryState> {
   }
 }
 
-class GraphiQLExplorer extends React.PureComponent<Props, any> {
+const DEFAULT_EXPLORER_WIDTH = 300;
+const MIN_EXPLORER_WIDTH = 260;
+
+type GraphiQLExplorerState = {
+  explorerWidth : number,
+};
+
+class GraphiQLExplorer extends React.PureComponent<GraphiQLExplorerProps, GraphiQLExplorerState> {
   static defaultValue = defaultValue;
   static defaultProps = {
-    width: 320,
+    explorerWidth: DEFAULT_EXPLORER_WIDTH,
     title: 'Explorer',
   };
+
+  state = {
+    explorerWidth : Number(this.props.storage.getItem('graphiql:explorerWidth')) ?? this.props.explorerWidth,
+  };
+
+  explorerContainer : Maybe<HTMLDivElement>;
+
+  private getLeft = (initialElem : HTMLElement) => {
+    let pt = 0;
+    let elem = initialElem;
+    while (elem.offsetParent) {
+      pt += elem.offsetLeft;
+      elem = elem.offsetParent as HTMLElement;
+    }
+    return pt;
+  }
+
+  private handleDocsResetResize = () => {
+    this.setState({
+      explorerWidth: this.props.explorerWidth,
+    });
+    debounce(500, () =>
+      this.props.storage.setItem(
+        'graphiql:explorerWidth',
+        JSON.stringify(this.state.explorerWidth),
+      ),
+    )();
+  };
+
+  private handleDocsResizeStart : MouseEventHandler<
+    HTMLDivElement
+  > = downEvent => {
+      downEvent.preventDefault();
+
+      const hasWidth = this.state.explorerWidth;
+      const offset = downEvent.clientX - this.getLeft(downEvent.target as HTMLElement);
+
+      let onMouseMove : OnMouseMoveFn = moveEvent => {
+        if (moveEvent.buttons === 0) {
+          return onMouseUp();
+        }
+
+        const app = this.explorerContainer as HTMLElement;
+        const newWidth = moveEvent.clientX - this.getLeft(app) - offset
+
+        if (newWidth < MIN_EXPLORER_WIDTH) {
+          this.props.explorerIsOpen = !this.props.explorerIsOpen;
+          this.setState({
+            explorerWidth: hasWidth,
+          });
+        } else {
+          this.setState({
+            explorerWidth: newWidth,
+          });
+        }
+        debounce(500, () =>
+          this.props.storage.setItem(
+            'graphiql:explorerWidth',
+            JSON.stringify(this.state.explorerWidth),
+          ),
+        )();
+        this.props.storage.setItem(
+          'graphiql:explorerIsOpen',
+          JSON.stringify(this.props.explorerIsOpen),
+        )
+      };
+
+      let onMouseUp : OnMouseUpFn = () => {
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+        onMouseMove = null;
+        onMouseUp = null;
+      };
+
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    };
+
   render() {
     return (
       <div
+        ref={n => {
+          this.explorerContainer = n;
+        }}
         className="docExplorerWrap"
         style={{
           height: '100%',
-          width: this.props.width,
-          minWidth: this.props.width,
+          width: this.state.explorerWidth,
           zIndex: 7,
           display: this.props.explorerIsOpen ? 'flex' : 'none',
           flexDirection: 'column',
-          overflow: 'hidden',
+          padding: '0px',
         }}
       >
-        <div className="doc-explorer-title-bar">
+        <div
+          className="doc-explorer-title-bar"
+          style={{width: 'inherit'}}
+        >
           <div className="doc-explorer-title">{this.props.title}</div>
           <div className="doc-explorer-rhs">
             <div className="docExplorerHide" onClick={this.props.onToggleExplorer}>
@@ -3321,11 +3445,27 @@ class GraphiQLExplorer extends React.PureComponent<Props, any> {
             /* Unset overflowY since docExplorerWrap sets it and it'll
             cause two scrollbars (one for the container and one for the schema tree) */
             overflowY: 'unset',
+            minWidth: 0,
+            width: 'inherit',
           }}>
           <ErrorBoundary>
             <Explorer {...this.props} />
           </ErrorBoundary>
         </div>
+        <div
+          className="explorerResizer"
+          style={{
+            cursor: 'col-resize',
+            height: '100%',
+            right: '-5px',
+            position: 'absolute',
+            top: 0,
+            width: '10px',
+            zIndex: 10,
+          }}
+          onDoubleClick={this.handleDocsResetResize}
+          onMouseDown={this.handleDocsResizeStart}
+        />
       </div>
     );
   }

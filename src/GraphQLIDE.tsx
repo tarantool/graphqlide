@@ -52,6 +52,7 @@ type GraphQLIDEState = {
 
 class GraphQLIDE extends Component<any, GraphQLIDEState> {
   _graphiql : GraphiQL;
+  _graphiqlExplorer : GraphiQLExplorer;
   _storage : CustomStorage = new CustomStorage();
 
   _getDefaultSchema = () : string => {
@@ -75,7 +76,7 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
   state = {
     schema: null,
     query: DEFAULT_QUERY,
-    explorerIsOpen: false,
+    explorerIsOpen: Boolean(this._storage.getItem('graphiql:explorerIsOpen')),
     schemaSelected: this._getDefaultSchema(),
     reloadSchema: false,
     latency: '-',
@@ -103,9 +104,9 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
     }
 
     endpoint = '/' + endpoint
-    if (!('descriptions' in options)) { options.descriptions = true }
-    if (!('specifiedByUrl' in options)) { options.specifiedByUrl = true }
-    if (!('directiveIsRepeatable' in options)) { options.directiveIsRepeatable = true }
+    options.descriptions = options?.descriptions ?? true;
+    options.specifiedByUrl = options?.specifiedByUrl ?? true;
+    options.directiveIsRepeatable = options?.directiveIsRepeatable ?? true;
     return { endpoint, options }
   }
 
@@ -216,7 +217,7 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
     this._fetcher({
       query: getIntrospectionQuery(options)
     }).then(result => {
-      this._storage.schema = 'graphqlide:' + defaultSchema ?? 'unknown';
+      this._storage.schema = defaultSchema ?? 'unknown';
       this.setState({ schema: buildClientSchema(result.data), reloadSchema: false });
     });
   }
@@ -282,7 +283,8 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
   _handleEditQuery = (query : string) : void => this.setState({ query });
 
   _handleToggleExplorer = () => {
-    this.setState({ explorerIsOpen: !this.state.explorerIsOpen });
+    this.setState({ explorerIsOpen: !this._graphiqlExplorer.props.explorerIsOpen });
+    this._storage.setItem('graphiql:explorerIsOpen', !this._graphiqlExplorer.props.explorerIsOpen);
   };
 
   _handleToggleDocExplorer = () => {
@@ -305,7 +307,7 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
       return;
     }
     const Response = new Blob([response], { type: 'application/json;charset=utf-8' });
-    saveAs(Response, 'response.json');
+    saveAs(Response, 'response1.json');
   };
 
   _handleCopyResponse = () => {
@@ -342,7 +344,7 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
   }
 
   _handleSchemaSelect = async(selection) => {
-    this._storage.schema = 'graphqlide:' + selection ?? 'unknown';
+    this._storage.schema = selection ?? 'unknown';
     const queries = this._graphiql?._historyStore.fetchAllQueries() ?? [];
 
     if (this._graphiql._queryHistory) {
@@ -430,12 +432,14 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
       >
         <div className={cx(styles.container, 'graphiql-container')} >
           <GraphiQLExplorer
+            ref={ref => (this._graphiqlExplorer = ref)}
             schema={schema}
             query={query}
             onEdit={this._handleEditQuery}
             onRunOperation={operationName => this._graphiql.handleRunQuery(operationName)}
             explorerIsOpen={this.state.explorerIsOpen}
             onToggleExplorer={this._handleToggleExplorer}
+            storage={this._storage}
           />
           <GraphiQL
             ref={ref => (this._graphiql = ref)}
@@ -447,6 +451,7 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
             docExplorerOpen={false}
             headerEditorEnabled={false}
             storage={this._storage}
+            maxHistoryLength={50}
           >
             <GraphiQL.Toolbar>
               {this._schemasMenuReducer()}
@@ -503,7 +508,6 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
               <ToolbarGroup>
                 <div>
                   <span style={{
-                    marginLeft: '100px',
                     color: this.state.statusColor,
                     backgroundColor: this.state.statusBackgroundColor,
                     display: 'inline-flex',
@@ -516,7 +520,7 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
                     <b>{this.state.status}</b>
                   </span>
                   <span style={{
-                    marginLeft: '20px'
+                    marginLeft: '10px'
                   }}
                   >
                     <b>{'\u23F1'}&nbsp;{this.state.latency}&nbsp;ms</b>

@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- `coerce arguments default values`
+- `make Explorer div resizable`
+- `fixed hydrate settings in webUI not worked`
+- `fixed module version injection on publish`
+
 ## 0.0.17
 
 - `update graphiql@1.5.1 to graphiql@1.5.16`
