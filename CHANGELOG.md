@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.0.18
 
 - `coerce arguments default values`
 - `make Explorer div resizable`
