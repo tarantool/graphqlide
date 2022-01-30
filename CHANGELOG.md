@@ -6,6 +6,8 @@
 - `make Explorer div resizable`
 - `fixed hydrate settings in webUI not worked`
 - `fixed module version injection on publish`
+- `speedup CI`
+- `update luatest to 0.5.7`
 
 ## 0.0.17
 
