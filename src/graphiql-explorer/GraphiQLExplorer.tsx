@@ -272,7 +272,7 @@ function isListArgument(arg : GraphQLArgument) : boolean {
 }
 
 function isRequiredArgument(arg : GraphQLArgument) : boolean {
-  return isNonNullType(arg.type) && arg.defaultValue === undefined;
+  return isNonNullType(arg.type);
 }
 
 function unwrapOutputType(outputType : GraphQLOutputType) : any {

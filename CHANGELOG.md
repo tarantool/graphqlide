@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- `update graphiql@1.5.16 to graphiql@1.5.17`
+- `allow defaults for mandatory arguments`
+
 ## 0.0.18
 
 - `coerce arguments default values`
