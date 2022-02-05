@@ -1131,7 +1131,7 @@ class AbstractArgView extends React.PureComponent<
   AbstractArgViewProps,
   {displayArgActions : boolean},
 > {
-  state = {displayArgActions: false};
+  state = {displayArgActions: !!this.props.argValue};
   render() {
     const {
       argValue,
