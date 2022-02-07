@@ -440,6 +440,8 @@ class GraphQLIDE extends Component<any, GraphQLIDEState> {
             explorerIsOpen={this.state.explorerIsOpen}
             onToggleExplorer={this._handleToggleExplorer}
             storage={this._storage}
+            explorerWidth={300}
+            title={'Explorer'}
           />
           <GraphiQL
             ref={ref => (this._graphiql = ref)}

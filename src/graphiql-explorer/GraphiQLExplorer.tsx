@@ -3344,7 +3344,7 @@ class GraphiQLExplorer extends React.PureComponent<GraphiQLExplorerProps, Graphi
   };
 
   state = {
-    explorerWidth : Number(this.props.storage.getItem('graphiql:explorerWidth')) ?? this.props.explorerWidth,
+    explorerWidth : Number(this.props.storage.getItem('graphiql:explorerWidth') ?? this.props.explorerWidth),
   };
 
   explorerContainer : Maybe<HTMLDivElement>;
