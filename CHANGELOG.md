@@ -4,6 +4,7 @@
 
 - `update graphiql@1.5.16 to graphiql@1.5.17`
 - `allow defaults for mandatory arguments`
+- `fix incorrect setting explorer width on first module load`
 
 ## 0.0.18
 

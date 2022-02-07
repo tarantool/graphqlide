@@ -41,5 +41,5 @@ jobs:
         with:
           auth: ${{ secrets.ROCKS_AUTH }}
           files: |
-            graphqlide-${{ env.TAG }}-1.rockspec
-            graphqlide-${{ env.TAG }}-1.all.rock
+            graphqlide-$TAG-1.rockspec
+            graphqlide-$TAG-1.all.rock
