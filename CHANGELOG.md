@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- `update graphiql@1.5.17 to graphiql@1.5.18`
+- `update graphiql@1.5.17 to graphiql@1.5.19`
 
 ## 0.0.19
 
