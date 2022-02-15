@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- `update graphiql@1.5.17 to graphiql@1.5.18`
+
 ## 0.0.19
 
 - `update graphiql@1.5.16 to graphiql@1.5.17`
