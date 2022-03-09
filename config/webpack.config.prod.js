@@ -10,7 +10,7 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 const moduleConfig = require('../module-config');
-const LuaBundlerPlugin = require('@tarantool.io/lua-bundler-webpack-plugin')
+const { LuaBundleWebpackPlugin } = require('@tarantool.io/lua-bundler-webpack-plugin')
 
 const crypto = require("crypto");
 const crypto_orig_createHash = crypto.createHash;
@@ -352,8 +352,10 @@ module.exports = {
       extensions: ['ts', 'tsx'],
       files: 'src/**/*.ts?'
     }),
-    new LuaBundlerPlugin({ namespace: moduleConfig.namespace }),
-        new webpack.ProvidePlugin({
+    new LuaBundleWebpackPlugin({
+      namespace: moduleConfig.namespace
+    }),
+    new webpack.ProvidePlugin({
       process: 'process/browser',
     }),
   ],
