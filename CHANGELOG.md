@@ -5,6 +5,7 @@
 - `update graphiql@1.5.17 to graphiql@1.7.0`
 - `update @tarantool.io/lua-bundler-webpack-plugin@1.0.0 to @tarantool.io/lua-bundler-webpack-plugin@2.0.0`
 - `update multiple dependencies to latest`
+- `fix tree open/close arrow is not shown if operation has only arguments`
 
 ## 0.0.19
 

@@ -2126,7 +2126,7 @@ class FieldView extends React.PureComponent<FieldViewProps, {displayFieldActions
             data-field-type={type.name}
             onClick={this._handleUpdateSelections}
           >
-            {isObjectType(type) ? (
+            {(isObjectType(type) || args.length) ? (
               <span>
                 {selection
                   ? this.props.styleConfig.arrowOpen
