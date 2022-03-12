@@ -2,10 +2,11 @@
 
 ## Unreleased
 
-- `update graphiql@1.5.17 to graphiql@1.7.0`
+- `update graphiql@1.5.17 to graphiql@1.7.1`
 - `update @tarantool.io/lua-bundler-webpack-plugin@1.0.0 to @tarantool.io/lua-bundler-webpack-plugin@2.0.0`
 - `update multiple dependencies to latest`
 - `fix tree open/close arrow is not shown if operation has only arguments`
+- `update node.js@17.6.0 to node.js@17.7.1`
 
 ## 0.0.19
 
