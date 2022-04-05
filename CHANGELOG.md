@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.0.20
 
 - `update graphiql@1.5.17 to graphiql@1.8.3`
 - `update @tarantool.io/lua-bundler-webpack-plugin@1.0.0 to @tarantool.io/lua-bundler-webpack-plugin@2.0.1`
