@@ -2,10 +2,11 @@
 
 ## Ureleased
 
-- `update graphiql@1.8.3 to graphiql@1.8.8`
-- `update graphql@16.3.0 to graphiql@16.4.0`
+- `update graphiql@1.8.3 to graphiql@1.8.9`
+- `update graphql@16.3.0 to graphiql@16.5.0`
 - `update multiple dependencies to latest`
 - `update Cartridge dependencies`
+- `fix absent antd css`
 
 ## 0.0.20
 
