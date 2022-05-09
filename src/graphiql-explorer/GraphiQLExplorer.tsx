@@ -8,6 +8,8 @@ import parserGraphql from 'prettier/parser-graphql';
 import React, { Fragment } from 'react';
 import { Tooltip } from 'antd';
 
+import 'antd/dist/antd.css';
+
 import {
   ArgumentNode,
   DefinitionNode,
@@ -3442,13 +3444,7 @@ class GraphiQLExplorer extends React.PureComponent<GraphiQLExplorerProps, Graphi
         >
           <div className="doc-explorer-title">{this.props.title}</div>
           <div className="doc-explorer-rhs">
-            <div
-              className="docExplorerHide"
-              style={{
-                margin: '-8px 0px 0px 0px',
-              }}
-              onClick={this.props.onToggleExplorer}
-            >
+            <div className="docExplorerHide" onClick={this.props.onToggleExplorer}>
               {'\u2715'}
             </div>
           </div>
