@@ -13,7 +13,7 @@ description = {
 dependencies = {
     'lua >= 5.1',
     'checks ~> 3',
-    'frontend-core ~> 7',
+    'frontend-core ~> 8',
 }
 build = {
     type = 'make',

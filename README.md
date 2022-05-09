@@ -28,8 +28,8 @@ GraphQL IDE module is used to add GraphQL IDE functionality into Tarantool Cartr
 Based on:
 
 - [Tarantool 1.10.x or 2.x.x](https://www.tarantool.io/en/download/)
-- [Tarantool Cartridge 2.6.0+](https://github.com/tarantool/cartridge) (optional, module can work without Tarantool Cartridge)
-- [Tarantool Frontend Core 7+](https://github.com/tarantool/frontend-core)
+- [Tarantool Cartridge 2.7.4+](https://github.com/tarantool/cartridge) (optional, module can work without Tarantool Cartridge)
+- [Tarantool Frontend Core 8+](https://github.com/tarantool/frontend-core)
 - [Tarantool Http 1.1.0+](https://github.com/tarantool/http/tree/1.1.0)
 - [GraphiQL 1.8.8](https://github.com/graphql/graphiql)
 - [GraphiQL Explorer 0.6.3+](https://github.com/OneGraph/graphiql-explorer)
