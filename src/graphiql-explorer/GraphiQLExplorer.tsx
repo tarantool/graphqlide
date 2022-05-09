@@ -3442,7 +3442,13 @@ class GraphiQLExplorer extends React.PureComponent<GraphiQLExplorerProps, Graphi
         >
           <div className="doc-explorer-title">{this.props.title}</div>
           <div className="doc-explorer-rhs">
-            <div className="docExplorerHide" onClick={this.props.onToggleExplorer}>
+            <div
+              className="docExplorerHide"
+              style={{
+                margin: '-8px 0px 0px 0px',
+              }}
+              onClick={this.props.onToggleExplorer}
+            >
               {'\u2715'}
             </div>
           </div>
