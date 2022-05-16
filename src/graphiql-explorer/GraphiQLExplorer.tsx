@@ -2135,7 +2135,9 @@ class FieldView extends React.PureComponent<FieldViewProps, {displayFieldActions
                   : this.props.styleConfig.arrowClosed}
               </span>
             ) : null}
-            <Checkbox checked={!!selection} styleConfig={this.props.styleConfig} />
+            <span>
+              <Checkbox checked={!!selection} styleConfig={this.props.styleConfig} />
+            </span>
             <span style={{ color: styleConfig.colors.property }}>{field.name}</span>
           </span>
         </Tooltip>
