@@ -1897,11 +1897,22 @@ function defaultArgs(
           },
         } as ArgumentNode);
       } else if (isLeafType(argType)) {
-        args.push({
-          kind: 'Argument',
-          name: { kind: 'Name', value: arg.name },
-          value: getDefaultScalarArgValue(field, arg, argType),
-        } as ArgumentNode);
+        if (isListArgument(arg)) {
+          args.push({
+            kind: 'Argument',
+            name: { kind: 'Name', value: arg.name },
+            value: {
+              kind: 'ListValue',
+              values: [getDefaultScalarArgValue(field, arg, argType)],
+            },
+          } as ArgumentNode);
+        } else {
+          args.push({
+            kind: 'Argument',
+            name: { kind: 'Name', value: arg.name },
+            value: getDefaultScalarArgValue(field, arg, argType),
+          } as ArgumentNode);
+        }
       }
     }
   }
