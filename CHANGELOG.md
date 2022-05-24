@@ -8,6 +8,7 @@
 - `update Cartridge dependencies`
 - `fix absent antd css`
 - `fix simple field explorer layout`
+- `fix incorrect mandatory list arguments generation in case of no default provided`
 
 ## 0.0.20
 
