@@ -30,8 +30,8 @@ Based on:
 - [Tarantool 1.10.x or 2.x.x](https://www.tarantool.io/en/download/)
 - [Tarantool Cartridge 2.7.4+](https://github.com/tarantool/cartridge) (optional, module can work without Tarantool Cartridge)
 - [Tarantool Frontend Core 8+](https://github.com/tarantool/frontend-core)
-- [Tarantool Http 1.1.0+](https://github.com/tarantool/http/tree/1.1.0)
-- [GraphiQL 1.8.8](https://github.com/graphql/graphiql)
+- [Tarantool Http 1.1.0+](https://github.com/tarantool/http)
+- [GraphiQL 1.8.10](https://github.com/graphql/graphiql)
 - [GraphiQL Explorer 0.6.3+](https://github.com/OneGraph/graphiql-explorer)
 
 GraphQL IDE interface:
