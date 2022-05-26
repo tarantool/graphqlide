@@ -1,6 +1,6 @@
 # Changelog
 
-## Ureleased
+## 0.0.21
 
 - `update graphiql@1.8.3 to graphiql@1.8.10`
 - `update graphql@16.3.0 to graphiql@16.5.0`
