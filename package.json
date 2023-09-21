@@ -9,7 +9,7 @@
     "@tarantool.io/ui-kit": "0.51.1",
     "antd": "4.20.6",
     "graphiql": "1.8.10",
-    "graphql": "16.5.0",
+    "graphql": "16.8.1",
     "prettier": "2.6.2",
     "react-hot-keys": "2.7.2"
   },
